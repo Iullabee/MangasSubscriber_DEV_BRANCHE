@@ -53,7 +53,7 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 
 //display chosen import file
 document.getElementById("hidden_import").addEventListener("change", async (e) => {
-	document.getElementById("visible_import").innerHTML = "["+ document.getElementById("hidden_import").files[0].name +"]";
+	document.getElementById("visible_import").innerText = "["+ document.getElementById("hidden_import").files[0].name +"]";
 });
 
 //display and manage the manga list
