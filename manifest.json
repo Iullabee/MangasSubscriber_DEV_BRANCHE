@@ -1,0 +1,43 @@
+{
+
+	"manifest_version": 2,
+	"name": "MangaSubscriber",
+	"version": "1.0",
+
+	"icons": {
+		"48": "icons/high_resolution_logo.png"
+	},
+
+	"permissions": [
+		"activeTab",
+		"storage",
+		"unlimitedStorage",
+		"<all_urls>",
+		"downloads"
+	],
+
+	"browser_action": {
+		"browser_style": true,
+		"default_icon": "icons/high_resolution_logo.png",
+		"default_title": "MangaSub",
+		"default_popup": "popup/popup.html"
+	},
+
+	"background": {
+		"scripts": ["background_tasks/background_script.js"]
+	},
+	
+	"content_scripts": [
+		{
+			"run_at": "document_start",
+			"matches": ["https://www.mangahere.co/manga/*"],
+			"js": ["content_tasks/content_script.js"]
+		}
+	],
+	
+	"options_ui": {
+		"page": "options/options.html",
+		"browser_style": true
+	}
+
+}

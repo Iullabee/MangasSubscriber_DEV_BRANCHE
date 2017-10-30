@@ -1,0 +1,107 @@
+html, body {
+  /* width: 200px; */
+}
+
+.button {
+	padding: 4px;
+	text-align: center;
+	font-size: 1.25em;
+	cursor: pointer;
+	background-color: #000000;
+	color: #00ff00;
+}
+
+.button:hover {
+  background-color: #505050;
+}
+
+table, tr {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.mangas_list {
+	max-height: 50vh;
+}
+
+#list {
+	max-width: 1000px;
+}
+#list tr:hover {
+	background-color: #e5e5e5;
+}
+
+#list tr td {
+	border-bottom: 1px solid black;
+	font-size: 1em;
+}
+
+td select, td button{
+	width: 100%;
+	font-size: 1em;
+}
+
+.unread_number {
+	text-align: right;
+	color: red;
+}
+
+.read_number {
+	text-align: right;
+	color: green;
+}
+
+.list_top {
+	font-size: 1em;
+	width: 100%;
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+.all_releases {
+	border-left:1px solid #505050;
+}
+
+.name_text{
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+}
+
+.name_text .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 1px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 50;
+    bottom: 125%;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.name_text .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.name_text:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

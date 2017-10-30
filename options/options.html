@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+		<link rel="stylesheet" href="options.css"/>
+  </head>
+
+<body>
+	
+	
+	<table id="options_menu">
+		<tr><td id="export" colspan="3">export mangas list</td></tr>
+		<tr id="import">
+			<td id="import_text" colspan="1">import mangas list</td>
+			<td id="import_file" class="import_file" colspan="1"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></td>
+			<td id="import_options" class="import_options" colspan="1">
+				<input type="radio" name="import_option" id="import_option_1" value="merge" checked><label for="import_option_1">merge with existing</label><br>
+				<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
+			</td>
+		</tr>
+		<tr><td id="toggle_list" colspan="2">manage your subscriptions</td><td><input type="search" placeholder="search..." id="search_list"></input></td></tr>
+		
+		<tr class="legend" hidden="hidden"><td colspan="3"><img class="small_icons open_icon" src="/icons/high_resolution_open.png"></img> will open the selected chapter from that manga in a new tab,
+			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
+			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"></img> will delete that manga from your list</td></tr>
+		<tr id="list_container"><td colspan="3"><table id="complete_list"></table></td></tr>
+	</table>
+	
+
+  
+	<script src="options.js"></script>
+</body>
+
+</html>

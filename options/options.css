@@ -1,0 +1,159 @@
+html, body {
+  /* width: 200px; */
+}
+
+
+
+table, tr {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 1.5em;
+}
+
+tr:not(#list_container):hover {
+	background-color: #e5e5e5;
+}
+
+tr td {
+	border-bottom: 1px solid black;
+}
+
+td {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+label {
+	width: 100%;
+}
+
+.import_file {
+	font-size: 0.75em;
+	vertical-align: center;
+}
+
+.import_options {
+	font-size: 0.5em;
+}
+
+#search_list {
+	width: 100%;
+}
+
+#complete_list {
+	font-size: 0.5em;
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 100%;
+	/*max-width: 100vw;*/
+}
+
+#complete_list tr {
+	width: 100%;
+	background-color: white;
+	border-bottom: 1px solid black;
+	border-collapse: collapse;
+}
+
+#complete_list tr:hover {
+	background-color: #e5e5e5;
+}
+select {
+	width: 100%;
+}
+.unread_number {
+	text-align: right;
+	color: red;
+}
+
+.read_number {
+	text-align: right;
+	color: green;
+}
+.tooltiptextcontainer{
+	position: relative;
+}
+.name_text{
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+	width: 100%;
+	max-width: 55vw;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.tooltiptextcontainer .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 1px;
+    border-radius: 6px;
+	font-size: 0.75em;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 50;
+    bottom: 100%;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.tooltiptextcontainer .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 33%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltiptextcontainer:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltiptextcontainer .tooltiptext:hover {
+    visibility: hidden;
+    opacity: 1;
+}
+
+.icons {
+	width: 28px;
+	height: 28px;
+	border: 1px solid black;
+}
+
+.small_icons {
+	width: 14px;
+	height: 14px;
+	border: 1px solid black;
+}
+
+.read_all_icon {
+	background:url("/icons/high_resolution_read_all.png");
+	background-size: contain;
+}
+
+.delete_icon {
+	background:url("/icons/high_resolution_delete.png");
+	background-size: contain;
+}
+
+.open_icon {
+	background:url("/icons/high_resolution_open.png");
+	background-size: contain;
+}
+
+.legend {
+	font-size: 0.5em;
+}
