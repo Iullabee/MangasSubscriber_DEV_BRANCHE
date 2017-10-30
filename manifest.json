@@ -38,6 +38,12 @@
 	"options_ui": {
 		"page": "options/options.html",
 		"browser_style": true
+	},
+	
+	"applications": {
+	  "gecko": {
+	    "id": "MangaSubscriberByLullabee"
+	  }
 	}
 
 }
