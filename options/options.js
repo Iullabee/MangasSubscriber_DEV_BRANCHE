@@ -34,6 +34,7 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 		
 		document.getElementById("import_options").style="display:none";
 		document.getElementById("import_file").style="display:none";
+		document.getElementById("import_text").colSpan = "3";
 		
 		var fail = await background.importMangasList(file, import_option);
 		if (!fail){
@@ -42,6 +43,7 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 			document.getElementById("import_text").innerHTML = "error, try again";
 		}
 		setTimeout(()=>{document.getElementById("import_text").innerHTML = "import mangas list";
+						document.getElementById("import_text").colSpan = "1";
 						document.getElementById("import_options").style="display:";
 						document.getElementById("import_file").style="display:";
 		},3000);
@@ -95,7 +97,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				unread_chapters.sort();
 				read_chapters.sort().reverse();
 				
-				//construct div element with manga & website name properties,   
+				//construct tr element with manga & website name properties,   
 				let dom_manga = document.createElement("tr");
 				dom_manga.manga_name = name;
 				dom_manga.website_name = manga.website_name;

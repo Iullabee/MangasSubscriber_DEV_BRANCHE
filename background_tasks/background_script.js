@@ -114,11 +114,15 @@ async function importMangasList(file, import_option){
 async function updateMangasList(){
 	//fetch current list
 	var mangas_list = await browser.storage.local.get();
-	
-	//for each manga, check if there is an update
+	var updated_chapters_list = {};
+	//for each manga, get an updated chapters list
 	for (let manga in mangas_list) {
 		let website = getWebsite(mangas_list[manga].website_name);
-		let updated_chapters = await website.getAllChapters(manga);
+		updated_chapters_list[manga] = website.getAllChapters(manga); //A PROMISE IS RETURNED HERE
+	}
+	//for each manga, check if there is an update
+	for (let manga in mangas_list) {
+		let updated_chapters = await updated_chapters_list[manga]; //MUST AWAIT THE PROMISE RESOLUTION HERE
 		//if there is, update the chapters list, and store the manga
 		if (updated_chapters.length > Object.keys(mangas_list[manga].chapters_list).length){
 			for (let chapter in updated_chapters){

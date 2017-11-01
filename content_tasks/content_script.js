@@ -4,8 +4,6 @@ window.addEventListener("load", readMangaChapter);
 
 function readMangaChapter() {
 	
-	
-	//TO-DO check if the chapter if available or if it's a placeholder page
 	var url = window.location.href;
 	var is_placeholder = false;
 	var website = "notAMangaWebsite";
@@ -16,6 +14,7 @@ function readMangaChapter() {
 		}
 	}
 	
+	//TO-DO check if the chapter if available or if it's a placeholder page
 	switch (website) {
 		case websites_list["mangahere"]:
 			is_placeholder = document.getElementsByClassName("mangaread_error")[0];

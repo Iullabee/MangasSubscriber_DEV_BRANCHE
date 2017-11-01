@@ -1,5 +1,6 @@
 html, body {
-  /* width: 200px; */
+	/*width: 400px;*/
+	overflow-x: hidden;
 }
 
 .button {
@@ -25,8 +26,9 @@ table, tr {
 }
 
 #list {
-	max-width: 1000px;
+	width: 400px;
 }
+
 #list tr:hover {
 	background-color: #e5e5e5;
 }
@@ -58,19 +60,29 @@ td select, td button{
 	top: 0;
 	left: 0;
 	z-index: 1;
+	overflow: hidden;
 }
 
 .all_releases {
 	border-left:1px solid #505050;
 }
-
-.name_text{
-	padding-left: 10px;
-	padding-right: 10px;
+.tooltiptextcontainer{
 	position: relative;
 }
 
-.name_text .tooltiptext {
+.name_text{
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+	width: 100%;
+	max-width: 60vw;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.tooltiptextcontainer .tooltiptext {
     visibility: hidden;
     background-color: #555;
     color: #fff;
@@ -81,7 +93,7 @@ td select, td button{
     /* Position the tooltip text */
     position: absolute;
     z-index: 50;
-    bottom: 125%;
+    bottom: 100%;
 
     /* Fade in tooltip */
     opacity: 0;
@@ -89,11 +101,11 @@ td select, td button{
 }
 
 /* Tooltip arrow */
-.name_text .tooltiptext::after {
+.tooltiptextcontainer .tooltiptext::after {
     content: "";
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: 33%;
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
@@ -101,7 +113,30 @@ td select, td button{
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
-.name_text:hover .tooltiptext {
+.tooltiptextcontainer:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+.tooltiptextcontainer .tooltiptext:hover {
+    visibility: hidden;
+    opacity: 1;
+}
+
+.icons {
+	width: 24px;
+	height: 28px;
+	border: 1px solid black;
+}
+
+.small_icons {
+	width: 14px;
+	height: 14px;
+	border: 1px solid black;
+}
+
+.open_icon {
+	background:url("/icons/high_resolution_open.png");
+	background-size: contain;
+	background-repeat: no-repeat;
 }

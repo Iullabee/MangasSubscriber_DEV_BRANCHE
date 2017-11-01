@@ -70,9 +70,11 @@ select {
 	text-align: right;
 	color: green;
 }
+
 .tooltiptextcontainer{
 	position: relative;
 }
+
 .name_text{
 	display: inline-block;
 	padding-left: 10px;
