@@ -15,7 +15,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 	var unread_mangas = [];
 	var read_mangas = [];
 
-		//for each manga, 
+	//for each manga, 
 	for (let name in mangas){
 		var manga = mangas[name];
 		
@@ -23,7 +23,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		let read_chapters = [];
 		let unread_chapters = [];
 		for (let chapter in manga.chapters_list){
-			manga.chapters_list[chapter] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
+			manga.chapters_list[chapter]["status"] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
 		}
 		unread_chapters.sort();
 		read_chapters.sort().reverse();
@@ -56,10 +56,10 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		let dom_unread_number_node = document.createElement("td");
 		let text_node;
 		if (unread_chapters.length) {
-			dom_unread_number_node.setAttribute("class", "unread_number");
+			dom_unread_number_node.setAttribute("class", "red_text align_right");
 			text_node = document.createTextNode(" ("+unread_chapters.length+")");
 		} else {
-			dom_unread_number_node.setAttribute("class", "read_number");
+			dom_unread_number_node.setAttribute("class", "green_text align_right");
 			text_node = document.createTextNode(" (0)");
 		}
 		dom_unread_number_node.appendChild(text_node);
@@ -70,13 +70,13 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		
 		let dom_select_td = document.createElement("td");
 		let dom_select = document.createElement("select");
-		dom_select.style = unread_chapters.length?"background:#ffeedd":"background:#ddffee";
+		dom_select.setAttribute("class", unread_chapters.length?"unread_chapter":"read_chapter");
 		//update background when selected option changes
-		dom_select.addEventListener("change", function(e){for (let x in e.target.options[e.target.selectedIndex].style){e.target.style[x] = e.target.options[e.target.selectedIndex].style[x];}}, false);
+		dom_select.addEventListener("change", function(e){e.target.setAttribute("class", e.target.options[e.target.selectedIndex].classList);}, false);
 		
 		for (let x in unread_chapters){
 			let dom_option = document.createElement("option");
-			dom_option.style.background = "#ffeedd";
+			dom_option.setAttribute("class", "unread_chapter");
 			let dom_option_text = document.createTextNode(unread_chapters[x]);
 			dom_option.appendChild(dom_option_text);
 			
@@ -84,7 +84,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		}
 		for (let x in read_chapters){
 			let dom_option = document.createElement("option");
-			dom_option.style.background = "#ddffee";
+			dom_option.setAttribute("class", "read_chapter");
 			let dom_option_text = document.createTextNode(read_chapters[x]);
 			dom_option.appendChild(dom_option_text);
 			
@@ -101,28 +101,13 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		dom_button.appendChild(dom_button_text);
 		dom_button.addEventListener("click", 
 									async function(e){	let my_manga = e.target.parentElement.parentElement;
-														let manga_url = background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
-														browser.tabs.create({url:manga_url});
+														let manga_url = await background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
+														browser.tabs.create({url:manga_url, active:false});
 													}
 									, false);
 		
 		dom_button_td.appendChild(dom_button);
 		dom_manga.appendChild(dom_button_td);
-		
-		/*replace previous snippet with the following to change the button to a div with appropriate class to display open.png
-		let dom_read_button_td = document.createElement("td");
-		let dom_read_button = document.createElement("div");
-		dom_read_button.setAttribute("class", "icons open_icon");
-		dom_read_button.addEventListener("click", 
-									async function(e){	let my_manga = e.target.parentElement.parentElement;
-														let manga_url = background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
-														browser.tabs.create({url:manga_url});
-													}
-									, false);
-		
-		dom_read_button_td.appendChild(dom_read_button);
-		dom_manga.appendChild(dom_read_button_td);
-		*/
 		
 		if (unread_chapters.length)
 			unread_mangas.push(dom_manga);
@@ -138,7 +123,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 	
 	
 	//hide first layer menu
-	document.getElementById("menu").style.display = "none";
+	document.getElementById("menu_panel").style.display = "none";
 	//show new mangas list
 	document.getElementById("mangas_list").style.display = "block";
 });
@@ -167,7 +152,7 @@ document.getElementById("all_releases").addEventListener("click", async (e) => {
 
 document.getElementById("back_menu").addEventListener("click", async (e) => {
 	//show first layer menu
-	document.getElementById("menu").style.display = "";
+	document.getElementById("menu_panel").style.display = "";
 	//hide new mangas list
 	document.getElementById("mangas_list").style.display = "none";
 
@@ -230,3 +215,52 @@ async function initializeFollowButton(){
 }
 
 initializeFollowButton();
+
+
+document.getElementById("console_toggle").addEventListener("click", async (e) => {
+	//show first layer menu
+	if (document.getElementById("console").style.display == "none") {
+		document.getElementById("console").style.display = "";
+	} else {
+		document.getElementById("console").style.display = "none";
+	}
+});
+
+//listen to background script, and display console messages
+browser.runtime.onMessage.addListener(updateConsole);
+
+async function updateConsole(message) {
+	if  (message.target == "popup" && message.log){
+		var log = message.log;
+		//displaying updates status
+		//TODO : divide into three div, retrieving + name to the left, from in the middle and status to the right
+		//TODO : cut manga name if too long and set a tooltip
+		//TODO : add background color depending on status
+		let manga = document.createElement("div");
+		let text_node = document.createTextNode("retrieving "+log.manga+" from "+log.from+" - status : "+log.status+ (log.details != "" ? " details : "+log.details : ""));
+		manga.appendChild(text_node);
+		var console_display = document.getElementById("console_display");
+		console_display.appendChild(manga);
+		//updating console recap numbers
+		if (log.status == "updating") {
+			let updating_number = document.getElementById("console_updating_number");
+			if (!updating_number.value)
+				updating_number.value = 0;
+			updating_number.value += 1;
+			updating_number.innerHTML = "("+updating_number.value+")";
+		} else {
+			let updating_number = document.getElementById("console_updating_number");
+			updating_number.value -= 1;
+			updating_number.innerHTML = "("+updating_number.value+")";
+			let finished_number = document.getElementById("console_"+log.status+"_number");
+			if (!finished_number.value)
+				finished_number.value = 0;
+			finished_number.value += 1;
+			finished_number.innerHTML = "("+finished_number.value+")";
+		}
+
+		//TODO : delete the update button inner html auto-change, and change it here when updating_number.value reaches 0
+
+		//TODO : turn console_errors div into a bug submit or copy to clipboard button if console_errors_number > 0
+	}
+}

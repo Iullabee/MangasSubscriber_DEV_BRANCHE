@@ -7,15 +7,28 @@
 	</head>
 
 	<body>
-		<div id="menu">
-			<div class="button" id="new_releases">new releases</div>
-			<div class="button" id="follow">follow this manga</div>
-			<div class="button" id="update">update the list</div>
-			<div class="button" id="options">options</div>
-			
+		<div id="menu_panel">
+			<div id="menu" class="right">
+				<div id="new_releases" class="button">new releases</div>
+				<div id="follow" class="button">follow this manga</div>
+				<div id="update" class="button">update the list</div>
+				<div>
+					<div id="console_toggle" class="left button small_button">&lt</div>
+					<div id="options" class="left button large_button">options</div>
+					<div id="help" class="left button small_button">?</div>
+				</div>
+			</div>
+			<div id="console" class="left" style="display:none">
+				<div id="console_display"></div>
+				<div id="console_recap" class="bottom">
+					<div id="console_updating" class="left medium_button">updating <div id="console_updating_number" class="right">(0)</div></div>
+					<div id="console_completed" class="left medium_button">completed <div id="console_completed_number" class="right green_text">(0)</div></div>
+					<div id="console_errors" class="left medium_button">errors <div id="console_errors_number" class="right red_text">(0)</div></div>
+				</div>
+			</div>
 		</div>
 		<div id="mangas_list" style="display:none">
-			<table class="list_top"><tr><td class="button" id="back_menu"><- back</td><td class="button all_releases" id="all_releases">show all mangas</td></tr></table>
+			<table class="list_top"><tr><td class="left button back_menu" id="back_menu"><- back</td><td class="left button all_releases" id="all_releases">show all mangas</td></tr></table>
 			<table id="list"></table>
 		</div>
 		

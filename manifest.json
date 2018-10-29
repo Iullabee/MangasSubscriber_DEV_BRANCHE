@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangaSubscriber",
-	"version": "1.0.2",
+	"version": "1.0.0_public_temp",
 
 	"icons": {
 		"48": "icons/high_resolution_logo.png"
@@ -30,13 +30,16 @@
 	"content_scripts": [
 		{
 			"run_at": "document_start",
-			"matches": ["https://www.mangahere.co/manga/*"],
+			"matches": ["*://www.mangahere.cc/manga/*",
+						"*://fanfox.net/manga/*",
+						"*://www.mangatown.com/manga/*"],
 			"js": ["content_tasks/content_script.js"]
 		}
 	],
 	
 	"options_ui": {
 		"page": "options/options.html",
+		"open_in_tab":true,
 		"browser_style": true
 	},
 	

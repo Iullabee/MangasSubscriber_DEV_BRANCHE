@@ -7,9 +7,11 @@
   </head>
 
 <body>
-	
-	
+	<div id="details" class="details"></div>
+	<div class="title">Options</div>
 	<table id="options_menu">
+		<!--<tr><td id="db_update" colspan="3">NEW VERSION : update database</td></tr>-->
+		<tr><td id="check_all_sites" colspan="3">check all sites when updating the list <img class="icons update_true_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_true.png"></img></td></tr>
 		<tr><td id="export" colspan="3">export mangas list</td></tr>
 		<tr id="import">
 			<td id="import_text" colspan="1">import mangas list</td>
@@ -21,10 +23,11 @@
 		</tr>
 		<tr><td id="toggle_list" colspan="2">manage your subscriptions</td><td><input type="search" placeholder="search..." id="search_list"></input></td></tr>
 		
-		<tr class="legend" hidden="hidden"><td colspan="3"><img class="small_icons open_icon" src="/icons/high_resolution_open.png"></img> will open the selected chapter from that manga in a new tab,
-			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
+		<tr id="legend" class="legend" hidden="hidden"><td colspan="3"><img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
+			<img class="small_icons update_true_icon" src="/icons/high_resolution_update_true.png"></img> means that manga will be updated,
+			<img class="small_icons update_false_icon" src="/icons/high_resolution_update_false.png"></img> means that manga will not be updated,
 			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"></img> will delete that manga from your list</td></tr>
-		<tr id="list_container"><td colspan="3"><table id="complete_list"></table></td></tr>
+		<tr id="list_container"><td colspan="3"><div id="complete_list"></div></td></tr>
 	</table>
 	
 

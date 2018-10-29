@@ -1,19 +1,58 @@
-html, body {
+html, body{
 	/*width: 400px;*/
 	overflow-x: hidden;
 }
 
 .button {
-	padding: 4px;
-	text-align: center;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	font-size: 1.25em;
 	cursor: pointer;
-	background-color: #000000;
-	color: #00ff00;
+	
+	text-align: center;
+	
+	box-sizing: border-box;
+	background: #EEEEEE;
+	border: 1px solid gray;
+	border-radius: 7px;
 }
 
 .button:hover {
-  background-color: #505050;
+  background-color: #8a8a8a;
+}
+
+.small_button{
+	width: 20%;
+}
+
+.large_button{
+	width: 60%;
+}
+.medium_button{
+	width: 33.3%;
+	padding: 4px;
+	font-size: 1.25em;
+	border: 1px solid gray;
+}
+
+#menu{
+	width: 250px;
+}
+
+.left{
+	float: left;
+}
+
+.right{
+	float: right;
+}
+
+.bottom{
+	float: bottom;
+}
+
+.linear{
+	display: inline-block;
 }
 
 table, tr {
@@ -21,12 +60,25 @@ table, tr {
 	border-collapse: collapse;
 }
 
-.mangas_list {
-	max-height: 50vh;
+#console {
+	width: 550px;
+	height: 300px;
+	border: 1px solid black;
+	overflow: hidden;
+}
+
+#console_display{
+	width: 550px;
+	height: 268px;
+	max-height: 268px;
+	overflow-y: scroll;
 }
 
 #list {
-	width: 400px;
+	width: 800px;
+	margin-top: 32px;
+	overflow-y: auto;
+	background: white;
 }
 
 #list tr:hover {
@@ -43,29 +95,47 @@ td select, td button{
 	font-size: 1em;
 }
 
-.unread_number {
-	text-align: right;
-	color: red;
+.read_chapter {
+	background: #ddffee;
 }
 
-.read_number {
+.unread_chapter {
+	background: #ffeedd;
+}
+
+.align_right {
 	text-align: right;
+}
+
+.green_text {
 	color: green;
+}
+
+.red_text{
+	color: red;
 }
 
 .list_top {
 	font-size: 1em;
 	width: 100%;
-	position: sticky;
-	top: 0;
-	left: 0;
+	position: fixed;
+	top: -2px;
+	left: 0px;
 	z-index: 1;
 	overflow: hidden;
+	border-collapse: separate;
+	margin: 0px;
+	background: white;
+}
+
+.back_menu{
+	width: 30%;
 }
 
 .all_releases {
-	border-left:1px solid #505050;
+	width: 70%;
 }
+
 .tooltiptextcontainer{
 	position: relative;
 }
@@ -75,8 +145,7 @@ td select, td button{
 	padding-left: 10px;
 	padding-right: 10px;
 	position: relative;
-	width: 100%;
-	max-width: 60vw;
+	width: 70vw;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -135,8 +204,3 @@ td select, td button{
 	border: 1px solid black;
 }
 
-.open_icon {
-	background:url("/icons/high_resolution_open.png");
-	background-size: contain;
-	background-repeat: no-repeat;
-}
