@@ -199,7 +199,6 @@ async function updateMangasList(){
 	var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 	var updated_chapters_list = {};
 	var check_all_sites = await getCheckAllSites();
-	var promises_tab = [];
 	//for each manga that is set to update, get an updated chapters list
 	for (let manga in mangas_list) {
 		if (mangas_list[manga]["update"]){
@@ -208,8 +207,7 @@ async function updateMangasList(){
 				if (check_all_sites || website_name == mangas_list[manga].website_name) {
 					browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"updating" , "details":""}}); //warning the popup
 					updated_chapters_list[manga][website_name] = websites_list[website_name].getAllChapters(manga); //A PROMISE IS RETURNED HERE
-					promises_tab.push(updated_chapters_list[manga][website_name]); //registering the update promise in a tab to save results to storage when all promises are fulfilled
-					updated_chapters_list[manga][website_name].then(function(updated_chapters){
+					updated_chapters_list[manga][website_name].then(async function(updated_chapters){
 																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"completed" , "details":""}}); //warning the popup
 																		for (let chapter in updated_chapters){
 																			if (!mangas_list[manga].chapters_list[chapter]){
@@ -220,13 +218,11 @@ async function updateMangasList(){
 																				mangas_list[manga].chapters_list[chapter] = {"status":mangas_list[manga].chapters_list[chapter]["status"] , "url":updated_chapters[chapter]["url"]};
 																			}
 																		}
-																		//await browser.storage.local.set({"mangas_list" : mangas_list});
-																		
-																		delete (updated_chapters_list[manga][website_name]);
+																		await browser.storage.local.set({"mangas_list" : mangas_list});
+																		setBadgeNumber();
 																	},
 																	function(error){
 																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+error}}); //warning the popup
-																		delete (updated_chapters_list[manga][website_name]);
 																	}
 					);
 				}
@@ -234,13 +230,6 @@ async function updateMangasList(){
 		}
 	}
 
-	//when all update promises are fulfilled, save results to storage
-	Promise.all(promises_tab).then(async function() {
-		await browser.storage.local.set({"mangas_list" : mangas_list});
-		//update badge
-		setBadgeNumber();
-	});
-	
 	return;
 }
 

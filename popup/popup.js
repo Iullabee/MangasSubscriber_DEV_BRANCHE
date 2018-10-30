@@ -142,7 +142,7 @@ document.getElementById("all_releases").addEventListener("click", async (e) => {
 		e.target.innerHTML = "show all mangas";
 		var all_releases = document.getElementById("list").childNodes;
 		for (release in all_releases){
-			if (all_releases.hasOwnProperty(release) && all_releases[release].firstChild.nextSibling.classList.contains("read_number")) {
+			if (all_releases.hasOwnProperty(release) && all_releases[release].firstChild.nextSibling.classList.contains("green_text")) {
 					all_releases[release].style.display = "none"; 
 			}
 		}
@@ -232,15 +232,73 @@ browser.runtime.onMessage.addListener(updateConsole);
 async function updateConsole(message) {
 	if  (message.target == "popup" && message.log){
 		var log = message.log;
+
 		//displaying updates status
-		//TODO : divide into three div, retrieving + name to the left, from in the middle and status to the right
-		//TODO : cut manga name if too long and set a tooltip
-		//TODO : add background color depending on status
+		//main line (name + website + status)
 		let manga = document.createElement("div");
-		let text_node = document.createTextNode("retrieving "+log.manga+" from "+log.from+" - status : "+log.status+ (log.details != "" ? " details : "+log.details : ""));
-		manga.appendChild(text_node);
+		manga.setAttribute("class", "");
+		manga.setAttribute("id", log.manga+log.from+log.status);
+
+		//name 
+		let retrieving = document.createElement("div");
+		retrieving.setAttribute("class", "tooltiptextcontainer left console_line");
+		//name tooltip
+		let tooltip = document.createElement("span");
+		tooltip.setAttribute("class", "tooltiptext");
+		let tooltip_text = document.createTextNode(log.manga.replace(/_/g, " "));
+		tooltip.appendChild(tooltip_text);
+		retrieving.appendChild(tooltip);
+		//add text to the name
+		let retrieving_text = document.createElement("span");
+		retrieving_text.setAttribute("class", "console_name_text");
+		let retrieving_text_node = document.createTextNode("retrieving "+log.manga.replace(/_/g, " "));
+		retrieving_text.appendChild(retrieving_text_node);
+		retrieving.appendChild(retrieving_text);
+		manga.appendChild(retrieving);
+
+		//website 
+		let from = document.createElement("div");
+		from.setAttribute("class", "console_from left console_line");
+		let from_text_node = document.createTextNode(" from "+log.from);
+		from.appendChild(from_text_node);
+		manga.appendChild(from);
+
+		//status 
+		let status = document.createElement("div");
+		status.setAttribute("class",  (log.status == "completed" ? "green_text" : log.status == "errors" ? "red_text" : "")+" left console_status console_line" );
+		let status_text_node = document.createTextNode(" - status : "+log.status);
+		status.appendChild(status_text_node);
+		manga.appendChild(status);
+
+		//toggle details display
+		manga.addEventListener("click", 
+								async function(e){	if (log.details != "") {
+														let details = document.getElementById(this.id+"details");
+														if (details.style.display == "") {
+															details.style.display = "none";
+														} else {
+															details.style.display = "";
+														}
+													}
+												}
+								, false);
 		var console_display = document.getElementById("console_display");
 		console_display.appendChild(manga);
+
+		//details line
+		let manga_details = document.createElement("div");
+		manga_details.setAttribute("class", "");
+		manga_details.setAttribute("id", log.manga+log.from+log.status+"details");
+		let details = document.createElement("span");
+		details.setAttribute("class", (log.status == "errors" ? "red_text" : "")+" left console_details");
+		let details_text_node = document.createTextNode((log.details != "" ? " details : "+log.details : ""));
+		details.appendChild(details_text_node);
+		manga_details.style.display = log.status == "errors" ? "" : "none";
+		manga_details.appendChild(details);
+		console_display.appendChild(manga_details);
+		
+
+
 		//updating console recap numbers
 		if (log.status == "updating") {
 			let updating_number = document.getElementById("console_updating_number");
