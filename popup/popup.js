@@ -180,14 +180,7 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 document.getElementById("update").addEventListener("click", async (e) => {
 	var background = await browser.runtime.getBackgroundPage();
 	e.target.innerText = "...";
-	var fail = await background.updateMangasList();
-	if (!fail){
-		e.target.innerText = "list updated";
-	} else {
-		e.target.innerText = "error, try again";
-	}
-	setTimeout(()=>{e.target.innerText = "update the list";},3000);
-
+	background.updateMangasList();
 });
 
 document.getElementById("options").addEventListener("click", async (e) => {
@@ -232,6 +225,8 @@ browser.runtime.onMessage.addListener(updateConsole);
 async function updateConsole(message) {
 	if  (message.target == "popup" && message.log){
 		var log = message.log;
+		var console_display = document.getElementById("console_display");
+		var user_scrolled = !(console_display.scrollHeight - console_display.height <= console_display.scrollTop);//!(console_display.scrollTop == 0 || console_display.scrollTop == console_display.scrollHeight);
 
 		//displaying updates status
 		//main line (name + website + status)
@@ -282,12 +277,10 @@ async function updateConsole(message) {
 													}
 												}
 								, false);
-		var console_display = document.getElementById("console_display");
 		console_display.appendChild(manga);
 
 		//details line
 		let manga_details = document.createElement("div");
-		manga_details.setAttribute("class", "");
 		manga_details.setAttribute("id", log.manga+log.from+log.status+"details");
 		let details = document.createElement("span");
 		details.setAttribute("class", (log.status == "errors" ? "red_text" : "")+" left console_details");
@@ -297,6 +290,8 @@ async function updateConsole(message) {
 		manga_details.appendChild(details);
 		console_display.appendChild(manga_details);
 		
+		if (!user_scrolled)
+			console_display.scrollTop = console_display.scrollHeight;
 
 
 		//updating console recap numbers
@@ -317,8 +312,33 @@ async function updateConsole(message) {
 			finished_number.innerHTML = "("+finished_number.value+")";
 		}
 
-		//TODO : delete the update button inner html auto-change, and change it here when updating_number.value reaches 0
-
-		//TODO : turn console_errors div into a bug submit or copy to clipboard button if console_errors_number > 0
+		//informing update button the updating is finished
+		if (document.getElementById("console_updating_number").value == 0) {
+			document.getElementById("update").innerText = "list updated";
+			setTimeout(()=>{document.getElementById("update").innerText = "update the list";},3000);
+		}
+		//turn console_errors div into a copy errors details to clipboard button if console_errors_number > 0
+		var console_errors = document.getElementById("console_errors")
+		if (log.status == "errors" && ! console_errors.classList.contains('button')) {
+			console_errors.setAttribute("class", "left medium_button button");
+			console_errors.addEventListener("click", 
+											function change_to_button(e){let details = document.getElementsByClassName("console_details");
+														let details_text = "";
+														for (let index in details){
+															if (details[index].classList) {
+																details_text += details[index].classList.contains("red_text") ? details[index].innerText+"\n" : "";
+															}
+														}
+														navigator.clipboard.writeText(details_text).then(function() {
+															console_errors.removeEventListener("click", change_to_button);
+															console_errors.setAttribute("class", "left medium_button");
+														  }, function() {
+															/* clipboard write failed */
+															alert("couldn't copy error messages to clipboard");
+														  });
+														
+															}
+											, false);
+		}
 	}
 }

@@ -13,7 +13,8 @@
 		"storage",
 		"unlimitedStorage",
 		"<all_urls>",
-		"downloads"
+		"downloads",
+		"clipboardWrite"
 	],
 
 	"browser_action": {

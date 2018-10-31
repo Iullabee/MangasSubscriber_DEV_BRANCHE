@@ -27,7 +27,7 @@ var websites_list = {
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].getElementsByClassName("color_0077")[0].href){
 																		//						get the url											get rid of the website and manga name				get rid of the last /
-																		let chapter_number = list[i].getElementsByClassName("color_0077")[0].href.split(source_url.replace("http", "moz-extension"))[1].slice(0,-1);
+																		let chapter_number = list[i].getElementsByClassName("color_0077")[0].href.split(source_url)[1].slice(0,-1);
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].getElementsByClassName("color_0077")[0].href.replace("moz-extension", "http")};
 																	}
@@ -66,7 +66,10 @@ var websites_list = {
 																var list = doc.getElementById("chapters").getElementsByClassName("tips");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].href){
-																		let url_tail = list[i].href.split(source_url.replace("http", "moz-extension"))[1];
+																		let url_tail = list[i].href.split(source_url)[1];
+																		if (!url_tail)
+																			throw new Error("different name on this website (url_tail is undefined)");
+																		
 																		let chapter_number = "";
 																		
 																		url_tail = url_tail.split("/");
@@ -109,7 +112,7 @@ var websites_list = {
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].href){
 																		//					get the url		get rid of the website and manga name				get rid of the last /
-																		let chapter_number = list[i].href.split(source_url.replace("http", "moz-extension"))[1].slice(0,-1);
+																		let chapter_number = list[i].href.split(source_url)[1].slice(0,-1);
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 																	}
