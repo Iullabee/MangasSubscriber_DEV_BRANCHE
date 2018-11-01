@@ -226,7 +226,7 @@ async function updateConsole(message) {
 	if  (message.target == "popup" && message.log){
 		var log = message.log;
 		var console_display = document.getElementById("console_display");
-		var user_scrolled = !(console_display.scrollHeight - console_display.height <= console_display.scrollTop);//!(console_display.scrollTop == 0 || console_display.scrollTop == console_display.scrollHeight);
+		var user_scrolled = !(console_display.scrollHeight - console_display.clientHeight <= console_display.scrollTop + 1);
 
 		//displaying updates status
 		//main line (name + website + status)
@@ -291,7 +291,7 @@ async function updateConsole(message) {
 		console_display.appendChild(manga_details);
 		
 		if (!user_scrolled)
-			console_display.scrollTop = console_display.scrollHeight;
+			console_display.scrollTop = console_display.scrollHeight - console_display.clientHeight;
 
 
 		//updating console recap numbers
