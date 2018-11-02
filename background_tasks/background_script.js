@@ -26,8 +26,8 @@ var websites_list = {
 																var list = doc.getElementsByClassName("detail_list")[0].getElementsByClassName("left");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].getElementsByClassName("color_0077")[0].href){
-																		//						get the url											get rid of the website and manga name				get rid of the last /
-																		let chapter_number = list[i].getElementsByClassName("color_0077")[0].href.split(source_url)[1].slice(0,-1);
+																		//get the url, get rid of the website and manga name (split(source_url)[1]), get rid of everything left before chapter number (split("c")[1]) and get rid of the last / (slice (0,-1))
+																		let chapter_number = list[i].getElementsByClassName("color_0077")[0].href.split(source_url)[1].split("c")[1].slice(0,-1);
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].getElementsByClassName("color_0077")[0].href.replace("moz-extension", "http")};
 																	}
@@ -66,7 +66,7 @@ var websites_list = {
 																var list = doc.getElementById("chapters").getElementsByClassName("tips");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].href){
-																		let url_tail = list[i].href.split(source_url)[1];
+																		let url_tail = list[i].href.split(source_url)[1].split("c")[1];
 																		if (!url_tail)
 																			throw new Error("different name on this website (url_tail is undefined)");
 																		
@@ -111,8 +111,8 @@ var websites_list = {
 																var list = doc.getElementsByClassName("chapter_list")[0].getElementsByTagName("a");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].href){
-																		//					get the url		get rid of the website and manga name				get rid of the last /
-																		let chapter_number = list[i].href.split(source_url)[1].slice(0,-1);
+																		//get the url, get rid of the website and manga name (split(source_url)[1]), get rid of everything left before chapter number (split("c")[1]) and get rid of the last / (slice (0,-1))
+																		let chapter_number = list[i].href.split(source_url)[1].split("c")[1].slice(0,-1);
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 																	}
@@ -186,7 +186,7 @@ async function importMangasList(file, import_option){
 											back_up["mangas_list"][manga_name] = stored_list[manga_name];
 										}
 									}
-								}
+								} else await browser.storage.local.clear();
 								await browser.storage.local.set(back_up);
 								updateMangasList();
 							}
@@ -340,11 +340,7 @@ async function getAllChapters(manga_name, website_name){
 }
 
 async function reconstructChapterURL(website_name, manga_name, chapter){
-	//var website = getWebsite(website_name);
-	//if (websites_list[website_name])
-		//return await website.reconstructChapterURL(manga_name, chapter);
-		return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
-	//else return ""; 
+	return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
 }
 
 
@@ -394,23 +390,43 @@ async function getCheckAllSites(){
 }
 
 async function db_update(){
-	browser.browserAction.setBadgeText({"text" : "U"});
-	//fetch current list
-	var mangas_list = await browser.storage.local.get();
-	
-	for (let manga in mangas_list) {
-		if (mangas_list[manga]["website_name"] == "http://mangafox.la/manga/"){
-			mangas_list[manga]["website_name"] = "http://fanfox.net/manga/";
-			let to_log = {};
-			to_log[manga] = mangas_list[manga];
-			await browser.storage.local.set(to_log);
+	var prefs = await browser.storage.local.get("MangaSubscriberPrefs")["MangaSubscriberPrefs"];
+	var to_log = null;
+
+	if (!prefs){
+		browser.browserAction.setBadgeText({"text" : "U"});
+		//fetch current list
+		var mangas_list = await browser.storage.local.get();
+		
+		for (let manga in mangas_list) {
+			if (mangas_list[manga]["website_name"] == "http://fanfox.net/manga/"){
+				mangas_list[manga]["website_name"] = "fanfox";	
+			}
+			if (mangas_list[manga]["website_name"] == "http://www.mangahere.cc/manga/"){
+				mangas_list[manga]["website_name"] = "mangahere";	
+			}
+			if (mangas_list[manga]["website_name"] == "http://www.mangatown.com/manga/"){
+				mangas_list[manga]["website_name"] = "mangatown";	
+			}
+			for (let index in mangas_list[manga]["chapters_list"]) {
+				mangas_list[manga]["chapters_list"][index.split("c")[1]] = {"status":mangas_list[manga]["chapters_list"][index], "url":""};
+				delete(mangas_list[manga]["chapters_list"][index]);
+			}
 		}
+		to_log = {"MangaSubscriberPrefs": {"check_all_sites": true, "DB_version":"1.0.0"},
+						"mangas_list":mangas_list};
 	}
 	
-	//update badge
-	setBadgeNumber();
+	if (to_log){
+		await browser.storage.local.clear();
+		await browser.storage.local.set(to_log);
+		await updateMangasList();
+		//update badge
+		setBadgeNumber();
+	}
 	return;
 }
 
+db_update();
 //update badge
 setBadgeNumber();
