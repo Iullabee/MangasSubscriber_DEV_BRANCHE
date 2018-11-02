@@ -8,9 +8,9 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1];
+													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1].split("/")[0];
 													//and get rid of page number
-													return url_tail.substring(0,url_tail.lastIndexOf("/"));
+													return url_tail;//.substring(0,url_tail.lastIndexOf("/"));
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
 															var source = "truc";
@@ -44,13 +44,10 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1];
+													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1];
 													//and get rid of volume and page number
-													url_tail = url_tail.split("/");
-													for (let x in url_tail) {
-														if (url_tail[x].charAt(0) == "c")
-															return url_tail[x];
-													}
+													url_tail = url_tail.split("/")[0];
+													return url_tail;
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
 															var source = "truc";
@@ -71,12 +68,8 @@ var websites_list = {
 																			throw new Error("different name on this website (url_tail is undefined)");
 																		
 																		let chapter_number = "";
+																		chapter_number = url_tail.split("/")[0];
 																		
-																		url_tail = url_tail.split("/");
-																		for (let x in url_tail) {
-																			if (url_tail[x].charAt(0) == "c")
-																				chapter_number = url_tail[x];
-																		}
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 																	}
@@ -93,9 +86,9 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1];
+													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1].split("/")[0];
 													//and get rid of page number
-													return url_tail.substring(0,url_tail.lastIndexOf("/"));
+													return url_tail;
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
 															var source = "truc";
@@ -390,13 +383,13 @@ async function getCheckAllSites(){
 }
 
 async function db_update(){
-	var prefs = await browser.storage.local.get("MangaSubscriberPrefs")["MangaSubscriberPrefs"];
+	var prefs = (await browser.storage.local.get("MangaSubscriberPrefs"))["MangaSubscriberPrefs"];
 	var to_log = null;
 
 	if (!prefs){
 		browser.browserAction.setBadgeText({"text" : "U"});
 		//fetch current list
-		var mangas_list = await browser.storage.local.get();
+		var mangas_list = await browser.storage.local.get("mangas_list")["mangas_list"];
 		
 		for (let manga in mangas_list) {
 			if (mangas_list[manga]["website_name"] == "http://fanfox.net/manga/"){

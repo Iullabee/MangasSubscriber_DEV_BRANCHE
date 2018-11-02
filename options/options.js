@@ -1,22 +1,3 @@
-/*
-TODO : switch the database upgrade to background
-//update the database to new version
-document.getElementById("db_update").addEventListener("click", async (e) => {
-	var background = await browser.runtime.getBackgroundPage();
-
-	var export_text = document.getElementById("db_update");
-
-	export_text.innerHTML = "...";
-	var fail = await background.db_update();
-	if (!fail){
-		export_text.innerHTML = "database updated";
-	} else {
-		export_text.innerHTML = "error";
-	}
-	setTimeout(()=>{export_text.innerHTML = "NEW VERSION : update database";},3000);
-});
-*/
-
 //display the version
 document.getElementById("details").innerHTML = "MangaSubscriber v" + browser.runtime.getManifest().version;
 
