@@ -193,7 +193,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				dom_read_button.addEventListener("click", 
 						async function(e){	let my_manga = e.target.parentElement.parentElement;
 											let manga_url = await background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
-											browser.tabs.create({url:manga_url});
+											browser.tabs.create({url:manga_url, active:false});
 										}
 						, false);
 				dom_read_button_td.appendChild(dom_read_button);

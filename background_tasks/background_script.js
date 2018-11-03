@@ -147,7 +147,7 @@ async function readMangaChapter(message) {
 }
 
 
-//extract mangas list to json file
+//expport mangas list to json file
 async function exportMangasList(){
 	var list = {"MangaSubscriberBackUp":await browser.storage.local.get()};
 	var blob = new Blob([JSON.stringify(list, null, 2)], {type : 'application/json'});
@@ -406,7 +406,7 @@ async function db_update(){
 				delete(mangas_list[manga]["chapters_list"][index]);
 			}
 		}
-		to_log = {"MangaSubscriberPrefs": {"check_all_sites": true, "DB_version":"1.0.0"},
+		to_log = {"MangaSubscriberPrefs": {"check_all_sites": false, "DB_version":"1.0.0"},
 						"mangas_list":mangas_list};
 	}
 	
