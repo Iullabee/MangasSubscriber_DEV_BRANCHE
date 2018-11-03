@@ -1,8 +1,3 @@
-html, body{
-	/*width: 400px;*/
-	overflow-x: hidden;
-}
-
 .button {
 	padding-top: 4px;
 	padding-bottom: 4px;
@@ -51,11 +46,6 @@ html, body{
 	display: inline-block;
 }
 
-table, tr {
-	width: 100%;
-	border-collapse: collapse;
-}
-
 #console {
 	width: 550px;
 	height: 300px;
@@ -95,23 +85,34 @@ table, tr {
 	border-left: 1px solid red;
 }
 
+#mangas_list{
+	max-height: 600px;
+}
 #list {
 	width: 800px;
+	max-height: 300px;
 	margin-top: 32px;
-	overflow-y: auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	background: white;
+	border-collapse: collapse;
 }
 
-#list tr:hover {
+.list_line {
+	font-size: 1.25em;
+	display: table-row;
+	width: 800px;
+	max-width: 800px;
+}
+.list_line div{
+	display: table-cell;
+	border-bottom: 1px solid black;
+}
+.list_line:hover {
 	background-color: #e5e5e5;
 }
 
-#list tr td {
-	border-bottom: 1px solid black;
-	font-size: 1em;
-}
-
-td select, td button{
+select, button{
 	width: 100%;
 	font-size: 1em;
 }
@@ -139,11 +140,9 @@ td select, td button{
 .list_top {
 	font-size: 1em;
 	width: 100%;
-	position: fixed;
-	top: -2px;
-	left: 0px;
+	position: sticky;
+	top: 2px;
 	z-index: 1;
-	overflow: hidden;
 	border-collapse: separate;
 	margin: 0px;
 	background: white;
@@ -166,7 +165,7 @@ td select, td button{
 	padding-left: 10px;
 	padding-right: 10px;
 	position: relative;
-	width: 70vw;
+	width: 80vw;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

@@ -29,13 +29,14 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		read_chapters.sort().reverse();
 		
 		//construct tr element with manga & website name properties,   
-		let dom_manga = document.createElement("tr");
+		let dom_manga = document.createElement("div");
+		dom_manga.setAttribute("class", "list_line");
 		dom_manga.manga_name = name;
 		dom_manga.website_name = manga.website_name;
 		dom_manga.style.display = unread_chapters.length?"":"none";
 		
 		//displaying the manga name 
-		let dom_manga_text = document.createElement("td");
+		let dom_manga_text = document.createElement("div");
 		dom_manga_text.setAttribute("class", "tooltiptextcontainer");
 		//create a tooltip with full name
 		let tooltip = document.createElement("span");
@@ -53,7 +54,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		dom_manga.appendChild(dom_manga_text);
 		
 		//and number of unread chapters			
-		let dom_unread_number_node = document.createElement("td");
+		let dom_unread_number_node = document.createElement("div");
 		let text_node;
 		if (unread_chapters.length) {
 			dom_unread_number_node.setAttribute("class", "red_text align_right");
@@ -68,7 +69,8 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		
 		//and the sorted chapter list (unread first, then read)
 		
-		let dom_select_td = document.createElement("td");
+		let dom_select_td = document.createElement("div");
+		dom_select_td.setAttribute("class", "");
 		let dom_select = document.createElement("select");
 		dom_select.setAttribute("class", unread_chapters.length?"unread_chapter":"read_chapter");
 		//update background when selected option changes
@@ -95,7 +97,8 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		
 		
 		//and a button to read chapter selected from the list. button needs listener to (1) call background function to reconstruct url, and (2) open link in new tab
-		let dom_button_td = document.createElement("td");
+		let dom_button_td = document.createElement("div");
+		dom_button_td.setAttribute("class", "");
 		let dom_button = document.createElement("button");
 		let dom_button_text = document.createTextNode("read");
 		dom_button.appendChild(dom_button_text);
