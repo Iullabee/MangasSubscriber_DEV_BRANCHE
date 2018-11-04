@@ -1,0 +1,31 @@
+#mangasubscriber_nav_bar{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    background: black;
+	z-index: 10;
+}
+
+.left_nav_button{
+    margin: 5px 0px 5px 5px;
+    float:left;
+}
+
+.right_nav_button{
+    margin: 5px 5px 5px 0px;
+    float:right;
+}
+
+.button {
+	padding: 4px;
+	cursor: pointer;
+	
+	text-align: center;
+	
+	box-sizing: border-box;
+	background: #363636;
+	border: 1px solid gray;
+    border-radius: 7px;
+    color: #EEEEEE;
+}

@@ -8,9 +8,13 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1].split("/")[0];
-													//and get rid of page number
-													return url_tail;//.substring(0,url_tail.lastIndexOf("/"));
+													var url_tail = url.split(this.url+manga_name+"/")[1];
+													//if there is a chapter number
+													if (url_tail.split("c")[1]){
+														//get rid of volume and page number
+														url_tail = url_tail.split("c")[1].split("/")[0];
+													}
+													return url_tail;
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
 															var source = "truc";
@@ -32,7 +36,7 @@ var websites_list = {
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].getElementsByClassName("color_0077")[0].href.replace("moz-extension", "http")};
 																	}
 																}
-															}
+															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
 															return chapters_list;
 				},
 				reconstructChapterURL: async function (manga_name, chapter){return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
@@ -44,9 +48,13 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1];
-													//and get rid of volume and page number
-													url_tail = url_tail.split("/")[0];
+													var url_tail = url.split(this.url+manga_name+"/")[1];
+													//if there is a chapter number
+													if (url_tail.split("c")[1]){
+														//get rid of volume and page number
+														url_tail = url_tail.split("c")[1].split("/")[0];
+													}
+													
 													return url_tail;
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
@@ -63,16 +71,23 @@ var websites_list = {
 																var list = doc.getElementById("chapters").getElementsByClassName("tips");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].href){
-																		let url_tail = list[i].href.split(source_url)[1].split("c")[1];
-																		if (!url_tail)
-																			throw new Error("different name on this website (url_tail is undefined)");
-																		
+																		var url_tail = list[i].href.split(source_url)[1];
+																		//if the name is different on fanfox
+																		if (!url_tail) {
+																			let fanfox_manga_name = doc.head.innerText.split("\n\n\n\n")[1];
+																			fanfox_manga_name = fanfox_manga_name.split(" Manga")[0].replace(/ /g, "_").toLowerCase();
+																			let source_name = this.url+fanfox_manga_name+"/";
+																			url_tail = list[i].href.split(source_name)[1];
+																		}
+																			
+																		url_tail = url_tail.split("c")[1];
+
 																		let chapter_number = "";
 																		chapter_number = url_tail.split("/")[0];
 																		
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
-																	}
+																	} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
 																}
 															}
 															return chapters_list;
@@ -86,8 +101,12 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
-													var url_tail = url.split(this.url+manga_name+"/")[1].split("c")[1].split("/")[0];
-													//and get rid of page number
+													var url_tail = url.split(this.url+manga_name+"/")[1];
+													//if there is a chapter number
+													if (url_tail.split("c")[1]){
+														//get rid of volume and page number
+														url_tail = url_tail.split("c")[1].split("/")[0];
+													}
 													return url_tail;
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
@@ -110,7 +129,7 @@ var websites_list = {
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 																	}
 																}
-															}
+															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
 															return chapters_list;
 				},
 				reconstructChapterURL: async function (manga_name, chapter){return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
@@ -122,22 +141,36 @@ var websites_list = {
 //listen to content script, and set manga chapter as "read"
 browser.runtime.onMessage.addListener(readMangaChapter);
 
-async function readMangaChapter(message) {
+async function readMangaChapter(message, sender) {
 	if  (message.target == "background" && message.url){
 		var url = message.url;
 		var manga = {};
 		var manga_name = getMangaName(url);
-		
+		var current_chapter = getCurrentChapter(url);
+
 		manga = (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name];
 		if (manga) {
-			var current_chapter = getCurrentChapter(url);
-			
 			if (current_chapter) {
 				if (manga.chapters_list[current_chapter]["status"] != "read") {
 					manga.chapters_list[current_chapter] = {"status" : "read", "url" : url};
 					let to_log = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 					to_log[manga_name] = manga;
 					browser.storage.local.set({"mangas_list" : to_log});
+				}
+				//send navigation info to content_script
+				let chapters_numbers = Object.keys(manga.chapters_list).sort();
+				let index = chapters_numbers.indexOf(current_chapter);
+				if (index >= 0) {
+					//first chapter (if current chapter isn't the first)
+					let first_chapter = index > 0 ? manga.chapters_list[chapters_numbers[0]].url : "";
+					//previous chapter (if there is at least one chapter between first and current)
+					let previous_chapter = index > 1 ? manga.chapters_list[chapters_numbers[index-1]].url : "";
+					//next chapter (if there is at least one chapter between current and last)
+					let next_chapter = index < (chapters_numbers.length-2) ? manga.chapters_list[chapters_numbers[index+1]].url : "";
+					//last chapter (if current chapter isn't the last)
+					let last_chapter = index < (chapters_numbers.length-1) ? manga.chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
+					
+					browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
 				}
 			}
 		}
@@ -152,7 +185,7 @@ async function exportMangasList(){
 	var list = {"MangaSubscriberBackUp":await browser.storage.local.get()};
 	var blob = new Blob([JSON.stringify(list, null, 2)], {type : 'application/json'});
 
-	await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListTestCase.json", "saveAs":true});
+	await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListBackUp.json", "saveAs":true});
 	return;
 }
 

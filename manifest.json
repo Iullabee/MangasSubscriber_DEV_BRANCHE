@@ -34,7 +34,8 @@
 			"matches": ["*://www.mangahere.cc/manga/*",
 						"*://fanfox.net/manga/*",
 						"*://www.mangatown.com/manga/*"],
-			"js": ["content_tasks/content_script.js"]
+			"js": ["content_tasks/content_script.js"],
+			"css":["content_tasks/content.css"]
 		}
 	],
 	
