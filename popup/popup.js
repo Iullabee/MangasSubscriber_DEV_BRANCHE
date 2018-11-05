@@ -104,7 +104,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		dom_button.appendChild(dom_button_text);
 		dom_button.addEventListener("click", 
 									async function(e){	let my_manga = e.target.parentElement.parentElement;
-														let manga_url = await background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
+														let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
 														browser.tabs.create({url:manga_url, active:false});
 													}
 									, false);

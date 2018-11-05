@@ -151,20 +151,22 @@ async function readMangaChapter(message, sender) {
 					to_log[manga_name] = manga;
 					browser.storage.local.set({"mangas_list" : to_log});
 				}
-				//send navigation info to content_script
-				let chapters_numbers = Object.keys(manga.chapters_list).sort();
-				let index = chapters_numbers.indexOf(current_chapter);
-				if (index >= 0) {
-					//first chapter (if current chapter isn't the first)
-					let first_chapter = index > 0 ? manga.chapters_list[chapters_numbers[0]].url : "";
-					//previous chapter (if there is at least one chapter between first and current)
-					let previous_chapter = index > 1 ? manga.chapters_list[chapters_numbers[index-1]].url : "";
-					//next chapter (if there is at least one chapter between current and last)
-					let next_chapter = index < (chapters_numbers.length-2) ? manga.chapters_list[chapters_numbers[index+1]].url : "";
-					//last chapter (if current chapter isn't the last)
-					let last_chapter = index < (chapters_numbers.length-1) ? manga.chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
-					
-					browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
+				if (sender){
+					//send navigation info to content_script
+					let chapters_numbers = Object.keys(manga.chapters_list).sort();
+					let index = chapters_numbers.indexOf(current_chapter);
+					if (index >= 0) {
+						//first chapter (if current chapter isn't the first)
+						let first_chapter = index > 0 ? manga.chapters_list[chapters_numbers[0]].url : "";
+						//previous chapter (if there is at least one chapter between first and current)
+						let previous_chapter = index > 1 ? manga.chapters_list[chapters_numbers[index-1]].url : "";
+						//next chapter (if there is at least one chapter between current and last)
+						let next_chapter = index < (chapters_numbers.length-2) ? manga.chapters_list[chapters_numbers[index+1]].url : "";
+						//last chapter (if current chapter isn't the last)
+						let last_chapter = index < (chapters_numbers.length-1) ? manga.chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
+						
+						browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
+					}
 				}
 			}
 		}
@@ -288,8 +290,8 @@ async function followManga(url){
 	}
 	
 	manga = {"website_name":website.name,
-						"update":true,	
-						"chapters_list":chapters_list};
+				"update":true,	
+				"chapters_list":chapters_list};
 
 	//add manga to storage
 	var list = await getMangasList();
@@ -359,7 +361,7 @@ async function getAllChapters(manga_name, website_name){
 	else return "NotAChapter"; 
 }
 
-async function reconstructChapterURL(website_name, manga_name, chapter){
+async function reconstructChapterURL(manga_name, chapter){
 	return (await getMangasList())[manga_name]["chapters_list"][chapter]["url"];
 }
 
@@ -446,6 +448,35 @@ async function db_update(){
 	}
 	return;
 }
+
+//returns an object containing each manganame as a key, associated to its preferred website -- can't return just the preferred website for one manga and call it each time we need it, it takes too much time to do that for each manga in options_page
+async function getPreferredWebsites(){
+	let mangas_list = await getMangasList();
+	let preferred_websites = {};
+	for (let manga in mangas_list) {
+		preferred_websites[manga] = mangas_list[manga]["website_name"];
+	}
+	return preferred_websites;
+}
+
+//sets website_name as preferred website for manga_name
+async function setPreferredWebsite(manga_name, website_name){
+	let mangas_list = await getMangasList();
+	mangas_list[manga_name]["website_name"] = website_name;
+	await browser.storage.local.set({"mangas_list":mangas_list});
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 db_update();
 //update badge

@@ -77,9 +77,14 @@ label {
 	vertical-align: middle;
 }
 
-select {
+.chapters_select {
 	width: 100%;
 	min-width: 100px;
+}
+
+.websites_select {
+	width: 100%;
+	min-width: 110px;
 }
 
 .read_chapter {

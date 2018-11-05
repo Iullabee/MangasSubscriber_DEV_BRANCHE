@@ -95,6 +95,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 			legend.attributes.removeNamedItem("hidden");
 		
 		var mangas = await background.getMangasList();
+		var prefered_websites = await background.getPreferredWebsites();
 		//sorting the mangas alphabetically
 		mangas = Object.keys(mangas).sort().reduce((r, k) => (r[k] = mangas[k], r), {});
 		var unread_mangas = [];
@@ -107,7 +108,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 		//for each manga, 
 		for (let name in mangas){
 			//if the manga corresponds with the search
-			if (search_list == "" || name.indexOf(search_list) != -1){
+			if (search_list == "" || name.indexOf(search_list) != -1 || name.replace(/_/g, " ").indexOf(search_list) != -1){
 				var manga = mangas[name];
 				
 				//sort the chapters (unread ones by ascending order, read ones by descending order)
@@ -161,7 +162,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				let dom_select_td = document.createElement("div");
 				dom_select_td.setAttribute("class", "cell");
 				let dom_select = document.createElement("select");
-				dom_select.setAttribute("class", unread_chapters.length?"unread_chapter cell":"read_chapter");
+				dom_select.setAttribute("class", unread_chapters.length?"chapters_select unread_chapter":"chapters_select read_chapter");
 				//update background when selected option changes
 				dom_select.addEventListener("change", function(e){e.target.setAttribute("class", e.target.options[e.target.selectedIndex].classList);}, false);
 				
@@ -192,12 +193,35 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				dom_read_button.appendChild(dom_read_button_text);
 				dom_read_button.addEventListener("click", 
 						async function(e){	let my_manga = e.target.parentElement.parentElement;
-											let manga_url = await background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
+											let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByTagName("select")[0].options[my_manga.getElementsByTagName("select")[0].selectedIndex].value); 
 											browser.tabs.create({url:manga_url, active:false});
 										}
 						, false);
 				dom_read_button_td.appendChild(dom_read_button);
 				dom_manga.appendChild(dom_read_button_td);
+
+				//option to choose preferred website
+				let dom_choose_preferred_website_cell = document.createElement("div");
+				dom_choose_preferred_website_cell.setAttribute("class", "cell");
+				let dom_choose_preferred_website = document.createElement("select");
+				dom_choose_preferred_website.setAttribute("class", "websites_select");
+				//update preferred website when selected option changes
+				dom_choose_preferred_website.addEventListener("change", async function(e){let my_manga = e.target.parentElement.parentElement;
+																						background.setPreferredWebsite(my_manga.manga_name, e.target.value);}, false);
+				//add options
+				for (let website_name in background.websites_list){
+					let dom_option = document.createElement("option");
+					dom_option.setAttribute("class", "");
+					let dom_option_text = document.createTextNode(website_name);
+					dom_option.appendChild(dom_option_text);
+					if (website_name == prefered_websites[name])
+						dom_option.selected = "selected";
+					dom_choose_preferred_website.appendChild(dom_option);
+				}
+				dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
+				dom_manga.appendChild(dom_choose_preferred_website_cell);
+				//button to update now
+
 
 				//and a button to mark all chapters as read
 				let dom_read_all_button_td = document.createElement("div");
@@ -206,20 +230,28 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				dom_read_all_button.setAttribute("class", "icons read_all_icon");
 				dom_read_all_button.addEventListener("click", 
 						async function(e){	let my_manga = e.target.parentElement.parentElement;
-											let chapters_list = my_manga.getElementsByTagName("select")[0].options;
-											for (let index in chapters_list) {
-												if (chapters_list.hasOwnProperty(index) && chapters_list[index].classList.contains("unread_chapter")){
-													let manga_url = await background.reconstructChapterURL(my_manga.website_name, my_manga.manga_name, chapters_list[index].value); 
+											let chapters_list = "";
+											let select_list = my_manga.getElementsByTagName("select");
+											for (let selector in select_list) {
+												if (select_list.hasOwnProperty(selector) && select_list[selector].classList.contains("chapters_select")) {
+													chapters_list = my_manga.getElementsByTagName("select")[selector];
+												}
+											}
+											
+											for (let index in chapters_list.options) {
+												if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
+													let manga_url = await background.reconstructChapterURL(my_manga.manga_name, chapters_list.options[index].value); 
 													await background.readMangaChapter({"target" : "background", "url" : manga_url});
 													
 													chapters_list[index].setAttribute("class", "read_chapter");
 												} else break;
 											}
-											
 											let unread_number = my_manga.getElementsByClassName("unread_number")[0];
-											unread_number.innerText = " (0)";
-											unread_number.setAttribute("class", "read_number");
-											my_manga.getElementsByTagName("select")[0].setAttribute("class", "read_chapter");
+											if (unread_number) {
+												unread_number.innerText = " (0)";
+												unread_number.setAttribute("class", "read_number cell");
+												chapters_list.setAttribute("class", "chapters_select read_chapter");
+											}
 										}
 						, false);
 				dom_read_all_button_td.appendChild(dom_read_all_button);
