@@ -38,8 +38,6 @@ var websites_list = {
 																}
 															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
 															return chapters_list;
-				},
-				reconstructChapterURL: async function (manga_name, chapter){return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
 				}
 	},
 	"fanfox":{name:"fanfox",
@@ -91,8 +89,6 @@ var websites_list = {
 																}
 															}
 															return chapters_list;
-				},
-				reconstructChapterURL: async function (manga_name, chapter){return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
 				}
 	},
 	"mangatown":{name:"mangatown",
@@ -131,8 +127,6 @@ var websites_list = {
 																}
 															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
 															return chapters_list;
-				},
-				reconstructChapterURL: async function (manga_name, chapter){return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
 				}
 	},
 };
@@ -147,13 +141,13 @@ async function readMangaChapter(message, sender) {
 		var manga = {};
 		var manga_name = getMangaName(url);
 		var current_chapter = getCurrentChapter(url);
+		let to_log = await getMangasList();
 
-		manga = (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name];
+		manga = to_log[manga_name];
 		if (manga) {
 			if (current_chapter) {
 				if (manga.chapters_list[current_chapter]["status"] != "read") {
 					manga.chapters_list[current_chapter] = {"status" : "read", "url" : url};
-					let to_log = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 					to_log[manga_name] = manga;
 					browser.storage.local.set({"mangas_list" : to_log});
 				}
@@ -197,7 +191,7 @@ async function importMangasList(file, import_option){
 	var reader = new FileReader();
     reader.onloadend = async function(e){var import_file = JSON.parse(e.target.result);
 							var back_up = import_file["MangaSubscriberBackUp"];
-							var stored_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+							var stored_list = await getMangasList();
 							if (back_up){
 								//if merge, merge storage and import_list
 								if (import_option == "merge"){
@@ -225,7 +219,7 @@ async function importMangasList(file, import_option){
 async function updateMangasList(){
 	browser.browserAction.setBadgeText({"text" : "UPD"});
 	//fetch current list
-	var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var mangas_list = await getMangasList();
 	var updated_chapters_list = {};
 	var check_all_sites = await getCheckAllSites();
 	//for each manga that is set to update, get an updated chapters list
@@ -275,9 +269,9 @@ async function getMangasList(){
 }
 
 async function isMangaFollowed(manga_name){
-	var check = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var check = (await getMangasList())[manga_name];
 	
-	return check[manga_name] ? true : false;
+	return check ? true : false;
 }
 
 //follow a manga
@@ -298,7 +292,7 @@ async function followManga(url){
 						"chapters_list":chapters_list};
 
 	//add manga to storage
-	var list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var list = await getMangasList();
 	list[manga_name] = manga;
 	await browser.storage.local.set({"mangas_list" : list});
 	//update badge
@@ -310,7 +304,7 @@ async function followManga(url){
 //delete a manga
 async function deleteManga(manga_name){
 	//get list
-	var list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var list = await getMangasList();
 	//remove manga from list
 	delete list[manga_name];
 	//update storage
@@ -321,7 +315,7 @@ async function deleteManga(manga_name){
 }
 
 async function setMangaUpdate(manga_name, update_state) {
-	var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var mangas_list = await getMangasList();
 	mangas_list[manga_name]["update"] = update_state;
 	await browser.storage.local.set({"mangas_list":mangas_list});
 	return;
@@ -366,7 +360,7 @@ async function getAllChapters(manga_name, website_name){
 }
 
 async function reconstructChapterURL(website_name, manga_name, chapter){
-	return (await browser.storage.local.get("mangas_list"))["mangas_list"][manga_name]["chapters_list"][chapter]["url"];
+	return (await getMangasList())[manga_name]["chapters_list"][chapter]["url"];
 }
 
 
@@ -386,7 +380,7 @@ async function getSource(source_url){
 
 async function setBadgeNumber() {
 	var number = 0;
-	var mangas = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	var mangas = await getMangasList();
 	
 	for (let name in mangas){
 		let updated = false;
