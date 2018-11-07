@@ -102,6 +102,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 		var read_mangas = [];
 		
 		//get search value and re-initialize it
+		let temp_search_field = document.getElementById("search_list");
 		var search_list = document.getElementById("search_list").value;
 		document.getElementById("search_list").value = "";
 		
@@ -209,9 +210,14 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				dom_choose_preferred_website.addEventListener("change", async function(e){let my_manga = e.target.parentElement.parentElement;
 																						background.setPreferredWebsite(my_manga.manga_name, e.target.value);}, false);
 				//add options
+				let dom_option_title = document.createElement("option");
+				dom_option_title_text = document.createTextNode("preferred website");
+				dom_option_title.appendChild(dom_option_title_text);
+				dom_option_title.setAttribute("disabled", "disabled");
+				dom_choose_preferred_website.appendChild(dom_option_title);
+
 				for (let website_name in background.websites_list){
 					let dom_option = document.createElement("option");
-					dom_option.setAttribute("class", "");
 					let dom_option_text = document.createTextNode(website_name);
 					dom_option.appendChild(dom_option_text);
 					if (website_name == prefered_websites[name])
@@ -220,8 +226,30 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				}
 				dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
 				dom_manga.appendChild(dom_choose_preferred_website_cell);
-				//button to update now
 
+
+				//button to update now
+				let dom_update_button_td = document.createElement("div");
+				dom_update_button_td.setAttribute("class", "cell");
+				let dom_update_button = document.createElement("div");
+				dom_update_button.update_state = manga["update"];
+				dom_update_button.setAttribute("class", "icons update_icon");
+				dom_update_button.addEventListener("click", 
+						async function(e){	let my_manga = e.target.parentElement.parentElement;
+											await background.updateMangasList(my_manga.manga_name);
+											//refresh list
+											let search_field = document.getElementById("search_list");
+											search_field.value = search_list;
+											var event = new Event('change', {
+												'bubbles': true,
+												'cancelable': true
+											});
+											
+											search_field.dispatchEvent(event);
+										}
+						, false);
+						dom_update_button_td.appendChild(dom_update_button);
+				dom_manga.appendChild(dom_update_button_td);
 
 				//and a button to mark all chapters as read
 				let dom_read_all_button_td = document.createElement("div");
@@ -265,10 +293,8 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 				dom_update_toggle_button.setAttribute("class", "icons update_"+dom_update_toggle_button.update_state+"_icon");
 				dom_update_toggle_button.addEventListener("click", 
 						async function(e){	let my_manga = e.target.parentElement.parentElement;
-											//if (e.target.update_state == "true") {
-												await background.setMangaUpdate(my_manga.manga_name, !e.target.update_state);
-												e.target.update_state = !e.target.update_state;
-											
+											await background.setMangaUpdate(my_manga.manga_name, !e.target.update_state);
+											e.target.update_state = !e.target.update_state;
 											e.target.setAttribute("class", "icons update_"+e.target.update_state+"_icon");
 										}
 						, false);

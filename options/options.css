@@ -175,6 +175,11 @@ label {
 	border: 1px solid black;
 }
 
+.update_icon {
+	background:url("/icons/high_resolution_update.png");
+	background-size: contain;
+}
+
 .read_all_icon {
 	background:url("/icons/high_resolution_read_all.png");
 	background-size: contain;
