@@ -30,23 +30,24 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		
 		//construct tr element with manga & website name properties,   
 		let dom_manga = document.createElement("div");
-		dom_manga.setAttribute("class", "list_line");
+		dom_manga.classList.add("list_line");
 		dom_manga.manga_name = name;
 		dom_manga.website_name = manga.website_name;
-		dom_manga.style.display = unread_chapters.length?"":"none";
+		if (unread_chapters.length == 0) 
+			dom_manga.classList.add("hidden");
 		
 		//displaying the manga name 
 		let dom_manga_text = document.createElement("div");
-		dom_manga_text.setAttribute("class", "tooltiptextcontainer");
+		dom_manga_text.classList.add("tooltiptextcontainer");
 		//create a tooltip with full name
 		let tooltip = document.createElement("span");
-		tooltip.setAttribute("class", "tooltiptext");
+		tooltip.classList.add("tooltiptext");
 		let tooltip_text = document.createTextNode(name.replace(/_/g, " "));
 		tooltip.appendChild(tooltip_text);
 		dom_manga_text.appendChild(tooltip);
 		//add text to the name
 		let dom_name_node = document.createElement("span");
-		dom_name_node.setAttribute("class", "name_text");
+		dom_name_node.classList.add("name_text");
 		let dom_name_text_node = document.createTextNode(name.replace(/_/g, " "));
 		dom_name_node.appendChild(dom_name_text_node);
 		dom_manga_text.appendChild(dom_name_node);
@@ -57,10 +58,10 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		let dom_unread_number_node = document.createElement("div");
 		let text_node;
 		if (unread_chapters.length) {
-			dom_unread_number_node.setAttribute("class", "red_text align_right");
+			dom_unread_number_node.classList.add("red_text", "align_right");
 			text_node = document.createTextNode(" ("+unread_chapters.length+")");
 		} else {
-			dom_unread_number_node.setAttribute("class", "green_text align_right");
+			dom_unread_number_node.classList.add("green_text", "align_right");
 			text_node = document.createTextNode(" (0)");
 		}
 		dom_unread_number_node.appendChild(text_node);
@@ -70,15 +71,14 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		//and the sorted chapter list (unread first, then read)
 		
 		let dom_select_td = document.createElement("div");
-		dom_select_td.setAttribute("class", "");
 		let dom_select = document.createElement("select");
-		dom_select.setAttribute("class", unread_chapters.length?"unread_chapter":"read_chapter");
+		dom_select.classList.add(unread_chapters.length?"unread_chapter":"read_chapter");
 		//update background when selected option changes
-		dom_select.addEventListener("change", function(e){e.target.setAttribute("class", e.target.options[e.target.selectedIndex].classList);}, false);
+		dom_select.addEventListener("change", function(e){e.target.classList.add(e.target.options[e.target.selectedIndex].classList);}, false);
 		
 		for (let x in unread_chapters){
 			let dom_option = document.createElement("option");
-			dom_option.setAttribute("class", "unread_chapter");
+			dom_option.classList.add("unread_chapter");
 			let dom_option_text = document.createTextNode(unread_chapters[x]);
 			dom_option.appendChild(dom_option_text);
 			
@@ -86,7 +86,7 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		}
 		for (let x in read_chapters){
 			let dom_option = document.createElement("option");
-			dom_option.setAttribute("class", "read_chapter");
+			dom_option.classList.add("read_chapter");
 			let dom_option_text = document.createTextNode(read_chapters[x]);
 			dom_option.appendChild(dom_option_text);
 			
@@ -98,7 +98,6 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		
 		//and a button to read chapter selected from the list. button needs listener to (1) call background function to reconstruct url, and (2) open link in new tab
 		let dom_button_td = document.createElement("div");
-		dom_button_td.setAttribute("class", "");
 		let dom_button = document.createElement("button");
 		let dom_button_text = document.createTextNode("read");
 		dom_button.appendChild(dom_button_text);
@@ -126,38 +125,33 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 	
 	
 	//hide first layer menu
-	document.getElementById("menu_panel").style.display = "none";
+	document.getElementById("menu_panel").classList.toggle("hidden");
 	//show new mangas list
-	document.getElementById("mangas_list").style.display = "block";
+	document.getElementById("mangas_list").classList.toggle("hidden");
 });
 
 
 document.getElementById("all_releases").addEventListener("click", async (e) => {
+	var all_releases = document.getElementById("list").getElementsByClassName("list_line");
+	for (let release in all_releases){
+		if (all_releases.hasOwnProperty(release) && all_releases[release].getElementsByClassName("green_text").length > 0) {
+				all_releases[release].classList.toggle("hidden"); 
+		}
+	}
 	if (e.target.innerHTML == "show all mangas") {
 		e.target.innerHTML = "hide old mangas";
-		var all_releases = document.getElementById("list").childNodes;
-		for (release in all_releases){
-			if (all_releases.hasOwnProperty(release) && all_releases[release].style.display == "none") {
-					all_releases[release].style.display = ""; 
-			}
-		}
+		
 	} else {
 		e.target.innerHTML = "show all mangas";
-		var all_releases = document.getElementById("list").childNodes;
-		for (release in all_releases){
-			if (all_releases.hasOwnProperty(release) && all_releases[release].firstChild.nextSibling.classList.contains("green_text")) {
-					all_releases[release].style.display = "none"; 
-			}
-		}
 	}
 
 });
 
 document.getElementById("back_menu").addEventListener("click", async (e) => {
 	//show first layer menu
-	document.getElementById("menu_panel").style.display = "";
+	document.getElementById("menu_panel").classList.toggle("hidden");
 	//hide new mangas list
-	document.getElementById("mangas_list").style.display = "none";
+	document.getElementById("mangas_list").classList.toggle("hidden");
 
 });
 
@@ -180,6 +174,7 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 
 });
 
+//TODO : reset console_display
 document.getElementById("update").addEventListener("click", async (e) => {
 	var background = await browser.runtime.getBackgroundPage();
 	e.target.innerText = "...";
@@ -196,10 +191,8 @@ document.getElementById("options").addEventListener("click", async (e) => {
 //initialize follow button
 async function initializeFollowButton(){
 	var manga_name = "notAManga";
-	
 	var background = await browser.runtime.getBackgroundPage();
 	var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
-	//website_url = current_tab[0].url;
 	manga_name = background.getMangaName(url);
 	if (manga_name == "notAManga"){
 		document.getElementById("follow").innerHTML = "can't follow this";
@@ -212,14 +205,49 @@ async function initializeFollowButton(){
 
 initializeFollowButton();
 
-
+//toggle console display
 document.getElementById("console_toggle").addEventListener("click", async (e) => {
-	//show first layer menu
-	if (document.getElementById("console").style.display == "none") {
-		document.getElementById("console").style.display = "";
-	} else {
-		document.getElementById("console").style.display = "none";
+	document.getElementById("console").classList.toggle("hidden");
+});
+
+//initializing status
+document.getElementById("console_updating").status = "hiding";
+//toggle "updating" console messages display
+document.getElementById("console_updating").addEventListener("click", async (e) => {
+	let messages = document.getElementsByClassName("console_line_container");
+	if (messages.length > 0) {
+		for (let index in messages){
+			if (messages[index].status == "updating")
+			e.target.status == "hiding" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
+		}
 	}
+	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
+});
+
+//initializing status
+document.getElementById("console_completed").status = "hiding";
+//toggle "completed" console messages display
+document.getElementById("console_completed").addEventListener("click", async (e) => {
+	let messages = document.getElementsByClassName("console_line_container");
+	if (messages.length > 0) {
+		for (let index in messages){
+			if (messages[index].status == "completed")
+			e.target.status == "hiding" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
+		}
+	}
+	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
+});
+
+//turn console_errors div into a copy errors details to clipboard button if console_errors_number > 0
+document.getElementById("console_errors").addEventListener("click", (e) => {
+	let details = document.getElementsByClassName("console_details");
+	let details_text = "";
+	for (let index in details){
+		if (details[index].classList) {
+			details_text += details[index].classList.contains("red_text") ? details[index].innerText+"\n" : "";
+		}
+	}
+	navigator.clipboard.writeText(details_text);
 });
 
 //listen to background script, and display console messages
@@ -234,21 +262,22 @@ async function updateConsole(message) {
 		//displaying updates status
 		//main line (name + website + status)
 		let manga = document.createElement("div");
-		manga.setAttribute("class", "");
+		manga.classList.add("console_line_container");
 		manga.setAttribute("id", log.manga+log.from+log.status);
+		manga.status = log.status;
 
 		//name 
 		let retrieving = document.createElement("div");
-		retrieving.setAttribute("class", "tooltiptextcontainer left console_line");
+		retrieving.classList.add( "tooltiptextcontainer", "left", "console_line");
 		//name tooltip
 		let tooltip = document.createElement("span");
-		tooltip.setAttribute("class", "tooltiptext");
+		tooltip.classList.add("tooltiptext");
 		let tooltip_text = document.createTextNode(log.manga.replace(/_/g, " "));
 		tooltip.appendChild(tooltip_text);
 		retrieving.appendChild(tooltip);
 		//add text to the name
 		let retrieving_text = document.createElement("span");
-		retrieving_text.setAttribute("class", "console_name_text");
+		retrieving_text.classList.add("console_name_text");
 		let retrieving_text_node = document.createTextNode("retrieving "+log.manga.replace(/_/g, " "));
 		retrieving_text.appendChild(retrieving_text_node);
 		retrieving.appendChild(retrieving_text);
@@ -256,14 +285,20 @@ async function updateConsole(message) {
 
 		//website 
 		let from = document.createElement("div");
-		from.setAttribute("class", "console_from left console_line");
+		from.classList.add("console_from", "left", "console_line");
 		let from_text_node = document.createTextNode(" from "+log.from);
 		from.appendChild(from_text_node);
 		manga.appendChild(from);
 
 		//status 
 		let status = document.createElement("div");
-		status.setAttribute("class",  (log.status == "completed" ? "green_text" : log.status == "errors" ? "red_text" : "")+" left console_status console_line" );
+		status.classList.add("left", "console_status", "console_line");
+		if (log.status == "completed") {
+			status.classList.add("green_text");
+			manga.classList.add("hidden");
+		}  else if (log.status == "errors") {
+			status.classList.add("red_text");
+		} else manga.classList.add("hidden");
 		let status_text_node = document.createTextNode(" - status : "+log.status);
 		status.appendChild(status_text_node);
 		manga.appendChild(status);
@@ -272,11 +307,7 @@ async function updateConsole(message) {
 		manga.addEventListener("click", 
 								async function(e){	if (log.details != "") {
 														let details = document.getElementById(this.id+"details");
-														if (details.style.display == "") {
-															details.style.display = "none";
-														} else {
-															details.style.display = "";
-														}
+														details.classList.toggle("hidden");
 													}
 												}
 								, false);
@@ -286,16 +317,15 @@ async function updateConsole(message) {
 		let manga_details = document.createElement("div");
 		manga_details.setAttribute("id", log.manga+log.from+log.status+"details");
 		let details = document.createElement("span");
-		details.setAttribute("class", (log.status == "errors" ? "red_text" : "")+" left console_details");
+		details.classList.add((log.status == "errors" ? "red_text" : "dummy"), "left", "console_details");
 		let details_text_node = document.createTextNode((log.details != "" ? " details : "+log.details : ""));
 		details.appendChild(details_text_node);
-		manga_details.style.display = log.status == "errors" ? "" : "none";
+		manga_details.classList.add(log.status == "errors" ? "dummy" : "hidden");
 		manga_details.appendChild(details);
 		console_display.appendChild(manga_details);
 		
 		if (!user_scrolled)
 			console_display.scrollTop = console_display.scrollHeight - console_display.clientHeight;
-
 
 		//updating console recap numbers
 		if (log.status == "updating") {
@@ -319,29 +349,6 @@ async function updateConsole(message) {
 		if (document.getElementById("console_updating_number").value == 0) {
 			document.getElementById("update").innerText = "list updated";
 			setTimeout(()=>{document.getElementById("update").innerText = "update the list";},3000);
-		}
-		//turn console_errors div into a copy errors details to clipboard button if console_errors_number > 0
-		var console_errors = document.getElementById("console_errors")
-		if (log.status == "errors" && ! console_errors.classList.contains('button')) {
-			console_errors.setAttribute("class", "left medium_button button");
-			console_errors.addEventListener("click", 
-											function change_to_button(e){let details = document.getElementsByClassName("console_details");
-														let details_text = "";
-														for (let index in details){
-															if (details[index].classList) {
-																details_text += details[index].classList.contains("red_text") ? details[index].innerText+"\n" : "";
-															}
-														}
-														navigator.clipboard.writeText(details_text).then(function() {
-															console_errors.removeEventListener("click", change_to_button);
-															console_errors.setAttribute("class", "left medium_button");
-														  }, function() {
-															/* clipboard write failed */
-															alert("couldn't copy error messages to clipboard");
-														  });
-														
-															}
-											, false);
 		}
 	}
 }

@@ -36,7 +36,7 @@ var websites_list = {
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].getElementsByClassName("color_0077")[0].href.replace("moz-extension", "http")};
 																	}
 																}
-															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
+															} else throw new Error(" can't find "+manga_name+" on "+this.name);
 															return chapters_list;
 				}
 	},
@@ -85,7 +85,7 @@ var websites_list = {
 																		
 																		if (chapter_number)
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
-																	} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
+																	} else throw new Error(" can't find "+manga_name+" on "+this.name);
 																}
 															}
 															return chapters_list;
@@ -125,7 +125,7 @@ var websites_list = {
 																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 																	}
 																}
-															} else throw new Error("Error - can't find "+manga_name+" on "+this.name);
+															} else throw new Error(" can't find "+manga_name+" on "+this.name);
 															return chapters_list;
 				}
 	},
