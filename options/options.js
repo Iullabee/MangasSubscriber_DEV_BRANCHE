@@ -1,5 +1,5 @@
 //display the version
-document.getElementById("details").innerHTML = "MangaSubscriber v" + browser.runtime.getManifest().version;
+document.getElementById("details").textContent = "MangaSubscriber v" + browser.runtime.getManifest().version;
 
 //toggle the "check all sites when updating the list" option
 document.getElementById("check_all_sites").addEventListener("click", async (e) => {
@@ -28,14 +28,14 @@ document.getElementById("export").addEventListener("click", async (e) => {
 
 	var export_text = document.getElementById("export");
 
-	export_text.innerHTML = "...";
+	export_text.textContent = "...";
 	var fail = await background.exportMangasList();
 	if (!fail){
-		export_text.innerHTML = "list exported";
+		export_text.textContent = "list exported";
 	} else {
-		export_text.innerHTML = "error, try again";
+		export_text.textContent = "error, try again";
 	}
-	setTimeout(()=>{export_text.innerHTML = "export mangas list";},3000);
+	setTimeout(()=>{export_text.textContent = "export mangas list";},3000);
 });
 
 //import the manga list
@@ -60,19 +60,19 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 		
 		var fail = await background.importMangasList(file, import_option);
 		if (!fail){
-			document.getElementById("import_text").innerHTML = "list imported";
+			document.getElementById("import_text").textContent = "list imported";
 		} else {
-			document.getElementById("import_text").innerHTML = "error, try again";
+			document.getElementById("import_text").textContent = "error, try again";
 		}
-		setTimeout(()=>{document.getElementById("import_text").innerHTML = "import mangas list";
+		setTimeout(()=>{document.getElementById("import_text").textContent = "import mangas list";
 						document.getElementById("import_text").colSpan = "1";
 						document.getElementById("import_options").style="display:";
 						document.getElementById("visible_import").textContent = "[choose a file]";
 						document.getElementById("import_file").style="display:";
 		},3000);
 	} else {
-		document.getElementById("import_text").innerHTML = "error, please choose a file to import";
-		setTimeout(()=>{document.getElementById("import_text").innerHTML = "import mangas list";},3000);
+		document.getElementById("import_text").textContent = "error, please choose a file to import";
+		setTimeout(()=>{document.getElementById("import_text").textContent = "import mangas list";},3000);
 	}
 });
 

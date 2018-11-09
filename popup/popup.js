@@ -138,13 +138,7 @@ document.getElementById("all_releases").addEventListener("click", async (e) => {
 				all_releases[release].classList.toggle("hidden"); 
 		}
 	}
-	if (e.target.innerHTML == "show all mangas") {
-		e.target.innerHTML = "hide old mangas";
-		
-	} else {
-		e.target.innerHTML = "show all mangas";
-	}
-
+	e.target.textContent == "show all mangas" ? e.target.textContent = "hide old mangas" : e.target.textContent = "show all mangas";
 });
 
 document.getElementById("back_menu").addEventListener("click", async (e) => {
@@ -174,11 +168,30 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 
 });
 
-//TODO : reset console_display
+//update the list
 document.getElementById("update").addEventListener("click", async (e) => {
-	var background = await browser.runtime.getBackgroundPage();
-	e.target.textContent = "...";
-	background.updateMangasList();
+	//if not already updating
+	if (e.target.textContent != "...") {
+		//reset the console_display
+		let console_display = document.getElementById("console_display");
+		while (console_display.firstChild) {
+			console_display.removeChild(console_display.firstChild);
+		}
+		let updating_number = document.getElementById("console_updating_number");
+		updating_number.value = 0;
+		updating_number.textContent = "(0)";
+		let completed_number = document.getElementById("console_completed_number");
+		completed_number.value = 0;
+		completed_number.textContent = "(0)";
+		let errors_number = document.getElementById("console_errors_number");
+		errors_number.value = 0;
+		errors_number.textContent = "(0)";
+		
+		//update the list
+		var background = await browser.runtime.getBackgroundPage();
+		e.target.textContent = "...";
+		background.updateMangasList();
+	}
 });
 
 document.getElementById("options").addEventListener("click", async (e) => {
@@ -195,11 +208,11 @@ async function initializeFollowButton(){
 	var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
 	manga_name = background.getMangaName(url);
 	if (manga_name == "notAManga"){
-		document.getElementById("follow").innerHTML = "can't follow this";
+		document.getElementById("follow").textContent = "can't follow this";
 	} else if (await background.isMangaFollowed(manga_name)){
-		document.getElementById("follow").innerHTML = "already followed";
+		document.getElementById("follow").textContent = "already followed";
 	} else {
-		document.getElementById("follow").innerHTML = "follow this manga";
+		document.getElementById("follow").textContent = "follow this manga";
 	}
 }
 
@@ -339,16 +352,16 @@ async function updateConsole(message) {
 			if (!updating_number.value)
 				updating_number.value = 0;
 			updating_number.value += 1;
-			updating_number.innerHTML = "("+updating_number.value+")";
+			updating_number.textContent = "("+updating_number.value+")";
 		} else {
 			let updating_number = document.getElementById("console_updating_number");
 			updating_number.value -= 1;
-			updating_number.innerHTML = "("+updating_number.value+")";
+			updating_number.textContent = "("+updating_number.value+")";
 			let finished_number = document.getElementById("console_"+log.status+"_number");
 			if (!finished_number.value)
 				finished_number.value = 0;
 			finished_number.value += 1;
-			finished_number.innerHTML = "("+finished_number.value+")";
+			finished_number.textContent = "("+finished_number.value+")";
 		}
 
 		//informing update button the updating is finished
