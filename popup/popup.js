@@ -157,17 +157,17 @@ document.getElementById("back_menu").addEventListener("click", async (e) => {
 
 document.getElementById("follow").addEventListener("click", async (e) => {
 	var background = await browser.runtime.getBackgroundPage();
-	switch (e.target.innerText) {
+	switch (e.target.textContent) {
 		case "follow this manga" :
 			var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
-			e.target.innerText = "...";
+			e.target.textContent = "...";
 			var fail = await background.followManga(url);
 			if (!fail){
-				e.target.innerText = "now following";
-				setTimeout(()=>{e.target.innerText = "already followed";},3000);
+				e.target.textContent = "now following";
+				setTimeout(()=>{e.target.textContent = "already followed";},3000);
 			} else {
-				e.target.innerText = "error, try again";
-				setTimeout(()=>{e.target.innerText = "follow this manga";},3000);
+				e.target.textContent = "error, try again";
+				setTimeout(()=>{e.target.textContent = "follow this manga";},3000);
 			}
 			break;
 	}
@@ -177,7 +177,7 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 //TODO : reset console_display
 document.getElementById("update").addEventListener("click", async (e) => {
 	var background = await browser.runtime.getBackgroundPage();
-	e.target.innerText = "...";
+	e.target.textContent = "...";
 	background.updateMangasList();
 });
 
@@ -210,32 +210,38 @@ document.getElementById("console_toggle").addEventListener("click", async (e) =>
 	document.getElementById("console").classList.toggle("hidden");
 });
 
-//initializing status
-document.getElementById("console_updating").status = "hiding";
 //toggle "updating" console messages display
 document.getElementById("console_updating").addEventListener("click", async (e) => {
+	//initializing if it's not
+	e.target.status ? "" : e.target.status = "hiding";
+
+
+	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
 	let messages = document.getElementsByClassName("console_line_container");
 	if (messages.length > 0) {
 		for (let index in messages){
 			if (messages[index].status == "updating")
-			e.target.status == "hiding" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
+				e.target.status == "showing" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
 		}
 	}
-	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
+	e.target.status == "showing" ? e.target.firstChild.textContent = "completed (hide)" : e.target.firstChild.textContent = "completed (show)";
 });
 
-//initializing status
-document.getElementById("console_completed").status = "hiding";
 //toggle "completed" console messages display
 document.getElementById("console_completed").addEventListener("click", async (e) => {
+	//initializing if it's not
+	e.target.status ? "" : e.target.status = "hiding";
+
+
+	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
 	let messages = document.getElementsByClassName("console_line_container");
 	if (messages.length > 0) {
 		for (let index in messages){
 			if (messages[index].status == "completed")
-			e.target.status == "hiding" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
+				e.target.status == "showing" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
 		}
 	}
-	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
+	e.target.status == "showing" ? e.target.firstChild.textContent = "completed (hide)" : e.target.firstChild.textContent = "completed (show)";
 });
 
 //turn console_errors div into a copy errors details to clipboard button if console_errors_number > 0
@@ -244,7 +250,7 @@ document.getElementById("console_errors").addEventListener("click", (e) => {
 	let details_text = "";
 	for (let index in details){
 		if (details[index].classList) {
-			details_text += details[index].classList.contains("red_text") ? details[index].innerText+"\n" : "";
+			details_text += details[index].classList.contains("red_text") ? details[index].textContent+"\n" : "";
 		}
 	}
 	navigator.clipboard.writeText(details_text);
@@ -347,8 +353,8 @@ async function updateConsole(message) {
 
 		//informing update button the updating is finished
 		if (document.getElementById("console_updating_number").value == 0) {
-			document.getElementById("update").innerText = "list updated";
-			setTimeout(()=>{document.getElementById("update").innerText = "update the list";},3000);
+			document.getElementById("update").textContent = "list updated";
+			setTimeout(()=>{document.getElementById("update").textContent = "update the list";},3000);
 		}
 	}
 }

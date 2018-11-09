@@ -61,7 +61,7 @@ function createNavigation(message) {
 
 		if (navigation.first_chapter != "") {
 			let first_button = document.createElement("div");
-			first_button.innerText = "first chapter";
+			first_button.textContent = "first chapter";
 			first_button.setAttribute("class", "left_nav_button button");
 			first_button.addEventListener("click", 
 											function(e){document.location.href = navigation.first_chapter;
@@ -71,7 +71,7 @@ function createNavigation(message) {
 		}
 		if (navigation.previous_chapter != "") {
 			let previous_button = document.createElement("div");
-			previous_button.innerText = "previous chapter";
+			previous_button.textContent = "previous chapter";
 			previous_button.setAttribute("class", "left_nav_button button");
 			previous_button.addEventListener("click", 
 											function(e){document.location.href = navigation.previous_chapter;
@@ -82,7 +82,7 @@ function createNavigation(message) {
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
 		if (navigation.last_chapter != "") {
 			let last_button = document.createElement("div");
-			last_button.innerText = "last chapter";
+			last_button.textContent = "last chapter";
 			last_button.setAttribute("class", "right_nav_button button");
 			last_button.addEventListener("click", 
 											function(e){document.location.href = navigation.last_chapter;
@@ -92,7 +92,7 @@ function createNavigation(message) {
 		}
 		if (navigation.next_chapter != "") {
 			let next_button = document.createElement("div");
-			next_button.innerText = "next chapter";
+			next_button.textContent = "next chapter";
 			next_button.setAttribute("class", "right_nav_button button");
 			next_button.addEventListener("click", 
 											function(e){document.location.href = navigation.next_chapter;

@@ -67,7 +67,7 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 		setTimeout(()=>{document.getElementById("import_text").innerHTML = "import mangas list";
 						document.getElementById("import_text").colSpan = "1";
 						document.getElementById("import_options").style="display:";
-						document.getElementById("visible_import").innerText = "[choose a file]";
+						document.getElementById("visible_import").textContent = "[choose a file]";
 						document.getElementById("import_file").style="display:";
 		},3000);
 	} else {
@@ -78,7 +78,7 @@ document.getElementById("import_text").addEventListener("click", async (e) => {
 
 //display chosen import file
 document.getElementById("hidden_import").addEventListener("change", async (e) => {
-	document.getElementById("visible_import").innerText = "["+ document.getElementById("hidden_import").files[0].name +"]";
+	document.getElementById("visible_import").textContent = "["+ document.getElementById("hidden_import").files[0].name +"]";
 });
 
 //display and manage the manga list
@@ -276,7 +276,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 											}
 											let unread_number = my_manga.getElementsByClassName("unread_number")[0];
 											if (unread_number) {
-												unread_number.innerText = " (0)";
+												unread_number.textContent = " (0)";
 												unread_number.setAttribute("class", "read_number cell");
 												chapters_list.setAttribute("class", "chapters_select read_chapter");
 											}
