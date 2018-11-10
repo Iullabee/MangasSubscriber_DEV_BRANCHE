@@ -9,26 +9,26 @@
 <body>
 	<div id="details" class="details"></div>
 	<div class="title">Options</div>
-	<table id="options_menu">
-		<tr><td id="check_all_sites" colspan="3">check all sites when updating the list <img class="icons update_true_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_true.png"></img></td></tr>
-		<tr><td id="export" colspan="3">export mangas list</td></tr>
-		<tr id="import">
-			<td id="import_text" colspan="1">import mangas list</td>
-			<td id="import_file" class="import_file" colspan="1"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></td>
-			<td id="import_options" class="import_options" colspan="1">
+	<div id="options_menu">
+		<div id="check_all_sites">check all sites when updating the list <img class="icons update_true_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_false.png"></img></div>
+		<div id="export">export mangas list</div>
+		<div class="row" id="import">
+			<div id="import_text" class="cell">import mangas list</div>
+			<div id="import_file" class="cell"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></div>
+			<div id="import_options" class="import_options cell">
 				<input type="radio" name="import_option" id="import_option_1" value="merge" checked><label for="import_option_1">merge with existing</label><br>
 				<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
-			</td>
-		</tr>
-		<tr><td id="toggle_list" colspan="2">manage your subscriptions</td><td><input type="search" placeholder="search..." id="search_list"></input></td></tr>
+			</div>
+		</div>
+		<div id="toggle_list"><div class="cell">manage your subscriptions</div><div class="cell"><input type="search" placeholder="search..." id="search_list"></input></div></div>
 		
-		<tr id="legend" class="legend" hidden="hidden"><td colspan="3">
+		<div id="legend" class="legend" hidden="hidden"><div>
 			<img class="small_icons update_icon" src="/icons/high_resolution_update.png"></img> will update that manga now,
 			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
 			<img class="small_icons update_true_icon" src="/icons/high_resolution_update_true.png"></img> /	<img class="small_icons update_false_icon" src="/icons/high_resolution_update_false.png"></img> means that manga will/won't be updated,
-			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"></img> will delete that manga from your list</td></tr>
-		<tr id="list_container"><td colspan="3"><div id="complete_list"></div></td></tr>
-	</table>
+			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"></img> will delete that manga from your list</div></div>
+		<div id="list_container"><div id="complete_list"></div></div>
+	</div>
 	
 
   

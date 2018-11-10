@@ -218,7 +218,7 @@ async function importMangasList(file, import_option){
 }
 
 //update the manga list
-async function updateMangasList(lone_manga){
+async function updateMangasList(lone_manga, ignore_no_update){
 	browser.browserAction.setBadgeText({"text" : "UPD"});
 	//fetch current list
 	var mangas_list = await getMangasList();
@@ -228,7 +228,7 @@ async function updateMangasList(lone_manga){
 	let to_update_list = lone_manga ? {[lone_manga]:mangas_list[lone_manga]} : mangas_list;
 	//for each manga that is set to update, get an updated chapters list
 	for (let manga in to_update_list) {
-		if (mangas_list[manga]["update"]){
+		if (mangas_list[manga]["update"] || ignore_no_update){
 			updated_chapters_list[manga] = {};
 			for (let website_name in websites_list){
 				if (check_all_sites || website_name == mangas_list[manga].website_name) {
@@ -418,9 +418,9 @@ async function db_update(){
 	var to_log = null;
 
 	if (!prefs){
-		browser.browserAction.setBadgeText({"text" : "U"});
+		browser.browserAction.setBadgeText({"text" : "UPD"});
 		//fetch current list
-		var mangas_list = await browser.storage.local.get("mangas_list")["mangas_list"];
+		var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 		
 		for (let manga in mangas_list) {
 			if (mangas_list[manga]["website_name"] == "http://fanfox.net/manga/"){
@@ -432,6 +432,10 @@ async function db_update(){
 			if (mangas_list[manga]["website_name"] == "http://www.mangatown.com/manga/"){
 				mangas_list[manga]["website_name"] = "mangatown";	
 			}
+			if (mangas_list[manga]["update"] == "true")
+			mangas_list[manga]["update"] = true;
+			if (mangas_list[manga]["update"] == "false")
+			mangas_list[manga]["update"] = false;
 			for (let index in mangas_list[manga]["chapters_list"]) {
 				mangas_list[manga]["chapters_list"][index.split("c")[1]] = {"status":mangas_list[manga]["chapters_list"][index], "url":""};
 				delete(mangas_list[manga]["chapters_list"][index]);
@@ -444,7 +448,7 @@ async function db_update(){
 	if (to_log){
 		await browser.storage.local.clear();
 		await browser.storage.local.set(to_log);
-		await updateMangasList();
+		await updateMangasList(false, true);
 		//update badge
 		setBadgeNumber();
 	}

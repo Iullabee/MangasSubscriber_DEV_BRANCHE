@@ -1,6 +1,7 @@
 html, body {
 	width: 98vw;
 	font-size: 1.2em;
+	border-collapse: collapse;
 }
 .details{
 	float: right;
@@ -12,33 +13,59 @@ html, body {
 	color: #5b00b5;
 }
 
-.options_menu{
-	margin-left: 30px;
+.hidden{
+	display: none;
 }
-table, tr {
+
+#options_menu {
+	/*margin-left: 30px;*/
 	width: 100%;
-	border-collapse: collapse;
 }
 
-tr:not(#list_container):hover {
-	background-color: #e5e5e5;
-}
-
-tr td {
+#options_menu > div {
+	vertical-align: middle;
+	width: 100%;
 	border-bottom: 1px solid black;
 }
 
-td {
-	padding-left: 10px;
-	padding-right: 10px;
+#options_menu > div:not(#list_container):hover{
+	background-color: #e5e5e5;
+}
+
+#import {
+	display: table;
+}
+#import .cell {
+	width: 33%;
+	vertical-align: middle;
+}
+
+#toggle_list {
+	display: table;
+}
+#toggle_list .cell {
+	width: 50%;
+	vertical-align: middle;
+}
+
+.onethird{
+	width: 33%;
+}
+
+.onehalf{
+	width: 50%;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
 }
 
 label {
 	width: 100%;
-}
-
-.import_file {
-	vertical-align: center;
 }
 
 .import_options {
@@ -57,7 +84,6 @@ label {
 }
 
 #complete_list .row {
-	width: 100%;
 	background-color: white;
 	border-bottom: 1px solid black;
 }
@@ -68,6 +94,7 @@ label {
 
 .row {
 	display:table-row; 
+	width: 100%;
 }
 .cell{
 	display:table-cell;
