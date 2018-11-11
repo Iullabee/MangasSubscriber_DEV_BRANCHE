@@ -121,6 +121,10 @@ select, button{
 	font-size: 1em;
 }
 
+select{
+	min-width: 66px;
+}
+
 .read_chapter {
 	background: #ddffee;
 }

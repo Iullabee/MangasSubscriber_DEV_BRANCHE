@@ -20,13 +20,18 @@ function readMangaChapter() {
 	//TO-DO check if the chapter is available or if it's a placeholder page
 	switch (website) {
 		case websites_list["mangahere"]:
-			is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
+			//if using mangaloader script in tampermonkey
+			if (document.getElementsByClassName("ml-images")[0]){
+				is_placeholder = false;
+			} else {
+				//regular placeholder test
+				is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
+			}
 			break;
 		case websites_list["mangafox"]:
 			//if using mangaloader script in tampermonkey
 			if (document.getElementsByClassName("ml-images")[0]){
-				//mangaloader placeholder test
-				is_placeholder = document.getElementsByClassName("ml-chap-nav")[0].getElementsByClassName("ml-chap-next")[0] ? false : true;
+				is_placeholder = false;
 			} else {
 				//regular placeholder test
 				is_placeholder = document.getElementsByClassName("prev_page")[0] ? false : true;
@@ -35,8 +40,7 @@ function readMangaChapter() {
 		case websites_list["mangatown"]:
 			//if using mangaloader script in tampermonkey
 			if (document.getElementsByClassName("ml-images")[0]){
-				//mangaloader placeholder test
-				is_placeholder = document.getElementsByClassName("ml-chap-nav")[0].getElementsByClassName("ml-chap-next")[0] ? false : true;
+				is_placeholder = false;
 			} else {
 				//regular placeholder test
 				is_placeholder = document.getElementById("viewer") ? false : true;

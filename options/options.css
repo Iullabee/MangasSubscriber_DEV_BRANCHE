@@ -3,14 +3,37 @@ html, body {
 	font-size: 1.2em;
 	border-collapse: collapse;
 }
+
 .details{
-	float: right;
+	text-align: right;
 	margin-right: 20px;
 	font-size: 0.5em;
 }
-.title{
+
+#title_bar{
+	min-height: 120px;
+}
+
+.selected_title{
+	text-align: center;
 	font-size: 3em;
 	color: #5b00b5;
+	border-top: 5px solid black;
+	border-left: 5px solid black;
+	border-right: 5px solid black;
+	margin: 5px 0px 15px -5px;
+	cursor: pointer;
+	width: 49.75%;
+}
+.unselected_title{
+	background: #CCCCCC;
+	text-align: center;
+	font-size: 3em;
+	color: gray;
+	border-bottom: 5px solid black;
+	margin: 5px 0px 15px 0px;
+	cursor: pointer;
+	width: 49.75%;
 }
 
 .hidden{
@@ -18,7 +41,6 @@ html, body {
 }
 
 #options_menu {
-	/*margin-left: 30px;*/
 	width: 100%;
 }
 

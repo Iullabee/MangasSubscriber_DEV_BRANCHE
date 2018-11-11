@@ -4,11 +4,15 @@
   <head>
     <meta charset="utf-8">
 		<link rel="stylesheet" href="options.css"/>
+		<title>Options - MangaSubscriber</title>
   </head>
 
 <body>
 	<div id="details" class="details"></div>
-	<div class="title">Options</div>
+	<div id="title_bar">
+		<div class="selected_title left">Options</div>
+		<div class="unselected_title left" id="help">Help</div>
+	</div>
 	<div id="options_menu">
 		<div id="check_all_sites">check all sites when updating the list <img class="icons update_true_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_false.png"></img></div>
 		<div id="export">export mangas list</div>
@@ -22,7 +26,7 @@
 		</div>
 		<div id="toggle_list"><div class="cell">manage your subscriptions</div><div class="cell"><input type="search" placeholder="search..." id="search_list"></input></div></div>
 		
-		<div id="legend" class="legend" hidden="hidden"><div>
+		<div id="legend" class="legend"><div>
 			<img class="small_icons update_icon" src="/icons/high_resolution_update.png"></img> will update that manga now,
 			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
 			<img class="small_icons update_true_icon" src="/icons/high_resolution_update_true.png"></img> /	<img class="small_icons update_false_icon" src="/icons/high_resolution_update_false.png"></img> means that manga will/won't be updated,

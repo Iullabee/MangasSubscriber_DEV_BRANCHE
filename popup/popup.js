@@ -74,7 +74,9 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		let dom_select = document.createElement("select");
 		dom_select.classList.add(unread_chapters.length?"unread_chapter":"read_chapter");
 		//update background when selected option changes
-		dom_select.addEventListener("change", function(e){e.target.classList.add(e.target.options[e.target.selectedIndex].classList);}, false);
+		dom_select.addEventListener("change", function(e){
+			e.target.classList.remove("unread_chapter", "read_chapter");
+			e.target.classList.add(e.target.options[e.target.selectedIndex].classList);}, false);
 		
 		for (let x in unread_chapters){
 			let dom_option = document.createElement("option");
@@ -237,7 +239,7 @@ document.getElementById("console_updating").addEventListener("click", async (e) 
 				e.target.status == "showing" ? messages[index].classList.remove("hidden") : messages[index].classList.add("hidden");
 		}
 	}
-	e.target.status == "showing" ? e.target.firstChild.textContent = "completed (hide)" : e.target.firstChild.textContent = "completed (show)";
+	e.target.status == "showing" ? e.target.firstChild.textContent = "updating (hide)" : e.target.firstChild.textContent = "updating (show)";
 });
 
 //toggle "completed" console messages display
@@ -371,3 +373,7 @@ async function updateConsole(message) {
 		}
 	}
 }
+
+document.getElementById("help").addEventListener("click", async (e) => {
+	browser.tabs.create({url: "/help/help.html"});
+});
