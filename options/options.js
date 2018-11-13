@@ -1,7 +1,7 @@
 
 
 //display the version
-document.getElementById("details").textContent = "MangaSubscriber v" + browser.runtime.getManifest().version;
+document.getElementById("details").textContent = "MangasSubscriber_DEV_BRANCHE " + browser.runtime.getManifest().version;
 
 //open the help page
 document.getElementById("help").addEventListener("click", async (e) => {
@@ -18,8 +18,8 @@ document.getElementById("check_all_sites").addEventListener("click", async (e) =
 //display the status of the "check all sites when updating the list" option
 async function displayCheckAllSites(){
 	var background = await browser.runtime.getBackgroundPage();
-	var check_all_sites = await background.getCheckAllSites();
-	if (check_all_sites) {
+	var nav_bar = await background.getCheckAllSites();
+	if (nav_bar) {
 		document.getElementById("check_all_sites_tickbox").src = "/icons/high_resolution_update_true.png";
 	} else {
 		document.getElementById("check_all_sites_tickbox").src = "/icons/high_resolution_update_false.png";
@@ -28,6 +28,27 @@ async function displayCheckAllSites(){
 
 //initialize the "check all sites when updating the list" option
 displayCheckAllSites();
+
+//toggle the navigation bar option
+document.getElementById("navigation_bar_tickbox").addEventListener("click", async (e) => {
+	var background = await browser.runtime.getBackgroundPage();
+	await background.toggleNavigationBar();
+	displayNavigationBar();
+});
+
+//display the status of the navigation bar option
+async function displayNavigationBar(){
+	var background = await browser.runtime.getBackgroundPage();
+	var nav_bar = await background.getNavigationBar();
+	if (nav_bar) {
+		document.getElementById("navigation_bar_tickbox").src = "/icons/high_resolution_update_true.png";
+	} else {
+		document.getElementById("navigation_bar_tickbox").src = "/icons/high_resolution_update_false.png";
+	}
+}
+
+//initialize the navigation bar option
+displayNavigationBar();
 
 //export the manga list
 document.getElementById("export").addEventListener("click", async (e) => {
@@ -251,7 +272,7 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 													'bubbles': true,
 													'cancelable': true
 												});
-												
+												document.getElementById("list_container").scrollmemory = window.scrollY;
 												search_field.dispatchEvent(event);
 											}
 							, false);
@@ -338,6 +359,12 @@ document.getElementById("toggle_list").addEventListener("click", async (e) => {
 			}
 			for (let dom_manga in read_mangas){
 				dom_mangas_list.appendChild(read_mangas[dom_manga]);
+			}
+
+			//get back to scroll position
+			if (document.getElementById("list_container").scrollmemory) {
+				window.scrollTo(0, document.getElementById("list_container").scrollmemory);
+				document.getElementById("list_container").scrollmemory = 0;
 			}
 			
 			

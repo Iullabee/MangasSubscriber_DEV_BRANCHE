@@ -1,8 +1,8 @@
 {
 
 	"manifest_version": 2,
-	"name": "MangaSubscriber",
-	"version": "1.0.0_public_temp",
+	"name": "MangasSubscriber_DEV_BRANCHE",
+	"version": "1.0.0",
 
 	"icons": {
 		"48": "icons/high_resolution_logo.png"
@@ -33,7 +33,10 @@
 			"run_at": "document_start",
 			"matches": ["*://www.mangahere.cc/manga/*",
 						"*://fanfox.net/manga/*",
-						"*://www.mangatown.com/manga/*"],
+						"*://www.mangatown.com/manga/*",
+						"*://m.mangahere.cc/manga/*",
+						"*://m.fanfox.net/manga/*",
+						"*://m.mangatown.com/manga/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
@@ -47,7 +50,7 @@
 	
 	"applications": {
 		"gecko": {
-			"id": "MangaSubscriber@Lullabee"
+			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee"
 		}
 	}
 

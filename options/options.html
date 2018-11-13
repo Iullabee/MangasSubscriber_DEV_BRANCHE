@@ -4,17 +4,18 @@
   <head>
     <meta charset="utf-8">
 		<link rel="stylesheet" href="options.css"/>
-		<title>Options - MangaSubscriber</title>
+		<title>Options - MangasSubscriber</title>
   </head>
 
 <body>
 	<div id="details" class="details"></div>
-	<div id="title_bar">
-		<div class="selected_title left">Options</div>
-		<div class="unselected_title left" id="help">Help</div>
-	</div>
+	<div id="title_bar"><div class="row">
+		<div class="selected_title onehalf">Options</div>
+		<div class="unselected_title onehalf" id="help">Help</div>
+	</div></div>
 	<div id="options_menu">
-		<div id="check_all_sites">check all sites when updating the list <img class="icons update_true_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_false.png"></img></div>
+		<div id="check_all_sites">check all sites when updating the list <img class="icons update_false_icon" id="check_all_sites_tickbox" src="/icons/high_resolution_update_false.png"></div>
+		<div id="navigation_bar">navigation bar while browsing mangas <img class="icons update_true_icon" id="navigation_bar_tickbox" src="/icons/high_resolution_update_true.png"></div>
 		<div id="export">export mangas list</div>
 		<div class="row" id="import">
 			<div id="import_text" class="cell">import mangas list</div>
@@ -24,13 +25,13 @@
 				<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
 			</div>
 		</div>
-		<div id="toggle_list"><div class="cell">manage your subscriptions</div><div class="cell"><input type="search" placeholder="search..." id="search_list"></input></div></div>
+		<div id="toggle_list_container"><div id="toggle_list"><div class="row"><div class="cell">manage your subscriptions</div><div class="cell"><input type="search" placeholder="search..." id="search_list"></div></div></div></div>
 		
 		<div id="legend" class="legend"><div>
-			<img class="small_icons update_icon" src="/icons/high_resolution_update.png"></img> will update that manga now,
-			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"></img> will mark all chapters from that manga as read,		
-			<img class="small_icons update_true_icon" src="/icons/high_resolution_update_true.png"></img> /	<img class="small_icons update_false_icon" src="/icons/high_resolution_update_false.png"></img> means that manga will/won't be updated,
-			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"></img> will delete that manga from your list</div></div>
+			<img class="small_icons update_icon" src="/icons/high_resolution_update.png"> will update that manga now,
+			<img class="small_icons read_all_icon" src="/icons/high_resolution_read_all.png"> will mark all chapters from that manga as read,		
+			<img class="small_icons update_true_icon" src="/icons/high_resolution_update_true.png"> /	<img class="small_icons update_false_icon" src="/icons/high_resolution_update_false.png"> means that manga will/won't be updated,
+			<img class="small_icons delete_icon" src="/icons/high_resolution_delete.png"> will delete that manga from your list</div></div>
 		<div id="list_container"><div id="complete_list"></div></div>
 	</div>
 	

@@ -1,25 +1,23 @@
-var websites_list = {mangahere:"www.mangahere.cc/manga/",
-					mangafox:"fanfox.net/manga/",
-					mangatown:"www.mangatown.com/manga/",
+var websites_list = {"mangahere":"mangahere.cc/manga/",
+					"mangafox":"fanfox.net/manga/",
+					"mangatown":"mangatown.com/manga/",
 					};
 
 window.addEventListener("load", readMangaChapter);
-
 function readMangaChapter() {
-	
 	var url = window.location.href;
 	var is_placeholder = true;
 	var website = "notAMangaWebsite";
 	//check if it's in the list and return the name
 	for (let x in websites_list) {
 		if (url.indexOf(websites_list[x]) >= 0){
-			website = websites_list[x];
+			website = x;
 		}
 	}
 	
 	//TO-DO check if the chapter is available or if it's a placeholder page
 	switch (website) {
-		case websites_list["mangahere"]:
+		case "mangahere":
 			//if using mangaloader script in tampermonkey
 			if (document.getElementsByClassName("ml-images")[0]){
 				is_placeholder = false;
@@ -28,16 +26,16 @@ function readMangaChapter() {
 				is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
 			}
 			break;
-		case websites_list["mangafox"]:
+		case "mangafox":
 			//if using mangaloader script in tampermonkey
 			if (document.getElementsByClassName("ml-images")[0]){
 				is_placeholder = false;
 			} else {
 				//regular placeholder test
-				is_placeholder = document.getElementsByClassName("prev_page")[0] ? false : true;
+				is_placeholder = document.getElementById("viewer") ? false : true;
 			}
 			break;
-		case websites_list["mangatown"]:
+		case "mangatown":
 			//if using mangaloader script in tampermonkey
 			if (document.getElementsByClassName("ml-images")[0]){
 				is_placeholder = false;
@@ -48,20 +46,19 @@ function readMangaChapter() {
 			break;
 	}
 	
-	if (!is_placeholder)
+	if (!is_placeholder) {
 		browser.runtime.sendMessage({"target":"background","url": url});
-	
+	}
 }
 
 //listen to background script, and create navigation buttons
 browser.runtime.onMessage.addListener(createNavigation);
 
 function createNavigation(message) {
-	
-	if  (!(document.getElementById("mangasubscriber_nav_bar")) && message.target == "content" && message.navigation){
+	if  (!(document.getElementById("mangassubscriber_nav_bar")) && message.target == "content" && message.navigation){
 		var navigation = message.navigation;
 		let nav_bar = document.createElement("div");
-		nav_bar.setAttribute("id", "mangasubscriber_nav_bar");
+		nav_bar.setAttribute("id", "mangassubscriber_nav_bar");
 
 		if (navigation.first_chapter != "") {
 			let first_button = document.createElement("div");

@@ -3,7 +3,7 @@
 
 var websites_list = {
 	"mangahere":{name:"mangahere",
-				url:"www.mangahere.cc/manga/",
+				url:"mangahere.cc/manga/",
 				getMangaName: function (url){return url.split(this.url)[1].split("/")[0];
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
@@ -92,7 +92,7 @@ var websites_list = {
 				}
 	},
 	"mangatown":{name:"mangatown",
-				url:"www.mangatown.com/manga/",
+				url:"mangatown.com/manga/",
 				getMangaName: function (url){return url.split(this.url)[1].split("/")[0];
 				},
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
@@ -165,7 +165,8 @@ async function readMangaChapter(message, sender) {
 						//last chapter (if current chapter isn't the last)
 						let last_chapter = index < (chapters_numbers.length-1) ? manga.chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
 						
-						browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
+						if (await getNavigationBar())
+							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
 					}
 				}
 			}
@@ -178,7 +179,7 @@ async function readMangaChapter(message, sender) {
 
 //expport mangas list to json file
 async function exportMangasList(){
-	var list = {"MangaSubscriberBackUp":await browser.storage.local.get()};
+	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
 	var blob = new Blob([JSON.stringify(list, null, 2)], {type : 'application/json'});
 
 	await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListBackUp.json", "saveAs":true});
@@ -192,7 +193,7 @@ async function importMangasList(file, import_option){
 	
 	var reader = new FileReader();
     reader.onloadend = async function(e){var import_file = JSON.parse(e.target.result);
-							var back_up = import_file["MangaSubscriberBackUp"];
+							var back_up = import_file["MangasSubscriberBackUp"];
 							var stored_list = await getMangasList();
 							if (back_up){
 								//if merge, merge storage and import_list
@@ -219,7 +220,8 @@ async function importMangasList(file, import_option){
 
 //update the manga list
 async function updateMangasList(lone_manga, ignore_no_update){
-	browser.browserAction.setBadgeText({"text" : "UPD"});
+	if (browser.browserAction.setBadgeText)
+		browser.browserAction.setBadgeText({"text" : "UPD"});
 	//fetch current list
 	var mangas_list = await getMangasList();
 	var updated_chapters_list = {};
@@ -398,27 +400,41 @@ async function setBadgeNumber() {
 			number++;
 	}
 	number > 0 ? number = number.toString() : number = "";
-	browser.browserAction.setBadgeText({"text" : number});
+	if (browser.browserAction.setBadgeText)
+		browser.browserAction.setBadgeText({"text" : number});
 }
 
 async function toggleCheckAllSites(){
-	var prefs = (await browser.storage.local.get("MangaSubscriberPrefs"))["MangaSubscriberPrefs"];
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
 	prefs["check_all_sites"] = !prefs["check_all_sites"];
-	await browser.storage.local.set({"MangaSubscriberPrefs" : prefs});
+	await browser.storage.local.set({"MangasSubscriberPrefs" : prefs});
 	return;
 }
 
 async function getCheckAllSites(){
-	var prefs = (await browser.storage.local.get("MangaSubscriberPrefs"))["MangaSubscriberPrefs"];
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
 	return prefs["check_all_sites"];
 }
 
+async function toggleNavigationBar(){
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	prefs["navigation_bar"] = !prefs["navigation_bar"];
+	await browser.storage.local.set({"MangasSubscriberPrefs" : prefs});
+	return;
+}
+
+async function getNavigationBar(){
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	return prefs["navigation_bar"];
+}
+
 async function db_update(){
-	var prefs = (await browser.storage.local.get("MangaSubscriberPrefs"))["MangaSubscriberPrefs"];
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
 	var to_log = null;
 
 	if (!prefs){
-		browser.browserAction.setBadgeText({"text" : "UPD"});
+		if (browser.browserAction.setBadgeText)
+			browser.browserAction.setBadgeText({"text" : "UPD"});
 		//fetch current list
 		var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 		
@@ -441,8 +457,8 @@ async function db_update(){
 				delete(mangas_list[manga]["chapters_list"][index]);
 			}
 		}
-		to_log = {"MangaSubscriberPrefs": {"check_all_sites": false, "DB_version":"1.0.0"},
-						"mangas_list":mangas_list};
+		to_log = {"MangasSubscriberPrefs": {"DB_version":"1.0.0", "check_all_sites":false, "navigation_bar":true},
+					"mangas_list":mangas_list};
 	}
 	
 	if (to_log){
