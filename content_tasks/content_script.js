@@ -1,6 +1,7 @@
 var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"mangafox":"fanfox.net/manga/",
 					"mangatown":"mangatown.com/manga/",
+					"readmangatoday":"readmng.com/",
 					};
 
 window.addEventListener("load", readMangaChapter);
@@ -15,35 +16,25 @@ function readMangaChapter() {
 		}
 	}
 	
-	//TO-DO check if the chapter is available or if it's a placeholder page
-	switch (website) {
-		case "mangahere":
-			//if using mangaloader script in tampermonkey
-			if (document.getElementsByClassName("ml-images")[0]){
-				is_placeholder = false;
-			} else {
-				//regular placeholder test
+	//check if the chapter is available or if it's a placeholder page
+	//if using mangaloader script in tampermonkey
+	if (document.getElementsByClassName("ml-images")[0]){
+		is_placeholder = false;
+	} else {
+		switch (website) {
+			case "mangahere":
 				is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
-			}
-			break;
-		case "mangafox":
-			//if using mangaloader script in tampermonkey
-			if (document.getElementsByClassName("ml-images")[0]){
-				is_placeholder = false;
-			} else {
-				//regular placeholder test
+				break;
+			case "mangafox":
 				is_placeholder = document.getElementById("viewer") ? false : true;
-			}
-			break;
-		case "mangatown":
-			//if using mangaloader script in tampermonkey
-			if (document.getElementsByClassName("ml-images")[0]){
-				is_placeholder = false;
-			} else {
-				//regular placeholder test
+				break;
+			case "mangatown":
 				is_placeholder = document.getElementById("viewer") ? false : true;
-			}
-			break;
+				break;
+			case "readmangatoday":
+				is_placeholder = document.getElementById("chapter_img") ? false : true;
+				break;
+		}
 	}
 	
 	if (!is_placeholder) {

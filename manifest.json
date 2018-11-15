@@ -31,12 +31,13 @@
 	"content_scripts": [
 		{
 			"run_at": "document_start",
-			"matches": ["*://www.mangahere.cc/manga/*",
-						"*://fanfox.net/manga/*",
-						"*://www.mangatown.com/manga/*",
+			"matches": ["*://*.mangahere.cc/manga/*",
 						"*://m.mangahere.cc/manga/*",
+						"*://fanfox.net/manga/*",
 						"*://m.fanfox.net/manga/*",
-						"*://m.mangatown.com/manga/*"],
+						"*://www.mangatown.com/manga/*",
+						"*://m.mangatown.com/manga/*",
+						"*://www.readmng.com/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
