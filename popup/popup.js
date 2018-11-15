@@ -25,8 +25,8 @@ document.getElementById("new_releases").addEventListener("click", async (e) => {
 		for (let chapter in manga.chapters_list){
 			manga.chapters_list[chapter]["status"] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
 		}
-		unread_chapters.sort();
-		read_chapters.sort().reverse();
+		unread_chapters.sort((a,b)=>{return parseFloat(a)-parseFloat(b);});
+		read_chapters.sort((a,b)=>{return parseFloat(a)-parseFloat(b);}).reverse();
 		
 		//construct tr element with manga & website name properties,   
 		let dom_manga = document.createElement("div");
