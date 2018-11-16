@@ -1,0 +1,43 @@
+GOALS :
+
+
+
+§§REFACTORING UI
+
+- merge popup and options mangas lists in the popup :
+-- a [+] button unfolding additional options buttons OR a vertical div on the right side containing the buttons (only the ones for the hovered/selected manga being displayed)
+-- changing the "search" field to filter
+-- add an "apply to all visible mangas" line at the start of the list, with update now, mark all chapters as read, update toggle, delete buttons)
+-- add a confirmation panel to delete a manga ("deleting <br> [TITLE HERE] <br> yes / no")
+-- redo icons for more explicit/standard ones (ex : "delete" -> trashcan icon)
+
+- merge menu and list panels :
+-- replace menu buttons by icons (ex : options -> cogwheel/wrench icon)
+-- horizontal menu at the top (always visible)
+
+- migrate options and help to the poup:
+-- panels appearing on top of the list when their buttons are clicked
+-- "slide over" animation
+
+
+
+§§FUNCTIONALITIES
+
+- change the way users choose websites to update on :
+-- instead of a "preferred website" select and a "check all sites" toggle, create a multiple choice "websites" select (containing a "all" and a "none" line)
+-- store those preferences in each manga
+-- global assign/unassign in the "apply to all mangas" line
+
+- autoupdate function :
+-- choose interval in hours
+-- 0 = never
+
+- search function to look up mangas on all websites ? :
+-- create a search function in each website object (could be used when updating in case a manga has different name on different sites?)
+
+
+
+§§WEBSITES LIST
+
+- support more websites :
+-- separate the websites list object from background page for easier maintainability

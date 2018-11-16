@@ -31,7 +31,7 @@
 	"content_scripts": [
 		{
 			"run_at": "document_start",
-			"matches": ["*://*.mangahere.cc/manga/*",
+			"matches": ["*://www.mangahere.cc/manga/*",
 						"*://m.mangahere.cc/manga/*",
 						"*://fanfox.net/manga/*",
 						"*://m.fanfox.net/manga/*",
