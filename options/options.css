@@ -234,44 +234,56 @@ label {
 	min-height: 28px;
 	max-width: 28px;
 	max-height: 28px;
-	border: 1px solid black;
 }
 
 .small_icons {
-	width: 14px;
-	height: 14px;
-	min-width: 14px;
-	min-height: 14px;
-	max-width: 14px;
-	max-height: 14px;
-	border: 1px solid black;
+	width: 20px;
+	height: 20px;
+	min-width: 20px;
+	min-height: 20px;
+	max-width: 20px;
+	max-height: 20px;
 }
 
 .update_icon {
-	background:url("/icons/high_resolution_update.png");
+	background:url("/icons/update.svg");
 	background-size: contain;
 }
 
 .read_all_icon {
-	background:url("/icons/high_resolution_read_all.png");
+	background:url("/icons/read.svg");
 	background-size: contain;
 }
 
 .update_true_icon {
-	background:url("/icons/high_resolution_update_true.png");
+	background:url("/icons/update_true.svg");
 	background-size: contain;
 }
 
 .update_false_icon {
-	background:url("/icons/high_resolution_update_false.png");
+	background:url("/icons/update_false.svg");
 	background-size: contain;
 }
 
 .delete_icon {
-	background:url("/icons/high_resolution_delete.png");
+	background:url("/icons/trash.svg");
+	background-size: contain;
+}
+
+.yes_icon {
+	background:url("/icons/yes.svg");
+	background-size: contain;
+}
+
+.no_icon {
+	background:url("/icons/no.svg");
 	background-size: contain;
 }
 
 .legend {
-	font-size: 0.5em;
+	font-size: 0.75em;
+}
+
+.inline {
+	display: inline-block;
 }

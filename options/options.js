@@ -20,9 +20,11 @@ async function displayCheckAllSites(){
 	var background = await browser.runtime.getBackgroundPage();
 	var nav_bar = await background.getCheckAllSites();
 	if (nav_bar) {
-		document.getElementById("check_all_sites_tickbox").src = "/icons/high_resolution_update_true.png";
+		document.getElementById("check_all_sites_tickbox").classList.add("yes_icon");
+		document.getElementById("check_all_sites_tickbox").classList.remove("no_icon");
 	} else {
-		document.getElementById("check_all_sites_tickbox").src = "/icons/high_resolution_update_false.png";
+		document.getElementById("check_all_sites_tickbox").classList.add("no_icon");
+		document.getElementById("check_all_sites_tickbox").classList.remove("yes_icon");
 	}
 }
 
@@ -41,9 +43,11 @@ async function displayNavigationBar(){
 	var background = await browser.runtime.getBackgroundPage();
 	var nav_bar = await background.getNavigationBar();
 	if (nav_bar) {
-		document.getElementById("navigation_bar_tickbox").src = "/icons/high_resolution_update_true.png";
+		document.getElementById("navigation_bar_tickbox").classList.add("yes_icon");
+		document.getElementById("navigation_bar_tickbox").classList.remove("no_icon");
 	} else {
-		document.getElementById("navigation_bar_tickbox").src = "/icons/high_resolution_update_false.png";
+		document.getElementById("navigation_bar_tickbox").classList.add("no_icon");
+		document.getElementById("navigation_bar_tickbox").classList.remove("yes_icon");
 	}
 }
 

@@ -156,7 +156,7 @@ var websites_list = {
 				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
 													//get rid of website and manga name,
 													var url_tail = url.split(this.reconstructMangaUrl(manga_name))[1];
-													return url_tail;
+													return url_tail.split("/")[0];
 				},
 				getAllChapters: async function (manga_name){var chapters_list = {};
 															var source = "truc";
@@ -206,7 +206,7 @@ async function readMangaChapter(message, sender) {
 				}
 				if (sender){
 					//send navigation info to content_script
-					let chapters_numbers = Object.keys(manga.chapters_list).sort();
+					let chapters_numbers = Object.keys(manga.chapters_list).sort((a,b)=>{return parseFloat(a)-parseFloat(b);});
 					let index = chapters_numbers.indexOf(current_chapter);
 					if (index >= 0) {
 						//first chapter (if current chapter isn't the first)
