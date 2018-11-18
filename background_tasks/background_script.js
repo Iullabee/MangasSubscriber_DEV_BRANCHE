@@ -81,20 +81,21 @@ var websites_list = {
 																	if(list[i].getElementsByTagName("a")[0].href){
 																		var url_tail = list[i].getElementsByTagName("a")[0].href.split(manga_name+"/")[1];
 																		//if the name is different on fanfox
-																		if (!url_tail) {
+																		/*if (!url_tail) {
 																			let fanfox_manga_name = doc.head.innerText.split("\n\n\n\n")[1];
 																			fanfox_manga_name = fanfox_manga_name.split(" Manga")[0].replace(/ /g, "_").toLowerCase();
 																			let source_name = this.url+fanfox_manga_name+"/";
 																			url_tail = list[i].href.split(source_name)[1];
-																		}
-																			
-																		url_tail = url_tail.split("c")[1];
-
-																		let chapter_number = "";
-																		chapter_number = url_tail.split("/")[0];
+																		}*/
 																		
-																		if (chapter_number)
-																			chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
+																		if(url_tail) {
+																			url_tail = url_tail.split("c")[1];
+
+																			let chapter_number = "";
+																			chapter_number = url_tail.split("/")[0];
+																			if (chapter_number)
+																				chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
+																		} else throw new Error(" "+manga_name+" has a different name on "+this.name);
 																	} else throw new Error(" can't find "+manga_name+" on "+this.name);
 																}
 															}
