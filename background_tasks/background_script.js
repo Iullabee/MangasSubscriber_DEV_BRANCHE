@@ -75,11 +75,11 @@ var websites_list = {
 															//extract the chapter list :: href property  from elementsByClassName "tips"  from elementById "chapters"
 															var parser = new DOMParser();
 															var doc = parser.parseFromString(source, "text/html");
-															if (doc.getElementById("chapters")) {
-																var list = doc.getElementById("chapters").getElementsByClassName("tips");
+															if (doc.getElementById("list-2")) {
+																var list = doc.getElementById("list-2").getElementsByTagName("li");
 																for (let i = 0; i<list.length; i++){
-																	if(list[i].href){
-																		var url_tail = list[i].href.split(source_url)[1];
+																	if(list[i].getElementsByTagName("a")[0].href){
+																		var url_tail = list[i].getElementsByTagName("a")[0].href.split(manga_name+"/")[1];
 																		//if the name is different on fanfox
 																		if (!url_tail) {
 																			let fanfox_manga_name = doc.head.innerText.split("\n\n\n\n")[1];
@@ -94,7 +94,7 @@ var websites_list = {
 																		chapter_number = url_tail.split("/")[0];
 																		
 																		if (chapter_number)
-																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
+																			chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
 																	} else throw new Error(" can't find "+manga_name+" on "+this.name);
 																}
 															}
@@ -510,6 +510,7 @@ async function db_update(){
 				delete(mangas_list[manga]["chapters_list"][index]);
 			}
 		}
+		if (!mangas_list) mangas_list = {};
 		to_log = {"MangasSubscriberPrefs": {"DB_version":"1.0.0", "check_all_sites":false, "navigation_bar":true},
 					"mangas_list":mangas_list};
 	} else {

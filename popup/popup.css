@@ -149,7 +149,7 @@ select{
 .list_top {
 	font-size: 1em;
 	width: 100%;
-	position: sticky;
+	position: fixed;
 	top: 2px;
 	z-index: 1;
 	border-collapse: separate;

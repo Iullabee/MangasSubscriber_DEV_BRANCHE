@@ -26,7 +26,7 @@ function readMangaChapter() {
 				is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
 				break;
 			case "mangafox":
-				is_placeholder = document.getElementById("viewer") ? false : true;
+				is_placeholder = document.getElementsByClassName("reader-main") ? false : true;
 				break;
 			case "mangatown":
 				is_placeholder = document.getElementById("viewer") ? false : true;
@@ -53,43 +53,39 @@ function createNavigation(message) {
 
 		if (navigation.first_chapter != "") {
 			let first_button = document.createElement("div");
-			first_button.textContent = "first chapter";
+			let first_button_link = document.createElement("a");
+			first_button_link.textContent = "first chapter";
+			first_button.appendChild(first_button_link);
+			first_button_link.href = navigation.first_chapter;
 			first_button.setAttribute("class", "left_nav_button button");
-			first_button.addEventListener("click", 
-											function(e){document.location.href = navigation.first_chapter;
-														}
-											, false);
 			nav_bar.appendChild(first_button);
 		}
 		if (navigation.previous_chapter != "") {
 			let previous_button = document.createElement("div");
-			previous_button.textContent = "previous chapter";
+			let previous_button_link = document.createElement("a");
+			previous_button_link.textContent = "previous chapter";
+			previous_button.appendChild(previous_button_link);
+			previous_button_link.href = navigation.previous_chapter;
 			previous_button.setAttribute("class", "left_nav_button button");
-			previous_button.addEventListener("click", 
-											function(e){document.location.href = navigation.previous_chapter;
-														}
-											, false);
 			nav_bar.appendChild(previous_button);
 		}
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
 		if (navigation.last_chapter != "") {
 			let last_button = document.createElement("div");
-			last_button.textContent = "last chapter";
+			let last_button_link = document.createElement("a");
+			last_button_link.textContent = "last chapter";
+			last_button_link.href = navigation.last_chapter;
+			last_button.appendChild(last_button_link);
 			last_button.setAttribute("class", "right_nav_button button");
-			last_button.addEventListener("click", 
-											function(e){document.location.href = navigation.last_chapter;
-														}
-											, false);
 			nav_bar.appendChild(last_button);
 		}
 		if (navigation.next_chapter != "") {
 			let next_button = document.createElement("div");
-			next_button.textContent = "next chapter";
+			let next_button_link = document.createElement("a");
+			next_button_link.textContent = "next chapter";
+			next_button.appendChild(next_button_link);
+			next_button_link.href = navigation.next_chapter;
 			next_button.setAttribute("class", "right_nav_button button");
-			next_button.addEventListener("click", 
-											function(e){document.location.href = navigation.next_chapter;
-														}
-											, false);
 			nav_bar.appendChild(next_button);
 		}
 		document.body.appendChild(nav_bar);

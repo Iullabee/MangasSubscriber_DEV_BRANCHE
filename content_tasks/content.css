@@ -29,3 +29,12 @@
     border-radius: 7px;
     color: #EEEEEE;
 }
+
+a {
+    text-decoration: none;
+    color: #EEEEEE;
+}
+
+a:hover {
+    color: #FAB400;
+}
