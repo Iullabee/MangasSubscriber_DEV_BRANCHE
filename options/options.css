@@ -132,7 +132,7 @@ label {
 .cell{
 	display:table-cell;
 	width:100%;
-	padding: 0px 5px 0px 5px;
+	padding: 5px;
 	border-bottom: 1px solid black;
 	vertical-align: middle;
 }
