@@ -1,0 +1,250 @@
+.hidden {
+	display: none !important;
+}
+
+#menu {
+	width: 250px;
+}
+
+.extension_name {
+	font-size: 2em;
+}
+
+.extension_version {
+	font-size: 1em;
+}
+
+.button {
+	padding-top: 4px;
+	padding-bottom: 4px;
+	font-size: 1.25em;
+	cursor: pointer;
+	
+	text-align: center;
+	
+	box-sizing: border-box;
+	background: #EEEEEE;
+	border: 1px solid gray;
+	border-radius: 7px;
+}
+
+.button:hover {
+  background-color: #8a8a8a;
+}
+
+.small_button {
+	width: 20%;
+}
+
+.large_button {
+	width: 60%;
+}
+.medium_button {
+	width: 33.3%;
+	padding: 4px;
+	font-size: 1.25em;
+	border: 1px solid gray;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.linear {
+	display: inline-block;
+}
+
+#console {
+	width: 550px;
+	height: 300px;
+	border: 1px solid black;
+	overflow: hidden;
+}
+
+#console_display {
+	width: 550px;
+	height: 268px;
+	max-height: 268px;
+	overflow-y: scroll;
+}
+.console_from, .console_status {
+	width: 115px;
+}
+.console_name_text {
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+	width: 300px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.console_line {
+	border-top: 1px solid gray;
+	padding-top: 2px;
+	margin-top: 2px;
+}
+
+.console_details {
+	margin-left: 25px;
+	padding: 0px 10px 0px 5px;
+	vertical-align: middle;
+	border-left: 1px solid red;
+}
+
+#mangas_list {
+	max-height: 600px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+#list {
+	width: 800px;
+	max-height: 300px;
+	margin-top: 32px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	background: white;
+	border-collapse: collapse;
+	display: table;
+}
+
+.list_line {
+	font-size: 1.25em;
+	display: table-row;
+	width: 800px;
+	max-width: 800px;
+}
+.list_line div {
+	display: table-cell;
+	border-bottom: 1px solid black;
+}
+.list_line:hover {
+	background-color: #e5e5e5;
+}
+
+select, button {
+	width: 100%;
+	font-size: 1em;
+}
+
+select {
+	min-width: 66px;
+}
+
+.read_chapter {
+	background: #ddffee;
+}
+
+.unread_chapter {
+	background: #ffeedd;
+}
+
+.align_right {
+	text-align: right;
+}
+
+.green_text {
+	color: green;
+}
+
+.red_text {
+	color: red;
+}
+
+.list_top {
+	font-size: 1em;
+	width: 100%;
+	position: fixed;
+	top: 2px;
+	z-index: 1;
+	border-collapse: separate;
+	margin: 0px;
+	background: white;
+}
+
+.back_menu {
+	width: 30%;
+}
+
+.all_releases {
+	width: 70%;
+}
+
+.tooltiptextcontainer{
+	position: relative;
+}
+
+.name_text {
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+	width: 80vw;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.tooltiptextcontainer .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 1px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 50;
+    bottom: 100%;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.tooltiptextcontainer .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 33%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltiptextcontainer:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltiptextcontainer .tooltiptext:hover {
+    visibility: hidden;
+    opacity: 1;
+}
+
+.icons {
+	width: 24px;
+	height: 28px;
+	border: 1px solid black;
+}
+
+.small_icons {
+	width: 14px;
+	height: 14px;
+	border: 1px solid black;
+}
+
+.large_icons {
+	width: 42px;
+	height: 42px;
+	border: 1px solid black;
+}

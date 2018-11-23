@@ -6,27 +6,23 @@ GOALS :
 
 - merge popup and options mangas lists in the popup :
 -- a [+] button unfolding additional options buttons OR a vertical div on the right side containing the buttons (only the ones for the hovered/selected manga being displayed)
--- changing the "search" field to filter
--- add an "apply to all visible mangas" line at the start of the list, with update now, mark all chapters as read, update toggle, delete buttons)
+-- add javascript to the "apply to all visible mangas" line
 -- add a confirmation panel to delete a manga ("deleting <br> [TITLE HERE] <br> yes / no")
--- redo icons for more explicit/standard ones (ex : "delete" -> trashcan icon)
 
-- merge menu and list panels :
--- replace menu buttons by icons (ex : options -> cogwheel/wrench icon)
--- horizontal menu at the top (always visible)
-
-- migrate options and help to the poup:
+- migrate help to the popup:
 -- panels appearing on top of the list when their buttons are clicked
 -- "slide over" animation
+-- redo help page as panel and add css and javascript
 
 
 
 §§FUNCTIONALITIES
 
 - change the way users choose websites to update on :
--- instead of a "preferred website" select and a "check all sites" toggle, create a multiple choice "websites" select (containing a "all" and a "none" line)
--- store those preferences in each manga
+-- instead of a "preferred website" select and a "check all sites" toggle, create a multiple choice "websites" select (containing a "all" and a "none" line) for each website, search the manga name and show the result to the user so he can select it even if it's a different name
+-- store those preferences in each manga (in a object, with website name as key and manga root url as data)
 -- global assign/unassign in the "apply to all mangas" line
+-- get rid of selectors in websites structure and use manga root for that website when updating
 
 - autoupdate function :
 -- choose interval in hours

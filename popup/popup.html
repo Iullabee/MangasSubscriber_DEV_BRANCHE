@@ -7,32 +7,55 @@
 	</head>
 
 	<body>
-		<div id="menu_panel">
-			<div id="menu" class="right">
-				<div id="new_releases" class="button">new releases</div>
-				<div id="follow" class="button">follow this manga</div>
-				<div id="update" class="button">update the list</div>
-				<div>
-					<div id="console_toggle" class="left button small_button">&lt</div>
-					<div id="options" class="left button large_button">options</div>
-					<div id="help" class="left button small_button">?</div>
+
+		<div id="menu">
+			<div class="inline extension_name">MangasSubscriber</div>
+			<div id="version" class="inline extension_version"></div>
+			<div id="follow" class="right tab" title="follow this manga"><img id="follow_icon" class="icons large_icons"></img></div>
+			<div id="options_toggle" class="right tab" title="show/hide options"><img id="options_icon" class="icons large_icons" src="../icons/options.svg"></img></div>
+			<div id="console_toggle" class="right tab" title="show/hide console"><img id="console_icon" class="icons large_icons" src="../icons/console.svg"></img></div>
+			<div id="help_toggle" class="right tab" title="show/hide help"><img id="help_icon" class="icons large_icons" src="../icons/help.svg"></img></div>
+		</div>
+		<div id="options" class="panel hidden">
+			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
+			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
+			<div id="export">export mangas list</div>
+			<div id="import" class="table"><div class="row">
+				<div id="import_text" class="cell onethird">import mangas list</div>
+				<div id="import_options" class="import_options cell onethird">
+					<input type="radio" name="import_option" id="import_option_1" value="merge"><label for="import_option_1">merge with existing</label><br>
+					<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
 				</div>
-			</div>
-			<div id="console" class="left hidden">
-				<div id="console_display"></div>
-				<div id="console_recap" class="bottom">
-					<div id="console_updating" class="left medium_button button"><div class="left">updating (show)</div><div id="console_updating_number" class="right">(0)</div></div>
-					<div id="console_completed" class="left medium_button button"><div class="left">completed (show)</div><div id="console_completed_number" class="right green_text">(0)</div></div>
-					<div id="console_errors" class="left medium_button button"><div class="left">errors (copy)</div><div id="console_errors_number" class="right red_text">(0)</div></div>
-				</div>
+				<div id="import_file" class="cell onethird"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></div>
+			</div></div>
+		</div>
+		<div id="console" class="panel hidden">
+			<div id="console_display"></div>
+			<div id="console_recap" class="bottom">
+				<div id="console_updating" class="left onethird button"><div class="left">updating (show)</div><div id="console_updating_number" class="right">(0)</div></div>
+				<div id="console_completed" class="left onethird button"><div class="left">completed (show)</div><div id="console_completed_number" class="right green_text">(0)</div></div>
+				<div id="console_errors" class="left onethird button"><div class="left">errors (copy)</div><div id="console_errors_number" class="right red_text">(0)</div></div>
 			</div>
 		</div>
-		<div id="mangas_list" class="hidden">
-			<div class="list_top"><div class="left button back_menu" id="back_menu"><- back</div><div class="left button all_releases" id="all_releases">show all mangas</div></div>
-			<div id="list"></div>
+		<div id="help" class="panel hidden">
+			<div id="help_msg">SECTION TO BE REDONE</div>
 		</div>
+		<div class="list_top">
+			<input type="search" placeholder="filter list..." id="filter_list">
+			<div class="inline right"><div class="inline"> Apply to all visible mangas : </div>
+			<div class="inline " title="read in new tabs"><img id="list_read_icon" class="icons" src="../icons/read.svg"></img></div>
+			<div class="inline " title="update now"><img id="list_update_icon" class="icons" src="../icons/update.svg"></img></div>
+			<div class="inline " title="mark all chapters as read"><img id="list_read_all_icon" class="icons" src="../icons/read_all.svg"></img></div>		
+			<div class="inline " title="toggle updates on/off"><img id="list_update_toggle_icon" class="icons" src="../icons/update_true.svg"></img></div>
+			<div class="inline " title="delete from your list"><img id="list_delete_icon" class="icons" src="../icons/trash.svg"></img></div></div>
+		</div>
+		<div id="list_container"><div id="list"></div></div>
 		
+
 		<script src="popup.js"></script>
+		<script src="list.js"></script>
+		<script src="options.js"></script>
+		<script src="console.js"></script>
 	</body>
 
 </html>
