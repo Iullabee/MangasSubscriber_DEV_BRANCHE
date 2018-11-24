@@ -5,7 +5,6 @@ GOALS :
 §§REFACTORING UI
 
 - merge popup and options mangas lists in the popup :
--- a [+] button unfolding additional options buttons OR a vertical div on the right side containing the buttons (only the ones for the hovered/selected manga being displayed)
 -- add javascript to the "apply to all visible mangas" line
 -- add a confirmation panel to delete a manga ("deleting <br> [TITLE HERE] <br> yes / no")
 

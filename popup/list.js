@@ -48,15 +48,10 @@ async function createMangasList() {
 
         dom_manga.appendChild(dom_manga_text);
         
-        //and number of unread chapters			
+        //and number of unread chapters
         let dom_unread_number_node = document.createElement("div");
-        let text_node;
-        if (unread_chapters.length)
-            dom_unread_number_node.classList.add("red_text", "align_right", "list_cell");
-        else
-            dom_unread_number_node.classList.add("green_text", "align_right", "list_cell");
-        
-        text_node = document.createTextNode(" ("+unread_chapters.length+")");
+        dom_unread_number_node.classList.add("unread_number", "list_cell", "align_right", unread_chapters.length ? "red_text" : "green_text");
+        let text_node = document.createTextNode(" ("+unread_chapters.length+")");
         dom_unread_number_node.appendChild(text_node);
         dom_manga.appendChild(dom_unread_number_node);
         
@@ -91,7 +86,7 @@ async function createMangasList() {
         dom_select_td.appendChild(dom_select);
         dom_manga.appendChild(dom_select_td);
         
-        //and a button to read chapter selected from the list. button needs listener to (1) call background function to reconstruct url, and (2) open link in new tab
+        //button to read chapter selected from the list. button needs listener to (1) call background function to reconstruct url, and (2) open link in new tab
         let dom_read_button_td = document.createElement("div");
         dom_read_button_td.classList.add("list_cell");
         dom_read_button_td.title = "open this chapter in a new tab";
@@ -107,53 +102,53 @@ async function createMangasList() {
         dom_read_button_td.appendChild(dom_read_button);
         dom_manga.appendChild(dom_read_button_td);
 
-        //option to choose preferred website
-        let dom_choose_preferred_website_cell = document.createElement("div");
-        dom_choose_preferred_website_cell.classList.add("list_cell");
-        let dom_choose_preferred_website = document.createElement("select");
-        dom_choose_preferred_website.classList.add("websites_select");
-        //update preferred website when selected option changes
-        dom_choose_preferred_website.addEventListener("change", async function(e){let my_manga = e.target.parentElement.parentElement;
-                                                                                background.setPreferredWebsite(my_manga.manga_name, e.target.value);}, false);
-        //add options
-        let dom_option_title = document.createElement("option");
-        dom_option_title_text = document.createTextNode("preferred website");
-        dom_option_title.appendChild(dom_option_title_text);
-        dom_option_title.setAttribute("disabled", "disabled");
-        dom_choose_preferred_website.appendChild(dom_option_title);
-
-        for (let website_name in background.websites_list){
-            let dom_option = document.createElement("option");
-            let dom_option_text = document.createTextNode(website_name);
-            dom_option.appendChild(dom_option_text);
-            if (website_name == prefered_websites[name])
-                dom_option.selected = "selected";
-            dom_choose_preferred_website.appendChild(dom_option);
-        }
-        dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
-        dom_manga.appendChild(dom_choose_preferred_website_cell);
-
-
-        //button to update now
-        let dom_update_button_td = document.createElement("div");
-        dom_update_button_td.classList.add("list_cell");
-        let dom_update_button = document.createElement("img");
-        dom_update_button.update_state = manga["update"];
-        dom_update_button.classList.add("icons");
-        dom_update_button.src = "../icons/update.svg"
-        dom_update_button.addEventListener("click", 
+        //and a button to delete the manga from the list
+        let dom_delete_button_td = document.createElement("div");
+        dom_delete_button_td.classList.add("list_cell", "left");
+        dom_delete_button_td.title = "delete this manga from your list";
+        let dom_delete_button = document.createElement("img");
+        dom_delete_button.classList.add("icons");
+        dom_delete_button.src = "../icons/trash.svg"
+        dom_delete_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    await background.updateMangasList(my_manga.manga_name, true);
-                                    //refresh list
-                                    document.getElementById("list_container").scrollmemory = window.scrollY;
+                                    await background.deleteManga(my_manga.manga_name);
+                                    dom_mangas_list.removeChild(e.target.parentElement.parentElement);
                                 }
                 , false);
-                dom_update_button_td.appendChild(dom_update_button);
-        dom_manga.appendChild(dom_update_button_td);
+        dom_delete_button_td.appendChild(dom_delete_button);
+        dom_manga.appendChild(dom_delete_button_td);
+
+        //a spacer to avoid missclicks
+        let dom_spacer_td = document.createElement("div");
+        dom_spacer_td.classList.add("list_cell", "right");
+        let dom_spacer = document.createElement("img");
+        dom_spacer.classList.add("icons");
+        dom_spacer.src = "../icons/icon_spacer.svg";
+        dom_spacer_td.appendChild(dom_spacer);
+        dom_manga.appendChild(dom_spacer_td);
+
+        //and a button to toggle updating of a manga
+        let dom_update_toggle_button_td = document.createElement("div");
+        dom_update_toggle_button_td.classList.add("list_cell", "right");
+        dom_update_toggle_button_td.title = "do / don't update this manga with the rest of the list";
+        let dom_update_toggle_button = document.createElement("img");
+        dom_update_toggle_button.update_state = manga["update"];
+        dom_update_toggle_button.classList.add("icons");
+        dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
+        dom_update_toggle_button.addEventListener("click", 
+                async function(e){	let my_manga = e.target.parentElement.parentElement;
+                                    await background.setMangaUpdate(my_manga.manga_name, !e.target.update_state);
+                                    e.target.update_state = !e.target.update_state;
+                                    dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
+                                }
+                , false);
+        dom_update_toggle_button_td.appendChild(dom_update_toggle_button);
+        dom_manga.appendChild(dom_update_toggle_button_td);
 
         //and a button to mark all chapters as read
         let dom_read_all_button_td = document.createElement("div");
-        dom_read_all_button_td.classList.add("list_cell");
+        dom_read_all_button_td.classList.add("list_cell", "right");
+        dom_read_all_button_td.title = "mark all chapters as \"read\"";
         let dom_read_all_button = document.createElement("img");
         dom_read_all_button.classList.add("icons");
         dom_read_all_button.src = "../icons/read_all.svg"
@@ -187,39 +182,54 @@ async function createMangasList() {
                 , false);
         dom_read_all_button_td.appendChild(dom_read_all_button);
         dom_manga.appendChild(dom_read_all_button_td);
+
         
-        //and a button to toggle updating of a manga
-        let dom_update_toggle_button_td = document.createElement("div");
-        dom_update_toggle_button_td.classList.add("list_cell");
-        let dom_update_toggle_button = document.createElement("img");
-        dom_update_toggle_button.update_state = manga["update"];
-        dom_update_toggle_button.classList.add("icons");
-        dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
-        dom_update_toggle_button.addEventListener("click", 
+        //button to update now
+        let dom_update_button_td = document.createElement("div");
+        dom_update_button_td.classList.add("list_cell", "right");
+        dom_update_button_td.title = "update (only) this manga now";
+        let dom_update_button = document.createElement("img");
+        dom_update_button.update_state = manga["update"];
+        dom_update_button.classList.add("icons");
+        dom_update_button.src = "../icons/update.svg"
+        dom_update_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    await background.setMangaUpdate(my_manga.manga_name, !e.target.update_state);
-                                    e.target.update_state = !e.target.update_state;
-                                    dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
+                                    await background.updateMangasList(my_manga.manga_name, true);
+                                    //refresh list
+                                    document.getElementById("list_container").scrollmemory = window.scrollY;
                                 }
                 , false);
-        dom_update_toggle_button_td.appendChild(dom_update_toggle_button);
-        dom_manga.appendChild(dom_update_toggle_button_td);
-        
-        //and a button to delete the manga from the list
-        let dom_delete_button_td = document.createElement("div");
-        dom_delete_button_td.classList.add("list_cell");
-        let dom_delete_button = document.createElement("img");
-        dom_delete_button.classList.add("icons");
-        dom_delete_button.src = "../icons/trash.svg"
-        dom_delete_button.addEventListener("click", 
-                async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    await background.deleteManga(my_manga.manga_name);
-                                    dom_mangas_list.removeChild(e.target.parentElement.parentElement);
-                                }
-                , false);
-        dom_delete_button_td.appendChild(dom_delete_button);
-        dom_manga.appendChild(dom_delete_button_td);
-        
+                dom_update_button_td.appendChild(dom_update_button);
+        dom_manga.appendChild(dom_update_button_td);
+
+
+        //option to choose preferred website
+        let dom_choose_preferred_website_cell = document.createElement("div");
+        dom_choose_preferred_website_cell.classList.add("list_cell", "right");
+        dom_choose_preferred_website_cell.title = "choose the preferred website on which to update/read this manga";
+        let dom_choose_preferred_website = document.createElement("select");
+        dom_choose_preferred_website.classList.add("websites_select");
+        //update preferred website when selected option changes
+        dom_choose_preferred_website.addEventListener("change", async function(e){let my_manga = e.target.parentElement.parentElement;
+                                                                                background.setPreferredWebsite(my_manga.manga_name, e.target.value);}, false);
+        //add options
+        let dom_option_title = document.createElement("option");
+        dom_option_title_text = document.createTextNode("preferred website");
+        dom_option_title.appendChild(dom_option_title_text);
+        dom_option_title.setAttribute("disabled", "disabled");
+        dom_choose_preferred_website.appendChild(dom_option_title);
+
+        for (let website_name in background.websites_list){
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode(website_name);
+            dom_option.appendChild(dom_option_text);
+            if (website_name == prefered_websites[name])
+                dom_option.selected = "selected";
+            dom_choose_preferred_website.appendChild(dom_option);
+        }
+        dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
+        dom_manga.appendChild(dom_choose_preferred_website_cell);
+
         
         //add manga to the unread array or to the read array
         if (unread_chapters.length)

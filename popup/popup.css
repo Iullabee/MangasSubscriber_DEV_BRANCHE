@@ -203,6 +203,7 @@ LIST SECTION
 	border-collapse: separate;
 	padding: 10px;
 	background: white;
+	vertical-align: middle;
 }
 
 #filter_list {
@@ -218,29 +219,29 @@ LIST SECTION
 }
 
 #list {
-    display: table;
     width: 783px;
     max-width: 783px;
 	background: white;
 	border-collapse: collapse;
-    max-height: 100px;
 }
 
 .list_line {
 	font-size: 1.25em;
-	display: table-row;
 	width: 783px;
 	max-width: 783px;
 	background-color: white;
+	transition: height 1s;
+	height: 39px;
+	overflow: hidden;
+	border-bottom: 1px solid black;
 }
 .list_line:hover {
 	background-color: #e5e5e5;
+	height: 83px;
 }
 .list_cell {
-    display:table-cell;
-	width:100%;
+	display: inline-block;
 	padding: 5px;
-	border-bottom: 1px solid black;
 	vertical-align: middle;
 }
 
@@ -252,27 +253,16 @@ LIST SECTION
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: calc(95vw - 20px - 9 * 10px - 35px - 50px - 110px - 4 * 28px);
+	max-width: calc(783px - 3 * 10px - 40px - 80px - 28px - 5px);
+	width: calc(783px - 3 * 10px - 40px - 80px - 28px - 5px);
 }
 
 .chapters_select {
-	width: 100%;
-	min-width: 80px;
+	width: 80px;
 }
 
 .websites_select {
-	width: 100%;
-	min-width: 110px;
-}
-
-
-select, button {
-	width: 100%;
-	font-size: 1em;
-}
-
-select {
-	min-width: 66px;
+	width: 150px;
 }
 
 .read_chapter {
@@ -281,6 +271,10 @@ select {
 
 .unread_chapter {
 	background: #ffeedd;
+}
+
+.unread_number {
+	width: 40px;
 }
 
 .align_right {
