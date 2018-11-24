@@ -270,3 +270,14 @@ document.getElementById("filter_list").addEventListener("keyup", async (e) => {
         }
     }
 });
+
+//clear the filter
+document.getElementById("filter_clear").addEventListener("click", async (e) => {
+    var filter = document.getElementById("filter_list");
+    filter.value = "";
+    var event = new Event('keyup', {
+        'bubbles': true,
+        'cancelable': true
+    });
+    filter.dispatchEvent(event);
+});
