@@ -290,6 +290,94 @@ LIST SECTION
 }
 
 /****************************************
+MODAL DELETE
+****************************************/
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #000000bb;
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(1.1);
+	transition: visibility 0s linear 0.5s, opacity 0.5s, transform 0.5s;
+	z-index: 100;
+}
+.modal_title{
+	width: 100%;
+	font-size: 1.5em;
+	text-align: center;
+	text-decoration: bold;
+}
+.modal_content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: white;
+	padding: 1em 1.5em;
+	border-radius: 0.5em;
+}
+.delete_list{
+	width: 500px;
+	max-height: 500px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.delete_list_line {
+	font-size: 1.25em;
+	width: 450px;
+	max-width: 450px;
+	background-color: white;
+	overflow: hidden;
+	border-bottom: 1px solid black;
+}
+.delete_list_line:hover {
+	background-color: #e5e5e5;
+}
+.delete_list_line .name_text{
+	padding-left: 0px;
+	width: 422px;
+	max-width: 422px;
+}
+.modal_agree {
+	float: left;
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: lightgray;
+	border: 1px solid red;
+}
+.modal_agree:hover {
+	background-color: darkgray;
+}
+.modal_cancel {
+	float: right;
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: lightgray;
+	border: 1px solid black;
+}
+.modal_cancel:hover {
+	background-color: darkgray;
+}
+.show_modal {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.5s, transform 0.5s;
+}
+/****************************************
+MODAL DELETE END
+****************************************/
+
+/****************************************
 LIST END
 ****************************************/
 

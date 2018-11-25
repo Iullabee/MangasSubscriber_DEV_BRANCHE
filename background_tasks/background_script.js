@@ -353,12 +353,14 @@ async function followManga(url){
 	return ;
 }
 
-//delete a manga
-async function deleteManga(manga_name){
+//delete mangas from an array of names
+async function deleteMangas(mangas){
 	//get list
 	var list = await getMangasList();
-	//remove manga from list
-	delete list[manga_name];
+	//remove mangas from list
+	for (let name in mangas) {
+		delete list[mangas[name]];
+	}
 	//update storage
 	await browser.storage.local.set({"mangas_list" : list});
 	//update badge
