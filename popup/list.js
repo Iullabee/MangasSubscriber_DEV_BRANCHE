@@ -350,3 +350,20 @@ document.getElementById("delete_modal_agree").addEventListener("click", async (e
         createMangasList();
     }
 });
+
+
+//[apply to all visible mangas] actions
+//read all visible mangas
+document.getElementById("list_read_icon").addEventListener("click", async (e) => {
+    let background = await browser.runtime.getBackgroundPage();
+    let visible_list = document.getElementById("list").getElementsByClassName("visible");
+    for (let manga in visible_list) {
+        if (visible_list.hasOwnProperty(manga)) {
+            let my_manga = visible_list[manga];
+            let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByClassName("chapters_select")[0].options[my_manga.getElementsByClassName("chapters_select")[0].selectedIndex].value); 
+            await browser.tabs.create({url:manga_url, active:false});
+        }
+    }
+    createMangasList();
+});
+
