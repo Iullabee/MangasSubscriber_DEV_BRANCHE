@@ -28,7 +28,7 @@ var websites_list = {
 															var source_url = this.reconstructMangaUrl(manga_name);
 															source = await getSource(source_url);
 
-															//extract the chapter list :: href property  from elementsByClassName "color_0077"  from elementsByClassName "left"  from elementsByClassName "detail_list"
+															//extract the chapter list
 															var parser = new DOMParser();
 															var doc = parser.parseFromString(source, "text/html");
 															if (doc.getElementsByClassName("detail_list")[0]) {
@@ -72,14 +72,15 @@ var websites_list = {
 															var source_url = this.reconstructMangaUrl(manga_name);
 															source = await getSource(source_url);
 
-															//extract the chapter list :: href property  from elementsByClassName "tips"  from elementById "chapters"
+															//extract the chapter list
 															var parser = new DOMParser();
 															var doc = parser.parseFromString(source, "text/html");
-															if (doc.getElementById("list-2")) {
-																var list = doc.getElementById("list-2").getElementsByTagName("li");
+															if (doc.getElementById("chapterlist")) {
+																let list = doc.getElementById("chapterlist").getElementsByTagName("li");
 																for (let i = 0; i<list.length; i++){
 																	if(list[i].getElementsByTagName("a")[0].href){
-																		var url_tail = list[i].getElementsByTagName("a")[0].href.split(manga_name+"/")[1];
+																		var reg = new RegExp(this.separator, "g");
+																		let url_tail = list[i].getElementsByTagName("a")[0].href.replace(reg, " ").split(manga_name+"/")[1];
 																		if(url_tail) {
 																			url_tail = url_tail.split("c")[1];
 
@@ -120,7 +121,7 @@ var websites_list = {
 															var source_url = this.reconstructMangaUrl(manga_name);
 															source = await getSource(source_url);
 
-															//extract the chapter list :: href property  from elementsByTagName "a"  from elementsByClassName "chapter_list"
+															//extract the chapter list
 															var parser = new DOMParser();
 															var doc = parser.parseFromString(source, "text/html");
 															if (doc.getElementsByClassName("chapter_list")[0]) {
@@ -158,7 +159,7 @@ var websites_list = {
 															var source_url = this.reconstructMangaUrl(manga_name);
 															source = await getSource(source_url);
 
-															//extract the chapter list :: href property  from elementsByTagName "a"  from elementsByClassName "chapter_list"
+															//extract the chapter list
 															var parser = new DOMParser();
 															var doc = parser.parseFromString(source, "text/html");
 															if (doc.getElementsByClassName("chp_lst")[0]) {
@@ -192,7 +193,11 @@ async function readMangaChapter(message, sender) {
 		manga = to_log[manga_name];
 		if (manga) {
 			if (current_chapter) {
-				if (manga.chapters_list[current_chapter]["status"] != "read") {
+				if (manga.chapters_list[current_chapter] && manga.chapters_list[current_chapter]["status"] != "read") {
+					manga.chapters_list[current_chapter]["status"] = "read";
+					to_log[manga_name] = manga;
+					browser.storage.local.set({"mangas_list" : to_log});
+				} else if (! manga.chapters_list[current_chapter]) {
 					manga.chapters_list[current_chapter] = {"status" : "read", "url" : url};
 					to_log[manga_name] = manga;
 					browser.storage.local.set({"mangas_list" : to_log});
@@ -233,35 +238,31 @@ async function exportMangasList(){
 }
 
 //import mangas list from json file
-async function importMangasList(file, import_option){
+async function importMangasList(parsed_json, import_option){
 	if (import_option == "replace")
 		await browser.storage.local.clear();
 	
-	var reader = new FileReader();
-    reader.onloadend = async function(e){var import_file = JSON.parse(e.target.result);
-							var back_up = import_file["MangasSubscriberBackUp"];
-							var stored_list = await getMangasList();
-							if (back_up){
-								//if merge, merge storage and import_list
-								if (import_option == "merge"){
-									//for each item in import_list, check if storage_list has same item, if it does, merge read chapters
-									for (let manga_name in stored_list){
-										if (back_up["mangas_list"][manga_name]){
-											for (let chapter_number in stored_list[manga_name]["chapters_list"]){
-												if (stored_list[manga_name]["chapters_list"][chapter_number]["status"] == "read")
-													back_up["mangas_list"][manga_name]["chapters_list"][chapter_number] = stored_list[manga_name]["chapters_list"][chapter_number];
-											}
-										} else {
-											back_up["mangas_list"][manga_name] = stored_list[manga_name];
-										}
-									}
-								} else await browser.storage.local.clear();
-								await browser.storage.local.set(back_up);
-								updateMangasList();
-							}
-							return ;
-						};
-    reader.readAsText(file);
+	var back_up = parsed_json["MangasSubscriberBackUp"];
+	var stored_list = await getMangasList();
+	if (back_up){
+		//if merge, merge storage and import_list
+		if (import_option == "merge"){
+			//for each item in import_list, check if storage_list has same item, if it does, merge read chapters
+			for (let manga_name in stored_list){
+				if (back_up["mangas_list"][manga_name]){
+					for (let chapter_number in stored_list[manga_name]["chapters_list"]){
+						if (stored_list[manga_name]["chapters_list"][chapter_number]["status"] == "read")
+							back_up["mangas_list"][manga_name]["chapters_list"][chapter_number] = stored_list[manga_name]["chapters_list"][chapter_number];
+					}
+				} else {
+					back_up["mangas_list"][manga_name] = stored_list[manga_name];
+				}
+			}
+		} else await browser.storage.local.clear();
+		await browser.storage.local.set(back_up);
+		updateMangasList();
+	}
+	return ;
 }
 
 //update the manga list

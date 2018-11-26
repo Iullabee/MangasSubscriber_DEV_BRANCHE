@@ -8,32 +8,14 @@
   </head>
 
 <body>
-	<div id="details" class="details"></div>
-	<div id="title_bar"><div class="row">
-		<div class="selected_title onehalf">Options</div>
-		<div class="unselected_title onehalf" id="help">Help</div>
-	</div></div>
-	<div id="options_menu">
-		<div id="check_all_sites">check all sites when updating the list <div class="inline icons yes_icon" id="check_all_sites_tickbox"></div></div>
-		<div id="navigation_bar">navigation bar while browsing mangas <div class="inline icons no_icon" id="navigation_bar_tickbox"></div></div>
-		<div id="export">export mangas list</div>
-		<div class="row" id="import">
-			<div id="import_text" class="cell">import mangas list</div>
-			<div id="import_file" class="cell"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></div>
-			<div id="import_options" class="import_options cell">
-				<input type="radio" name="import_option" id="import_option_1" value="merge" checked><label for="import_option_1">merge with existing</label><br>
-				<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
-			</div>
-		</div>
-		<div id="toggle_list_container"><div id="toggle_list"><div class="row"><div class="cell">manage your subscriptions</div><div class="cell"><input type="search" placeholder="search..." id="search_list"></div></div></div></div>
-		
-		<div id="legend" class="legend"><div>
-			<div class="inline small_icons update_icon"></div> will update that manga now,
-			<div class="inline small_icons read_all_icon"></div> will mark all chapters from that manga as read,		
-			<div class="inline small_icons update_true_icon"></div> /	<div class="inline small_icons update_false_icon"></div> means that manga will/won't be updated with the rest of the list,
-			<div class="inline small_icons delete_icon"></div> will delete that manga from your list</div></div>
-		<div id="list_container"><div id="complete_list"></div></div>
-	</div>
+    <div id="import" class="table"><div class="row">
+            <div id="import_text" class="cell onethird">import mangas list : </div>
+            <div id="import_options" class="import_options cell onethird">
+                <input type="radio" name="import_option" id="import_option_1" value="merge"><label for="import_option_1">merge with existing</label><br>
+                <input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
+            </div>
+            <div id="import_file" class="cell onethird align_center"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></div>
+    </div></div>
 	
 
   

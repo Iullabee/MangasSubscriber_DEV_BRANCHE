@@ -40,6 +40,20 @@ body {
     vertical-align: middle;
 }
 
+.input_button {
+	position: relative;
+	width: 27px;
+	height: 27px;
+	border: 1px solid black;
+}
+
+.input_button > img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 /****************************************
 MENU SECTION
 ****************************************/
@@ -180,6 +194,16 @@ OPTIONS PANEL
 .import_options {
 	font-size: 0.75em;
 }
+.left_padding {
+	padding-left: 15px;
+}
+#import_as_text_field {
+	width: 350px;
+}
+#import_as_text_agree {
+	top: -2px;
+}
+
 /****************************************
 OPTIONS END
 ****************************************/
@@ -208,6 +232,10 @@ LIST SECTION
 
 #filter_list {
     width: 50%;
+}
+
+#filter_clear {
+	top: -3px;
 }
 
 #list_container{

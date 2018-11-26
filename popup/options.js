@@ -49,9 +49,8 @@ document.getElementById("export").addEventListener("click", async (e) => {
 });
 
 //import the mangas list
-document.getElementById("hidden_import").addEventListener("change", async (e) => {
-    var file = e.target.files[0];
-    //retrieve the chosen import option
+async function importListAsText() {
+    
     let import_option = "";
     let inputs = document.getElementsByName("import_option");
     let option_checked = false;
@@ -63,23 +62,34 @@ document.getElementById("hidden_import").addEventListener("change", async (e) =>
     }
     
     if (option_checked) {
-        document.getElementById("visible_import").textContent = "["+ document.getElementById("hidden_import").files[0].name +"]";
-        document.getElementById("import_text").textContent = "...";
+        let json = document.getElementById("import_as_text_field").value;
+        if (json != "") {
+            let parsed_json = JSON.parse(json);
+            document.getElementById("import_as_text_desc").textContent = "...";
 
-        let background = await browser.runtime.getBackgroundPage();
-        var fail = await background.importMangasList(file, import_option);
-        if (!fail){
-            document.getElementById("import_text").textContent = "list imported";
-        } else {
-            document.getElementById("import_text").textContent = "error, try again";
+            let background = await browser.runtime.getBackgroundPage();
+            var fail = await background.importMangasList(parsed_json, import_option);
+            if (!fail){
+                document.getElementById("import_as_text_desc").textContent = "list imported";
+                document.getElementById("import_as_text_field").value = "";
+            } else {
+                document.getElementById("import_as_text_desc").textContent = "error, try again";
+            }
+            setTimeout(()=>{document.getElementById("import_as_text_desc").textContent = "import mangas list";
+                            document.getElementById("visible_import").textContent = "[choose a file]";
+                            for (let i = 0; i < inputs.length; i++) {
+                                inputs[i].checked = false;
+                            }
+            },3000);
         }
-        setTimeout(()=>{document.getElementById("import_text").textContent = "import mangas list";
-                        document.getElementById("visible_import").textContent = "[choose a file]";
-                        for (let i = 0; i < inputs.length; i++) {
-                            inputs[i].checked = false;
-                        }
-        },3000);
     } else {
         alert("please select an import option first (merge/replace)");
     }
+}
+
+document.getElementById("import_as_text_agree").addEventListener("click", (e)=>importListAsText(), false);
+document.getElementById("import_as_text_field").addEventListener("change", (e)=>importListAsText(), false);
+
+document.getElementById("import_as_file").addEventListener("click", async (e) => {
+	browser.runtime.openOptionsPage();
 });

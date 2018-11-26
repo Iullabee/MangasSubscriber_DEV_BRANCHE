@@ -1,289 +1,30 @@
-html, body {
-	width: 98vw;
-	font-size: 1.2em;
-	border-collapse: collapse;
+
+.onethird {
+	width: 33.3%;
 }
 
-.details{
-	text-align: right;
-	margin-right: 20px;
-	font-size: 0.5em;
+.table {
+    display: table;
+    background-color: white;
+    position: absolute;
+	top: 50px;
+	left: 50%;
+	transform: translate(-50%, 0%);
+    border: 1px solid black;
 }
-
-#title_bar{
-	min-height: 120px;
-	display: table;
-	width: 100%;
-}
-
-.selected_title{
-	display: table-cell;
-	text-align: center;
-	font-size: 3em;
-	color: #5b00b5;
-	border-top: 5px solid black;
-	border-left: 5px solid black;
-	border-right: 5px solid black;
-	margin: 5px 0px 15px -5px;
-	cursor: pointer;
-}
-.unselected_title{
-	display: table-cell;
-	background: #CCCCCC;
-	text-align: center;
-	font-size: 3em;
-	color: gray;
-	border-bottom: 5px solid black;
-	margin: 5px 0px 15px 0px;
-	cursor: pointer;
-}
-
-.hidden{
-	display: none;
-}
-
-#options_menu {
-	width: 100%;
-}
-
-#options_menu > div {
-	vertical-align: middle;
-	width: 100%;
-	border-bottom: 1px solid black;
-}
-
-#options_menu > div:not(#list_container):hover{
-	background-color: #e5e5e5;
-}
-
-#import {
-	display: table;
-}
-#import .cell {
-	width: 33%;
-	vertical-align: middle;
-}
-
-#toggle_list {
-	display: table;
-	width: 100%;
-}
-#toggle_list .cell {
-	width: 50%;
-	vertical-align: middle;
-}
-#toggle_list_container {
-	z-index: 5;
-	position: sticky;
-	top: 0px;
-	width: 100%;
-	background: white;
-}
-
-.onethird{
-	width: 33%;
-}
-
-.onehalf{
-	width: 50%;
-}
-
-.left {
-	float: left;
-}
-
-.right {
-	float: right;
-}
-
-label {
-	width: 100%;
-}
-
-.import_options {
-	font-size: 0.75em;
-}
-
-#search_list {
-	width: 100%;
-}
-
-#complete_list {
-	display: table;
-	font-size: .75em;
-	border: 1px solid black;
-	width: 100%;
-}
-
-#complete_list .row {
-	background-color: white;
-	border-bottom: 1px solid black;
-}
-
-#complete_list .row:hover {
-	background-color: #e5e5e5;
-}
-
 .row {
-	display:table-row; 
-	width: 100%;
-	max-width: 98vw;
+    display: table-row;
 }
-.cell{
-	display:table-cell;
-	width:100%;
-	padding: 5px;
-	border-bottom: 1px solid black;
-	vertical-align: middle;
+.row:hover {
+	background-color: #e5e5e5;
 }
-
-.chapters_select {
-	width: 100%;
-	min-width: 80px;
+.cell {
+    display: table-cell;
+    vertical-align: middle;
+    /*text-align: center;*/
+    padding: 0px 15px;
 }
 
-.websites_select {
-	width: 100%;
-	min-width: 110px;
-}
-
-.cell button {
-	min-width: 50px;
-}
-
-.read_chapter {
-	background: #ddffee;
-}
-
-.unread_chapter {
-	background: #ffeedd;
-}
-
-.unread_number {
-	text-align: right;
-	color: red;
-}
-
-.read_number {
-	text-align: right;
-	color: green;
-}
-
-.tooltiptextcontainer{
-	position: relative;
-	width: 100%;
-}
-
-.tooltiptextcontainer .tooltiptext {
-    visibility: hidden;
-    background-color: #555;
-    color: #fff;
+.align_center {
     text-align: center;
-    padding: 1px;
-    border-radius: 6px;
-	font-size: 1em;
-
-    /* Position the tooltip text */
-    position: absolute;
-    z-index: 50;
-    bottom: 100%;
-
-    /* Fade in tooltip */
-    opacity: 0;
-    transition: opacity 1s;
-}
-
-/* Tooltip arrow */
-.tooltiptextcontainer .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 33%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltiptextcontainer:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
-/* Hide the tooltip text when you mouse over the tooltip itself */
-.tooltiptextcontainer .tooltiptext:hover {
-    visibility: hidden;
-    opacity: 1;
-}
-
-.name_text{
-	display: inline-block;
-	padding-left: 10px;
-	padding-right: 10px;
-	position: relative;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: calc(97vw - 20px - 9 * 10px - 35px - 80px - 50px - 110px - 4 * 28px);
-}
-
-.icons {
-	width: 28px;
-	height: 28px;
-	min-width: 28px;
-	min-height: 28px;
-	max-width: 28px;
-	max-height: 28px;
-}
-
-.small_icons {
-	width: 20px;
-	height: 20px;
-	min-width: 20px;
-	min-height: 20px;
-	max-width: 20px;
-	max-height: 20px;
-}
-
-.update_icon {
-	background:url("/icons/update.svg");
-	background-size: contain;
-}
-
-.read_all_icon {
-	background:url("/icons/read.svg");
-	background-size: contain;
-}
-
-.update_true_icon {
-	background:url("/icons/update_true.svg");
-	background-size: contain;
-}
-
-.update_false_icon {
-	background:url("/icons/update_false.svg");
-	background-size: contain;
-}
-
-.delete_icon {
-	background:url("/icons/trash.svg");
-	background-size: contain;
-}
-
-.yes_icon {
-	background:url("/icons/yes.svg");
-	background-size: contain;
-}
-
-.no_icon {
-	background:url("/icons/no.svg");
-	background-size: contain;
-}
-
-.legend {
-	font-size: 0.75em;
-}
-
-.inline {
-	display: inline-block;
 }

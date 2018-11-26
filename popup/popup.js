@@ -33,7 +33,7 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 			if (!fail){
                 document.getElementById("follow").title = "now following";
                 document.getElementById("follow_icon").src = "../icons/followed.svg";
-				setTimeout(async ()=>{document.getElementById("follow").title = "already followed"; await createMangasList();},3000);
+				setTimeout(async ()=>{document.getElementById("follow").title = "already followed"; createMangasList();},3000);
 			} else {
                 document.getElementById("follow").title = "error, try again";
                 document.getElementById("follow_icon").src = "../icons/followed.svg";
@@ -71,7 +71,7 @@ document.getElementById("menu").addEventListener("click", async (e) => {
         //hide panels
         for (let i in tabs) document.getElementById(tabs[i]).classList.add("hidden");
     }
-
+    createMangasList();
     
 });
 

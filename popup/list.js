@@ -96,7 +96,8 @@ async function createMangasList() {
         dom_read_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
                                     let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByClassName("chapters_select")[0].options[my_manga.getElementsByClassName("chapters_select")[0].selectedIndex].value); 
-                                    browser.tabs.create({url:manga_url, active:false});
+                                    await browser.tabs.create({url:manga_url, active:false});
+                                    createMangasList();
                                 }
                 , false);
         dom_read_button_td.appendChild(dom_read_button);
@@ -205,6 +206,7 @@ async function createMangasList() {
                                         chapters_list.classList.remove("unread_chapter");
                                         chapters_list.classList.add("read_chapter");
                                     }
+                                    createMangasList();
                                 }
                 , false);
         dom_read_all_button_td.appendChild(dom_read_all_button);
@@ -224,6 +226,7 @@ async function createMangasList() {
                                     await background.updateMangasList(my_manga.manga_name, true);
                                     //refresh list
                                     document.getElementById("list_container").scrollmemory = window.scrollY;
+                                    createMangasList();
                                 }
                 , false);
                 dom_update_button_td.appendChild(dom_update_button);
@@ -341,7 +344,9 @@ document.getElementById("delete_modal_agree").addEventListener("click", async (e
             list.removeChild(lines[i]);
         }
     }
-    if (mangas != []) await background.deleteMangas(mangas);
     toggleModal("delete_modal");
-    createMangasList();
+    if (mangas != []) {
+        await background.deleteMangas(mangas);
+        createMangasList();
+    }
 });

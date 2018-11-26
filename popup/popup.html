@@ -20,14 +20,18 @@
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
 			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
 			<div id="export">export mangas list</div>
-			<div id="import" class="table"><div class="row">
-				<div id="import_text" class="cell onethird">import mangas list</div>
-				<div id="import_options" class="import_options cell onethird">
+			<div id="import_as_text" class="">
+				<div id="import_as_text_desc" class="inline">import list from text</div>
+				<div id="import_options" class="import_options inline left_padding">
 					<input type="radio" name="import_option" id="import_option_1" value="merge"><label for="import_option_1">merge with existing</label><br>
 					<input type="radio" name="import_option" id="import_option_2" value="replace"><label for="import_option_2">replace existing</label>
 				</div>
-				<div id="import_file" class="cell onethird"><input type="file" accept=".json" id="hidden_import" style="display:none"/><label for="hidden_import" id="visible_import">[choose a file]</label></div>
-			</div></div>
+				<div id="import_as_text" class="inline left_padding">
+					<input type="text" id="import_as_text_field" maxlength="100000000000" placeholder="copy/paste the content of your backup file..." title="max. 100 billions (100 000 000 000) characters!"/><!--
+					--><div id="import_as_text_agree" class="inline input_button"><img class="small_icons" src="../icons/yes.svg"></img></div>
+				</div>
+			</div>
+			<div id="import_as_file">import list from file</div>
 		</div>
 		<div id="console" class="panel hidden">
 			<div id="console_display"></div>
@@ -41,8 +45,8 @@
 			<div id="help_msg">SECTION TO BE REDONE</div>
 		</div>
 		<div class="list_top">
-			<input type="search" placeholder="filter list..." id="filter_list">
-			<img id="filter_clear" class="small_icons" src="../icons/no.svg"></img>
+			<input type="search" placeholder="filter list..." id="filter_list" autofocus><!--
+			--><div id="filter_clear" class="inline input_button"><img class="small_icons" src="../icons/no.svg"></img></div>
 			<div class="inline right"><div class="inline"> Apply to all visible mangas : </div>
 			<div class="inline " title="read in new tabs"><img id="list_read_icon" class="icons" src="../icons/read.svg"></img></div>
 			<div class="inline " title="update now"><img id="list_update_icon" class="icons" src="../icons/update.svg"></img></div>
