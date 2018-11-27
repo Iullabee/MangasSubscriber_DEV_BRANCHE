@@ -266,15 +266,23 @@ async function importMangasList(parsed_json, import_option){
 }
 
 //update the manga list
-async function updateMangasList(lone_manga, ignore_no_update){
+async function updateMangasList(mangas_selection, ignore_no_update){
 	if (browser.browserAction.setBadgeText)
 		browser.browserAction.setBadgeText({"text" : "UPD"});
 	//fetch current list
 	var mangas_list = await getMangasList();
 	var updated_chapters_list = {};
 	var check_all_sites = await getCheckAllSites();
+	let to_update_list = {};
+	
+	if (mangas_selection) {
+		for (var i in mangas_selection) {
+			if (mangas_selection.hasOwnProperty(i)) {
+				to_update_list[mangas_selection[i]] = mangas_list[mangas_selection[i]];
+			}
+		}
+	} else to_update_list = mangas_list;
 
-	let to_update_list = lone_manga ? {[lone_manga]:mangas_list[lone_manga]} : mangas_list;
 	//for each manga that is set to update, get an updated chapters list
 	for (let manga in to_update_list) {
 		if (mangas_list[manga]["update"] || ignore_no_update){

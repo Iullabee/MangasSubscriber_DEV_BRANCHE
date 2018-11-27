@@ -216,14 +216,14 @@ async function createMangasList() {
         //button to update now
         let dom_update_button_td = document.createElement("div");
         dom_update_button_td.classList.add("list_cell", "right");
-        dom_update_button_td.title = "update (only) this manga now";
+        dom_update_button_td.title = "update (only) this manga now.&#10;ignores the 'no update' tag!";
         let dom_update_button = document.createElement("img");
         dom_update_button.update_state = manga["update"];
         dom_update_button.classList.add("icons");
         dom_update_button.src = "../icons/update.svg"
         dom_update_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    await background.updateMangasList(my_manga.manga_name, true);
+                                    await background.updateMangasList([my_manga.manga_name], true);
                                     //refresh list
                                     document.getElementById("list_container").scrollmemory = window.scrollY;
                                     createMangasList();
@@ -364,6 +364,24 @@ document.getElementById("list_read_icon").addEventListener("click", async (e) =>
             await browser.tabs.create({url:manga_url, active:false});
         }
     }
+    createMangasList();
+});
+
+
+//update all visible mangas
+document.getElementById("list_update_icon").addEventListener("click", async (e) => {
+    let background = await browser.runtime.getBackgroundPage();
+    let visible_list = document.getElementById("list").getElementsByClassName("visible");
+    let update_list = [];
+    for (let manga in visible_list) {
+        if (visible_list.hasOwnProperty(manga)) {
+            let my_manga = visible_list[manga];
+            update_list.push(my_manga.manga_name);
+        }
+    }
+    await background.updateMangasList(update_list, false);
+    //refresh list
+    document.getElementById("list_container").scrollmemory = window.scrollY;
     createMangasList();
 });
 
