@@ -182,13 +182,7 @@ async function createMangasList() {
         dom_read_all_button.src = "../icons/read_all.svg"
         dom_read_all_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    let chapters_list = "";
-                                    let select_list = my_manga.getElementsByTagName("select");
-                                    for (let selector in select_list) {
-                                        if (select_list.hasOwnProperty(selector) && select_list[selector].classList.contains("chapters_select")) {
-                                            chapters_list = select_list[selector];
-                                        }
-                                    }
+                                     let chapters_list = my_manga.getElementsByClassName("chapters_select")[0];
                                     
                                     for (let index in chapters_list.options) {
                                         if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
@@ -385,3 +379,28 @@ document.getElementById("list_update_icon").addEventListener("click", async (e) 
     createMangasList();
 });
 
+//mark all chapters as "read" for all visible mangas
+document.getElementById("list_read_all_icon").addEventListener("click", async (e) => {
+    let background = await browser.runtime.getBackgroundPage();
+    let visible_list = document.getElementById("list").getElementsByClassName("visible");
+
+    for (let manga in visible_list) {
+        if (visible_list.hasOwnProperty(manga)) {
+            let my_manga = visible_list[manga];
+            
+            let chapters_list = my_manga.getElementsByClassName("chapters_select")[0];
+            
+            for (let index in chapters_list.options) {
+                if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
+                    let manga_url = await background.reconstructChapterURL(my_manga.manga_name, chapters_list.options[index].value); 
+                    background.readMangaChapter({"target" : "background", "url" : manga_url}).then((result)=> {
+                        //refresh list
+                        document.getElementById("list_container").scrollmemory = window.scrollY;
+                        createMangasList();
+                    });
+                } else break;
+            }
+
+        }
+    }
+});
