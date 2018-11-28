@@ -33,6 +33,7 @@ async function createMangasList() {
         let dom_manga = document.createElement("div");
         dom_manga.manga_name = name;
         dom_manga.website_name = manga.website_name;
+        dom_manga.update_state = manga["update"];
         dom_manga.classList.add("list_line", filter_list && !(name.includes(filter_list)) ? "hidden" : "visible");
         
         //displaying the manga name 
@@ -160,14 +161,13 @@ async function createMangasList() {
         dom_update_toggle_button_td.classList.add("list_cell", "right");
         dom_update_toggle_button_td.title = "do / don't update this manga with the rest of the list";
         let dom_update_toggle_button = document.createElement("img");
-        dom_update_toggle_button.update_state = manga["update"];
         dom_update_toggle_button.classList.add("icons");
-        dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
+        dom_update_toggle_button.src = "../icons/update_"+dom_manga.update_state+".svg";
         dom_update_toggle_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    await background.setMangaUpdate(my_manga.manga_name, !e.target.update_state);
-                                    e.target.update_state = !e.target.update_state;
-                                    dom_update_toggle_button.src = "../icons/update_"+dom_update_toggle_button.update_state+".svg";
+                                    await background.setMangaUpdate(my_manga.manga_name, !my_manga.update_state);
+                                    my_manga.update_state = !my_manga.update_state;
+                                    dom_update_toggle_button.src = "../icons/update_"+my_manga.update_state+".svg";
                                 }
                 , false);
         dom_update_toggle_button_td.appendChild(dom_update_toggle_button);
@@ -404,3 +404,22 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
         }
     }
 });
+
+//toggle "update with the rest of the list" option for all visible mangas
+document.getElementById("list_update_toggle_icon").addEventListener("click", async (e) => {
+    let background = await browser.runtime.getBackgroundPage();
+    let visible_list = document.getElementById("list").getElementsByClassName("visible");
+
+    for (let manga in visible_list) {
+        if (visible_list.hasOwnProperty(manga)) {
+            let my_manga = visible_list[manga];
+            
+            await background.setMangaUpdate(my_manga.manga_name, !my_manga.update_state);
+
+        }
+    }
+    //refresh list
+    document.getElementById("list_container").scrollmemory = window.scrollY;
+    createMangasList();
+});
+
