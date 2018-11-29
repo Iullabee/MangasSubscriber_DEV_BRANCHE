@@ -379,6 +379,7 @@ document.getElementById("list_update_icon").addEventListener("click", async (e) 
 document.getElementById("list_read_all_icon").addEventListener("click", async (e) => {
     let background = await browser.runtime.getBackgroundPage();
     let visible_list = document.getElementById("list").getElementsByClassName("visible");
+    let promised_results = [];
 
     for (let manga in visible_list) {
         if (visible_list.hasOwnProperty(manga)) {
@@ -389,16 +390,17 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
             for (let index in chapters_list.options) {
                 if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
                     let manga_url = await background.reconstructChapterURL(my_manga.manga_name, chapters_list.options[index].value); 
-                    background.readMangaChapter({"target" : "background", "url" : manga_url}).then((result)=> {
-                        //refresh list
-                        document.getElementById("list_container").scrollmemory = window.scrollY;
-                        createMangasList();
-                    });
+                    promised_results.push(background.readMangaChapter({"target" : "background", "url" : manga_url}));
                 } else break;
             }
-
         }
     }
+    Promise.all(promised_results).then((result) => {
+        //refresh list
+        document.getElementById("list_container").scrollmemory = window.scrollY;
+        createMangasList();
+    });
+    
 });
 
 //toggle "update with the rest of the list" option for all visible mangas
@@ -457,4 +459,3 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
     }
     toggleModal("delete_modal");
 });
-
