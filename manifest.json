@@ -5,7 +5,7 @@
 	"version": "1.0.0_v1",
 
 	"icons": {
-		"48": "icons/high_resolution_logo.png"
+		"48": "icons/logo.svg"
 	},
 
 	"permissions": [
@@ -19,7 +19,7 @@
 
 	"browser_action": {
 		"browser_style": true,
-		"default_icon": "icons/high_resolution_logo.png",
+		"default_icon": "icons/logo.svg",
 		"default_title": "MangasSub",
 		"default_popup": "popup/popup.html"
 	},
