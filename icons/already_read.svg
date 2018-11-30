@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="628"
+   height="628"
+   viewBox="0 0 166.15833 166.15834"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="already_read.svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient1421"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop1419" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.75258397"
+     inkscape:cx="-439.47768"
+     inkscape:cy="386.33053"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     units="px"
+     inkscape:window-width="2560"
+     inkscape:window-height="1417"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid815" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-130.84165)">
+    <path
+       style="fill:none;stroke:#000000;stroke-width:13.22916698;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 10.385548,220.60214 c 49.283831,49.2999 96.103482,49.2999 145.387322,0"
+       id="path816"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot1425"
+       style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+         id="flowRegion1427"><rect
+           id="rect1429"
+           width="210"
+           height="270"
+           x="-310"
+           y="8" /></flowRegion><flowPara
+         id="flowPara1431" /></flowRoot>    <g
+       aria-label="Z"
+       transform="matrix(2.2225868,0,0,2.2225868,27.960592,114.21012)"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.11904297;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="flowRoot1387">
+      <path
+         d="M 12.246094,24.230469 H 35.15625 v 3.007812 l -18.4375,22.832031 h 18.886719 v 3.320313 H 11.796875 v -3.007813 l 18.4375,-22.832031 H 12.246094 Z"
+         style=""
+         id="path831" />
+    </g>
+    <g
+       aria-label="Z"
+       transform="matrix(1.1112934,0,0,1.1112934,335.26373,135.9895)"
+       style="font-style:normal;font-weight:normal;font-size:80px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.23808594;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="flowRoot1433">
+      <path
+         d="m -295.50781,0.4609375 h 45.82031 v 6.015625 l -36.875,45.6640625 h 37.77344 v 6.640625 h -47.61719 v -6.015625 l 36.875,-45.6640625 h -35.97656 z"
+         style=""
+         id="path834" />
+    </g>
+  </g>
+</svg>

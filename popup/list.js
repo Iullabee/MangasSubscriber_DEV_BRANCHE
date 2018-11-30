@@ -33,6 +33,7 @@ async function createMangasList() {
         let dom_manga = document.createElement("div");
         dom_manga.manga_name = name;
         dom_manga.website_name = manga.website_name;
+        dom_manga.reading_status = unread_chapters[0] ? "unread" : "read";
         dom_manga.update_state = manga["update"];
         dom_manga.classList.add("list_line", filter_list && !(name.includes(filter_list)) ? "hidden" : "visible");
         
@@ -277,21 +278,35 @@ async function createMangasList() {
 
 createMangasList();
 
-//filter the list when user types something
-document.getElementById("filter_list").addEventListener("keyup", async (e) => {
-	var list = document.getElementById("list").children;
+//filter the list
+function filterList() {
+    var list = document.getElementById("list").children;
+    let filter_field = document.getElementById("filter_list").value;
+    let filter_unread = document.getElementById("unread_filter").filter_out;
+    let filter_already_read = document.getElementById("already_read_filter").filter_out;
 	//filter the list
 	for (let manga in list) {
         if (list.hasOwnProperty(manga)) {
-            if (!(list[manga].manga_name.includes(e.target.value))) {
+            if (!(list[manga].manga_name.includes(filter_field))) {
                 list[manga].classList.add("hidden");
                 list[manga].classList.remove("visible");
             } else {
-                list[manga].classList.remove("hidden");
-                list[manga].classList.add("visible");
+                list[manga].reading_status == "unread" ? 
+                    filter_unread ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
+                        : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
+                    : false;
+
+                list[manga].reading_status == "read" ? 
+                filter_already_read ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
+                    : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
+                : false;
             }
         }
     }
+}
+//filter the list when user types something
+document.getElementById("filter_list").addEventListener("keyup", async (e) => {
+	filterList();
 });
 
 //clear the filter
@@ -305,6 +320,35 @@ document.getElementById("filter_clear").addEventListener("click", async (e) => {
     filter.dispatchEvent(event);
 });
 
+//filter unread mangas
+document.getElementById("unread_filter").addEventListener("click", async (e) => {
+    e.target.filter_out = ! e.target.filter_out;
+    e.target.classList.toggle("selected");
+    
+    filterList();
+});
+//initialize unread_filter
+function initializeUnreadFilter() {
+    document.getElementById("unread_filter").filter_out = false;
+    document.getElementById("unread_filter").classList.add("selected");
+} 
+initializeUnreadFilter();
+
+//filter read mangas
+document.getElementById("already_read_filter").addEventListener("click", async (e) => {
+    e.target.filter_out = ! e.target.filter_out;
+    e.target.classList.toggle("selected");
+    
+    filterList();
+});
+//initialize read_filter
+function initializeReadFilter() {
+    document.getElementById("already_read_filter").filter_out = false;
+    document.getElementById("already_read_filter").classList.add("selected");
+} 
+initializeReadFilter();
+
+//modal window to confirm mangas deletion
 function toggleModal(id) {
     let modal = document.getElementById(id);
     modal.classList.toggle("show_modal");
@@ -340,7 +384,7 @@ document.getElementById("delete_modal_agree").addEventListener("click", async (e
         createMangasList();
     }
 });
-
+///////////////////////////////////////
 
 //[apply to all visible mangas] actions
 //read all visible mangas

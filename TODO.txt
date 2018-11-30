@@ -5,7 +5,7 @@ GOALS :
 §§REFACTORING UI
 
 - merge popup and options mangas lists in the popup :
--- add javascript to the "apply to all visible mangas" line
+-- move the "apply to all visible mangas" line down under the filter. add buttons to the right of the filter to select only from read/unread mangas
 
 - migrate help to the popup:
 -- panels appearing on top of the list when their buttons are clicked
