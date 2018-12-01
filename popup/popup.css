@@ -204,6 +204,9 @@ OPTIONS PANEL
 	top: -2px;
 }
 
+#auto_update_interval {
+	width: 75px;
+}
 /****************************************
 OPTIONS END
 ****************************************/

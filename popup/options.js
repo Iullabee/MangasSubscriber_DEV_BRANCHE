@@ -32,6 +32,29 @@ async function displayNavigationBar(){
 //initialize the navigation bar option
 displayNavigationBar();
 
+//change the auto update interval (waits 1s after user stops changing it before doing stuff to avoid firing a ton of list update from scrolling the numbers)
+var delay = null;
+document.getElementById("auto_update_interval").addEventListener("change", async (e) => {
+	if (delay) clearTimeout(delay);
+    delay = setTimeout(async ()=>{
+        delay = null;
+        var background = await browser.runtime.getBackgroundPage();
+        await background.autoUpdate(e.target.value);
+        displayAutoUpdateInterval();
+    }, 1000);
+    
+});
+
+//display the auto update interval
+async function displayAutoUpdateInterval(){
+	var background = await browser.runtime.getBackgroundPage();
+	var auto_update_interval = await background.getAutoUpdateInterval();
+    document.getElementById("auto_update_interval").value = auto_update_interval;
+}
+
+//initialize the auto update interval
+displayAutoUpdateInterval();
+
 //export the mangas list
 document.getElementById("export").addEventListener("click", async (e) => {
 	var background = await browser.runtime.getBackgroundPage();

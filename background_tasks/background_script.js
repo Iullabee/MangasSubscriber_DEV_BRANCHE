@@ -274,7 +274,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 	var updated_chapters_list = {};
 	var check_all_sites = await getCheckAllSites();
 	let to_update_list = {};
-	
+
 	if (mangas_selection) {
 		for (var i in mangas_selection) {
 			if (mangas_selection.hasOwnProperty(i)) {
@@ -521,6 +521,7 @@ async function db_update(){
 		if (prefs["DB_version"] == "1.0.0") {
 			to_log = await await browser.storage.local.get();
 			to_log["MangasSubscriberPrefs"]["DB_version"] = "1.0.1";
+			to_log["MangasSubscriberPrefs"]["auto_update"] = 0;
 			for (let manga in to_log["mangas_list"]) {
 				to_log["mangas_list"][manga.replace(/_/g, " ")] = to_log["mangas_list"][manga];
 				delete(to_log["mangas_list"][manga]);
@@ -557,10 +558,32 @@ async function setPreferredWebsite(manga_name, website_name){
 
 
 
+var isAutoUpdating;
+
+//set auto update interval
+async function autoUpdate(interval){
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	let hours = 3600000;
+	if (interval) {
+		prefs["auto_update"] = interval;
+		await browser.storage.local.set({"MangasSubscriberPrefs":prefs});
+	} else {
+		interval = prefs["auto_update"];
+	}
+	clearTimeout(isAutoUpdating);
+	if (interval > 0) {
+		updateMangasList();
+		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+	}
+	
+}
 
 
-
-
+//get auto update interval
+async function getAutoUpdateInterval(){
+	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	return prefs["auto_update"];
+}
 
 
 
