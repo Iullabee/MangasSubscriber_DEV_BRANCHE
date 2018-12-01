@@ -19,10 +19,6 @@ GOALS :
 -- global assign/unassign in the "apply to all mangas" line
 -- get rid of selectors in websites structure and use manga root for that website when updating
 
-- autoupdate function :
--- choose interval in hours
--- 0 = never
-
 - search function to look up mangas on all websites ? :
 -- create a search function in each website object (could be used when updating in case a manga has different name on different sites?)
 
