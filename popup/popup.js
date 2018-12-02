@@ -55,23 +55,27 @@ function selectTab (id) {
 
 document.getElementById("menu").addEventListener("click", async (e) => {
     var tabs = {"options_toggle":"options", "console_toggle":"console", "help_toggle":"help"};
+    let refresh_list = true;
     //if target has a panel attached
     if (tabs[e.target.parentElement.id]) {
-        let hidden = document.getElementById(tabs[e.target.parentElement.id]).classList.contains("hidden");
+        let visible = document.getElementById(tabs[e.target.parentElement.id]).classList.contains("visible_panel");
         //update buttons
         selectTab(e.target.parentElement.id);
         //hide panels
-        for (let i in tabs) document.getElementById(tabs[i]).classList.add("hidden");
+        for (let i in tabs) document.getElementById(tabs[i]).classList.remove("visible_panel");
         //if target was already hidden, show it
-        if (hidden) document.getElementById(tabs[e.target.parentElement.id]).classList.remove("hidden");
+        if (!visible) {
+            document.getElementById(tabs[e.target.parentElement.id]).classList.add("visible_panel");
+            refresh_list = false; // no need to refresh the list if we're showing a panel on top
+        }
     }
     else {
         //update buttons
         selectTab();
         //hide panels
-        for (let i in tabs) document.getElementById(tabs[i]).classList.add("hidden");
+        for (let i in tabs) document.getElementById(tabs[i]).classList.remove("visible_panel");
     }
-    createMangasList();
+    if (refresh_list) setTimeout(createMangasList, 1000); //wait for the sliding animation to finish before refreshing the list to avoid stuttering
     
 });
 

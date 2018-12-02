@@ -5,8 +5,6 @@ GOALS :
 §§REFACTORING UI
 
 - migrate help to the popup:
--- panels appearing on top of the list when their buttons are clicked
--- "slide over" animation
 -- redo help page as panel and add css and javascript
 
 

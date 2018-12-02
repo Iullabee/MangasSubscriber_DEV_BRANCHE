@@ -99,10 +99,17 @@ PANELS SECTION
     position: fixed;
     top: 52px;
     width: 800px;
-    height: 548px;
+    height: 0px;
+	overflow: hidden;
     border: 1px solid black;
     background: white;
-    z-index: 5;
+	z-index: 5;
+	transition: height 1s;
+}
+
+.visible_panel {
+	height: 548px;
+	z-index: 10;
 }
 
 /****************************************
