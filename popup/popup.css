@@ -360,14 +360,14 @@ MODAL DELETE
 	padding: 1em 1.5em;
 	border-radius: 0.5em;
 }
-.delete_list{
+#delete_modal_list {
 	width: 500px;
 	max-height: 500px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
 
-.delete_list_line {
+.delete_modal_list_line {
 	font-size: 1.25em;
 	width: 450px;
 	max-width: 450px;
@@ -375,10 +375,10 @@ MODAL DELETE
 	overflow: hidden;
 	border-bottom: 1px solid black;
 }
-.delete_list_line:hover {
+.delete_modal_list_line:hover {
 	background-color: #e5e5e5;
 }
-.delete_list_line .name_text{
+.delete_modal_list_line .name_text{
 	padding-left: 0px;
 	width: 422px;
 	max-width: 422px;

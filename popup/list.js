@@ -477,7 +477,7 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
             let list_line = document.createElement("div");
             list_line.manga_name = my_manga.manga_name;
             list_line.delete = true;
-            list_line.classList.add("delete_list_line");
+            list_line.classList.add("delete_modal_list_line");
             
             let dom_name_node = document.createElement("span");
             dom_name_node.classList.add("list_cell", "name_text");

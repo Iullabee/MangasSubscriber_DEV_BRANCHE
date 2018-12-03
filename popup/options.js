@@ -70,11 +70,27 @@ document.getElementById("export").addEventListener("click", async (e) => {
 	setTimeout(()=>{export_text.textContent = "export mangas list";},3000);
 });
 
+//export the mangas list online
+document.getElementById("export_online").addEventListener("click", async (e) => {
+	var background = await browser.runtime.getBackgroundPage();
+
+	var export_text = document.getElementById("export_online");
+
+	export_text.textContent = "...";
+	var fail = await background.exportMangasListOnline();
+	if (!fail){
+		export_text.textContent = "list exported";
+	} else {
+		export_text.textContent = "error, try again";
+	}
+	setTimeout(()=>{export_text.textContent = "export mangas list to pastebin";},3000);
+});
+
 //import the mangas list
 async function importListAsText() {
     
     let import_option = "";
-    let inputs = document.getElementsByName("import_option");
+    let inputs = document.getElementById("import_as_text_options").getElementsByTagName("input");
     let option_checked = false;
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].checked) {
@@ -98,7 +114,6 @@ async function importListAsText() {
                 document.getElementById("import_as_text_desc").textContent = "error, try again";
             }
             setTimeout(()=>{document.getElementById("import_as_text_desc").textContent = "import mangas list";
-                            document.getElementById("visible_import").textContent = "[choose a file]";
                             for (let i = 0; i < inputs.length; i++) {
                                 inputs[i].checked = false;
                             }
@@ -114,4 +129,55 @@ document.getElementById("import_as_text_field").addEventListener("change", (e)=>
 
 document.getElementById("import_as_file").addEventListener("click", async (e) => {
 	browser.runtime.openOptionsPage();
+});
+
+document.getElementById("import_online_desc").addEventListener("click", async (e) => {
+    let import_option = "";
+    let inputs = document.getElementById("import_online_options").getElementsByTagName("input");
+    let option_checked = false;
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+            import_option = inputs[i].value;
+            option_checked = true;
+        }
+    }
+    
+    if (option_checked) {
+        let json = "";
+        
+        let background = await browser.runtime.getBackgroundPage();
+        let key = await background.getSyncListURL();
+    
+        let request = new XMLHttpRequest();
+        request.open("POST", "https://pastebin.com/api/api_raw.php", true);
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request.send("api_dev_key=4f96e913faf4b10d77bd99304939270a&api_user_key=ff7e23814c18e02ebe244dc3aa70b020&api_option=show_paste&api_paste_key="+ key);
+    
+        request.onreadystatechange = async function() {
+            if (this.readyState == 4 && this.status == 200) {
+                json = this.responseText;
+                if (json.split("Bad API request")[1] || json.split("Paste Removed")[1]) json = "";
+
+                if (json != "") {
+                    let parsed_json = JSON.parse(json);
+                    document.getElementById("import_online_desc").textContent = "...";
+        
+                    let background = await browser.runtime.getBackgroundPage();
+                    var fail = await background.importMangasList(parsed_json, import_option);
+                    if (!fail){
+                        document.getElementById("import_online_desc").textContent = "list imported";
+                    } else {
+                        document.getElementById("import_online_desc").textContent = "error, try again";
+                    }
+                    setTimeout(()=>{document.getElementById("import_online_desc").textContent = "import mangas list";
+                                    for (let i = 0; i < inputs.length; i++) {
+                                        inputs[i].checked = false;
+                                    }
+                    },3000);
+                }
+            }
+        };
+    } else {
+        alert("please select an import option first (merge/replace)");
+    }
 });

@@ -228,13 +228,39 @@ async function readMangaChapter(message, sender) {
 }
 
 
-//expport mangas list to json file
+//export mangas list to json file
 async function exportMangasList(){
 	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
 	var blob = new Blob([JSON.stringify(list, null, 2)], {type : 'application/json'});
 
 	await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListBackUp.json", "saveAs":true});
 	return;
+}
+
+//export mangas list online to pastebin
+async function exportMangasListOnline(){
+	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
+	var text_data = JSON.stringify(list, null, 2);
+	//dev key 4f96e913faf4b10d77bd99304939270a
+	//user key ff7e23814c18e02ebe244dc3aa70b020
+
+	var request = new XMLHttpRequest();
+	request.open("POST", "https://pastebin.com/api/api_post.php", true);
+	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	request.send("api_dev_key=4f96e913faf4b10d77bd99304939270a&api_user_key=ff7e23814c18e02ebe244dc3aa70b020&api_option=paste&api_paste_private=0&api_paste_expire_date=N&api_paste_format=json&api_paste_code="+text_data);
+
+	request.onreadystatechange = async function() {
+		if (this.readyState == 4 && this.status == 200) {
+			console.log(this.responseText);
+			let key = this.responseText.split("https://pastebin.com/")[1];
+			await browser.storage.sync.set({"sync_list_key":key});
+		}
+	};
+	return;
+}
+
+async function getSyncListURL() {
+	return (await browser.storage.sync.get("sync_list_key"))["sync_list_key"];
 }
 
 //import mangas list from json file
