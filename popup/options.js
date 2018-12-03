@@ -32,17 +32,16 @@ async function displayNavigationBar(){
 //initialize the navigation bar option
 displayNavigationBar();
 
-//change the auto update interval (waits 1s after user stops changing it before doing stuff to avoid firing a ton of list update from scrolling the numbers)
+//change the auto update interval (waits 0.5s after user stops changing it before setting it to avoid firing a ton of background stuff from scrolling the numbers)
 var delay = null;
 document.getElementById("auto_update_interval").addEventListener("change", async (e) => {
 	if (delay) clearTimeout(delay);
     delay = setTimeout(async ()=>{
         delay = null;
         var background = await browser.runtime.getBackgroundPage();
-        await background.autoUpdate(e.target.value);
+        await background.setAutoUpdate(e.target.value);
         displayAutoUpdateInterval();
-    }, 1000);
-    
+    }, 500);
 });
 
 //display the auto update interval

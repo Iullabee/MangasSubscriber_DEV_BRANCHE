@@ -560,22 +560,15 @@ async function setPreferredWebsite(manga_name, website_name){
 
 var isAutoUpdating;
 
-//set auto update interval
-async function autoUpdate(interval){
+//set auto update interval and start the auto update
+async function setAutoUpdate(interval){
 	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
 	let hours = 3600000;
-	if (interval) {
-		prefs["auto_update"] = interval;
-		await browser.storage.local.set({"MangasSubscriberPrefs":prefs});
-	} else {
-		interval = prefs["auto_update"];
-	}
-	clearTimeout(isAutoUpdating);
-	if (interval > 0) {
-		updateMangasList();
-		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
-	}
+	prefs["auto_update"] = interval;
+	await browser.storage.local.set({"MangasSubscriberPrefs":prefs});
 	
+	clearTimeout(isAutoUpdating);
+	if (interval > 0) isAutoUpdating = setTimeout(autoUpdate, interval*hours);
 }
 
 
@@ -586,6 +579,17 @@ async function getAutoUpdateInterval(){
 }
 
 
+//auto update
+async function autoUpdate(){
+	let hours = 3600000;
+	let interval = await getAutoUpdateInterval();
+	
+	clearTimeout(isAutoUpdating);
+	if (interval > 0) {
+		updateMangasList();
+		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+	}
+}
 
 
 
