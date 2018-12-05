@@ -4,6 +4,10 @@ body {
 	overflow-x: hidden;
 }
 
+* {
+	box-sizing: border-box;
+  }
+
 .hidden {
 	display: none !important;
 }
@@ -61,7 +65,7 @@ MENU SECTION
     position: fixed;
     top: 0px;
     padding-bottom: 1px;
-    width: 100%;
+    width: 800px;
     z-index: 1;
 }
 
@@ -161,7 +165,6 @@ CONSOLE PANEL
 	
 	text-align: center;
 	
-	box-sizing: border-box;
 	background: #EEEEEE;
 	border: 1px solid gray;
 	border-radius: 7px;
@@ -229,7 +232,7 @@ LIST SECTION
 .list_top {
     position: fixed;
     top: 52px;
-    width: 100%;
+    width: 800px;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 	font-size: 1.25em;
@@ -287,14 +290,12 @@ LIST SECTION
 
 .name_text{
 	display: inline-block;
-	padding-left: 10px;
-	padding-right: 10px;
 	position: relative;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: calc(783px - 3 * 10px - 40px - 80px - 28px - 5px);
-	width: calc(783px - 3 * 10px - 40px - 80px - 28px - 5px);
+	max-width: calc(783px - 3 * 10px - 50px - 80px - 28px - 5px);
+	width: calc(783px - 3 * 10px - 50px - 80px - 28px - 5px);
 }
 
 .chapters_select {
@@ -314,7 +315,7 @@ LIST SECTION
 }
 
 .unread_number {
-	width: 40px;
+	width: 50px;
 }
 
 .align_right {
