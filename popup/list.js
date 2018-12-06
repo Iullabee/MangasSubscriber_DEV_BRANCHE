@@ -218,9 +218,7 @@ async function createMangasList() {
         dom_update_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
                                     await background.updateMangasList([my_manga.manga_name], true);
-                                    //refresh list
-                                    document.getElementById("list_container").scrollmemory = window.scrollY;
-                                    createMangasList();
+                                    refreshList();
                                 }
                 , false);
                 dom_update_button_td.appendChild(dom_update_button);
@@ -414,9 +412,7 @@ document.getElementById("list_update_icon").addEventListener("click", async (e) 
         }
     }
     await background.updateMangasList(update_list, false);
-    //refresh list
-    document.getElementById("list_container").scrollmemory = window.scrollY;
-    createMangasList();
+    refreshList();
 });
 
 //mark all chapters as "read" for all visible mangas
@@ -440,9 +436,7 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
         }
     }
     Promise.all(promised_results).then((result) => {
-        //refresh list
-        document.getElementById("list_container").scrollmemory = window.scrollY;
-        createMangasList();
+        refreshList();
     });
     
 });
@@ -460,9 +454,7 @@ document.getElementById("list_update_toggle_icon").addEventListener("click", asy
 
         }
     }
-    //refresh list
-    document.getElementById("list_container").scrollmemory = window.scrollY;
-    createMangasList();
+    refreshList();
 });
 
 //delete all visible mangas
@@ -502,4 +494,15 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
         }
     }
     toggleModal("delete_modal");
+});
+
+//refresh list
+function refreshList() {
+    document.getElementById("list_container").scrollmemory = window.scrollY;
+    createMangasList();
+}
+
+//manually refresh the list
+document.getElementById("refresh_list").addEventListener("click", async (e) => {
+    refreshList();
 });
