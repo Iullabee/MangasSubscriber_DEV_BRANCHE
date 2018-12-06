@@ -47,6 +47,7 @@ browser.runtime.onMessage.addListener(createNavigation);
 
 function createNavigation(message) {
 	if  (!(document.getElementById("mangassubscriber_nav_bar")) && message.target == "content" && message.navigation){
+		document.body.classList.add("navigation_bar_spacer");
 		var navigation = message.navigation;
 		let nav_bar = document.createElement("div");
 		nav_bar.setAttribute("id", "mangassubscriber_nav_bar");
