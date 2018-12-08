@@ -16,32 +16,26 @@
 			<div id="console_toggle" class="right tab" title="show/hide console"><img id="console_icon" class="icons large_icons" src="../icons/console.svg"></img></div>
 			<div id="help_toggle" class="right tab" title="show/hide help"><img id="help_icon" class="icons large_icons" src="../icons/help.svg"></img></div>
 		</div>
+	<!------- OPTIONS PANEL START ------->
 		<div id="options" class="panel">
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
 			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
 			<div id="auto_update" title="0 to disable it"><div class="inline onehalf">automatically update the list every : </div><input type="number" id="auto_update_interval" min="0" max="24" value="0" title="0-24 hours"> hours</div>
 			<div id="export">export mangas list</div>
-			<div id="export_online">export mangas list to pastebin</div>
 			<div id="import_as_text" class="">
 				<div id="import_as_text_desc" class="inline">import list from text</div>
-				<div id="import_as_text_options" class="import_options inline left_padding">
-					<input type="radio" name="import_option" id="import_as_text_option_1" value="merge"><label for="import_as_text_option_1">merge with existing</label><br>
-					<input type="radio" name="import_option" id="import_as_text_option_2" value="replace"><label for="import_as_text_option_2">replace existing</label>
-				</div>
 				<div id="import_as_text" class="inline left_padding">
 					<input type="text" id="import_as_text_field" maxlength="100000000000" placeholder="copy/paste the content of your backup file..." title="max. 100 billions (100 000 000 000) characters!"/><!--
 					--><div id="import_as_text_agree" class="inline input_button" title="import"><img class="small_icons" src="../icons/yes.svg"></img></div>
 				</div>
 			</div>
 			<div id="import_as_file">import list from file</div>
-			<div id="import_online" class="">
-				<div id="import_online_desc" class="inline">import list from pastebin</div>
-				<div id="import_online_options" class="import_options inline left_padding">
-					<input type="radio" name="import_option" id="import_online_option_1" value="merge"><label for="import_online_option_1">merge with existing</label><br>
-					<input type="radio" name="import_option" id="import_online_option_2" value="replace"><label for="import_online_option_2">replace existing</label>
-				</div>
-			</div>
+			<div id="export_online">export mangas list to pastebin</div>
+			<div id="import_online">import list from pastebin</div>
 		</div>
+	<!------- OPTIONS PANEL END! ------->
+
+	<!------- CONSOLE PANEL START ------->
 		<div id="console" class="panel">
 			<div id="console_display"></div>
 			<div id="console_recap" class="bottom">
@@ -50,9 +44,16 @@
 				<div id="console_errors" class="left onethird button"><div class="left">errors (copy)</div><div id="console_errors_number" class="right red_text">(0)</div></div>
 			</div>
 		</div>
+	<!------- CONSOLE PANEL END! ------->
+
+	<!------- HELP PANEL START ------->
 		<div id="help" class="panel">
 			<div id="help_msg">SECTION TO BE REDONE</div>
 		</div>
+	<!------- HELP PANEL END! ------->
+
+
+
 		<div class="list_top">
 			<input type="search" placeholder="filter list..." id="filter_list" title="type to filter the list" autofocus><!--
 			--><div id="filter_clear" class="inline input_button" title="clear the text filter"><img class="small_icons" src="../icons/no.svg"></img></div>

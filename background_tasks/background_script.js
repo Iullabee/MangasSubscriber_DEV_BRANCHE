@@ -264,27 +264,10 @@ async function getSyncListURL() {
 }
 
 //import mangas list from json file
-async function importMangasList(parsed_json, import_option){
-	if (import_option == "replace")
-		await browser.storage.local.clear();
-	
+async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	var stored_list = await getMangasList();
 	if (back_up){
-		//if merge, merge storage and import_list
-		if (import_option == "merge"){
-			//for each item in import_list, check if storage_list has same item, if it does, merge read chapters
-			for (let manga_name in stored_list){
-				if (back_up["mangas_list"][manga_name]){
-					for (let chapter_number in stored_list[manga_name]["chapters_list"]){
-						if (stored_list[manga_name]["chapters_list"][chapter_number]["status"] == "read")
-							back_up["mangas_list"][manga_name]["chapters_list"][chapter_number] = stored_list[manga_name]["chapters_list"][chapter_number];
-					}
-				} else {
-					back_up["mangas_list"][manga_name] = stored_list[manga_name];
-				}
-			}
-		} else await browser.storage.local.clear();
+		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
 		updateMangasList();
 	}
