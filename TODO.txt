@@ -22,6 +22,14 @@ GOALS :
 
 
 
+§§OPTIMIZATIONS
+
+- avoid excessive storage access
+-- store mangas list in general scope variable in background script, and save it to storage each time it is modified, but all access are to be done on the variable
+-- initialize mangas list variable after calling db_update
+
+
+
 §§WEBSITES LIST
 
 - support more websites :
