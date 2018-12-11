@@ -48,7 +48,58 @@
 
 	<!------- HELP PANEL START ------->
 		<div id="help" class="panel">
-			<div id="help_msg">SECTION TO BE REDONE</div>
+			<div class="separator"><h2><b>The Browser Action</b> is your entry point :</h2></div>
+			<div class="section">
+				<h3>The Icon</h3>
+				<img class="inline" src="../help/images/help_icon.png">><ul><li>On the icon is displayed the number of mangas that have at least one chapter you have yet to read (no matter how many unread chapters a manga has, it will be counted as one).</li> 
+					<li>When you click it, it will bring up the popup menu.</li>
+					<li title="Instead, to open the popup, use the page menu (generally triple dot in the top right corner), scroll it down to your addons list, and tap [MangasSub].">It is unavailable on firefox for android !</li></ul>
+			</div>
+			<div class="separator"><h2><b>The PopUp</b> consists of different parts :</h2></div>
+			<div class="zoom"><img class="small_image" src="../help/images/help_list.png"></div>
+			<div class="section">
+				<h3>The first line is the Menu</h3>
+				<ul><li><img class="inline" src="../help/images/help_follow.png"> add the manga to your list. It can also be : <img class="inline" src="../help/images/help_followed.png"> (already in your list), or <img class="inline" src="../help/images/help_unfollowable.png"> (not a manga on a supported website)</li>
+					<li><img class="inline" src="../help/images/help_options_icon.png"> open/close the options panel.</li>
+					<li><img class="inline" src="../help/images/help_console_icon.png"> open/close the console panel.</li>
+					<li><img class="inline" src="../help/images/help_help_icon.png"> open/close the help panel (this one).</li>
+					<li><img class="inline" src="../help/images/help_name&version.png"> version of the extension. close any opened panel.</li>
+				</ul>
+			</div>
+			<!--
+			<div class="section">
+				<h3>The second line filters the list and apply actions to all visible mangas</h3>
+				<ul>
+					<li title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive."><b>update the list :</b> will start updating your mangas list (during this time, it will display "..."). You can close the popup during the update, it will continue in the background. </span></li> 
+					<li></li>
+					<li>Each line represents a manga (name, number of unread chapters, and <span title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="It will open the selected chapter in a new tab"><b>read</b></span> button at the end).</li></ul>
+			</div>
+			<div class="separator"><h2><b>The Options Page</b> gives you access to two main functions :</h2></div>
+			<div class="section">
+				<h3>The Options</h3>
+				<img class="inline zoom small_image" src="../help/images/help_options.png"></img><div class="inline"><ul><li><span class="tooltip_container"><span class="tooltip">By default it is off. Be careful here, as using it for general use will significantly increase update times. Recommended use is to turn it on, manually update the mangas that have a leap in chapters through the options page list, and then turn it off.</span><b>check all sites :</b></span> lets you choose whether to check only a manga's preferred website when looking for new chapters, or all available websites.</li> 
+					<li><b>navigation bar :</b> will let you navigate between <span class="tooltip_container"><span class="tooltip">It only directs to chapters the extension is aware of (ie : chapters that have been found during an update or while reading). Some buttons may not appear when not applicable (for instance, previous when the previous chapter is also the first).</span>chapters (first, previous, next and last)</span> when reading a subscribed manga.</li>
+					<li><b>export mangas list :</b> will export your list to a local json file.</li>
+					<li> <span class="tooltip_container"><span class="tooltip">click [choose a file] to select a source, then tick either merge (will merge the import with the current data, keeping whatever chapter is already read in either one as read in the final result) or replace (will wipe current data to replace it with the import), then click "import mangas list".</span><b>import mangas list :</b></span> will import data saved in a local file.</li> 
+					<li> <span class="tooltip_container"><span class="tooltip">That list can be filtered using the <b>search</b> field.</span><b>manage your subscriptions :</b></span> will open your complete manga list. It offers more options than the popup list.</li> </ul></div>
+			</div>
+			<div class="section">
+				<h3>The Console</h3>
+				<img class="inline zoom small_image" src="../help/images/help_console.png"><div class="inline"><ul><li>It will show you what's happening while you're updating.</li> 
+					<li><b>updating :</b> shows/hides the mangas you have started updating, and on which website.</li>
+					<li><b>completed :</b> shows/hides the mangas that have successfully been updated.</li>
+					<li><b>errors :</b> copies (ctrl+c) the errors for easy reporting.</li></ul></div>
+			</div>
+			<div class="section">
+				<h3>The Complete Mangas List</h3>
+				<img class="inline zoom small_image" src="../help/images/options_page_list.png"><div class="inline"><ul><li>It offers the same possibilities as the popup list, and more !</li> 
+					<li title="By default, it is the site on which you registered that manga.">The <b>website</b> select will let you choose the preferred site on which to update that manga (the one used when "check all sites" is disabled). </li>
+					<li class="tooltip_container" title="Particularly recommended when you notice missing chapters (jumping from 20 to 26 for instance), in combination with 'check all sites'."><img class="inline icons" src="../icons/high_resolution_update.png"> will immediately update that manga (and only that one).</li>
+					<li><img class="inline icons" src="../icons/high_resolution_read_all.png"> will mark all chapters of a manga as read.</li>
+					<li title="It is highly recommended to disable the update of mangas that are completed to spare time when updating."><img class="inline icons" src="../icons/high_resolution_update_true.png"> will toggle the update state. when red, the manga won't be updated with the rest of the list.</li>
+					<li title="BE CAREFUL, there is no going back ! click it aaand it's gone."><img class="inline icons" src="../icons/high_resolution_delete.png"> will delete the manga from your list !</li></ul></div>
+			</div>
+		-->
 		</div>
 	<!------- HELP PANEL END! ------->
 

@@ -221,6 +221,48 @@ OPTIONS PANEL
 OPTIONS END
 ****************************************/
 
+
+
+/****************************************
+HELP PANEL
+****************************************/
+#help {
+    overflow-y: scroll;
+}
+
+.section {
+    min-height: 50px;
+    overflow: hidden;
+}
+
+.small_image {
+	width: 50%;
+}
+
+h1 {
+    text-align: center;
+}
+
+li {
+    margin-left: 20px;
+}
+.inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.zoom img {
+    transition: width 1s, height 1s;
+}
+
+.zoom img:hover {
+    width: 75%;
+    height: 75%;
+}
+/****************************************
+HELP END
+****************************************/
+
 /****************************************
 PANELS END
 ****************************************/

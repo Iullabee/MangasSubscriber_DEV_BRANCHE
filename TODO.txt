@@ -7,6 +7,9 @@ GOALS :
 - migrate help to the popup :
 -- redo help page as panel and add css and javascript
 
+- change the way the modal window works (make it more generic)
+-- pass title and content along with callback on agree when it is revealed
+
 
 
 §§FUNCTIONALITIES
