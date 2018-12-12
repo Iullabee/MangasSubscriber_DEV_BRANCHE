@@ -44,11 +44,23 @@ body {
     vertical-align: middle;
 }
 
-.input_button {
+.field_container {
+	height: 27px;
+	line-height: 27px;
+	vertical-align: middle;
+}
+
+.field_container input {
+	height: 27px;
+	float : left;
+}
+
+.field_container .input_button {
 	position: relative;
 	width: 27px;
 	height: 27px;
 	border: 1px solid black;
+	float : left;
 }
 
 .input_button > img {
@@ -208,10 +220,10 @@ OPTIONS PANEL
 	padding-left: 15px;
 }
 #import_as_text_field {
-	width: 350px;
+	width: 500px;
 }
 #import_as_text_agree {
-	top: -2px;
+	/*top: -2px;*/
 }
 
 #auto_update_interval {
@@ -245,10 +257,6 @@ h1 {
 
 li {
     margin-left: 20px;
-}
-.inline {
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .zoom img {
@@ -286,9 +294,8 @@ LIST SECTION
 }
 
 #filter_list {
-	position: relative;
-	width: 50%;
-	top: 3px;
+	width: 500px;
+	/*top: 3px;*/
 }
 
 .selected {

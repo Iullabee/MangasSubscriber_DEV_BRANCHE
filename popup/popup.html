@@ -24,7 +24,7 @@
 			<div id="export">export mangas list</div>
 			<div id="import_as_text" class="">
 				<div id="import_as_text_desc" class="inline">import list from text</div>
-				<div id="import_as_text" class="inline left_padding">
+				<div id="import_as_text" class="inline left_padding field_container">
 					<input type="text" id="import_as_text_field" maxlength="100000000000" placeholder="copy/paste the content of your backup file..." title="max. 100 billions (100 000 000 000) characters!"/><!--
 					--><div id="import_as_text_agree" class="inline input_button" title="import"><img class="small_icons" src="../icons/yes.svg"></img></div>
 				</div>
@@ -51,14 +51,14 @@
 			<div class="separator"><h2><b>The Browser Action</b> is your entry point :</h2></div>
 			<div class="section">
 				<h3>The Icon</h3>
-				<img class="inline" src="../help/images/help_icon.png">><ul><li>On the icon is displayed the number of mangas that have at least one chapter you have yet to read (no matter how many unread chapters a manga has, it will be counted as one).</li> 
+				<img class="inline" src="../help/images/help_icon.png"><ul><li>On the icon is displayed the number of mangas that have at least one chapter you have yet to read (no matter how many unread chapters a manga has, it will be counted as one).</li> 
 					<li>When you click it, it will bring up the popup menu.</li>
 					<li title="Instead, to open the popup, use the page menu (generally triple dot in the top right corner), scroll it down to your addons list, and tap [MangasSub].">It is unavailable on firefox for android !</li></ul>
 			</div>
 			<div class="separator"><h2><b>The PopUp</b> consists of different parts :</h2></div>
 			<div class="zoom"><img class="small_image" src="../help/images/help_list.png"></div>
 			<div class="section">
-				<h3>The first line is the Menu</h3>
+				<h3>The first part is the Menu</h3>
 				<ul><li><img class="inline" src="../help/images/help_follow.png"> add the manga to your list. It can also be : <img class="inline" src="../help/images/help_followed.png"> (already in your list), or <img class="inline" src="../help/images/help_unfollowable.png"> (not a manga on a supported website)</li>
 					<li><img class="inline" src="../help/images/help_options_icon.png"> open/close the options panel.</li>
 					<li><img class="inline" src="../help/images/help_console_icon.png"> open/close the console panel.</li>
@@ -66,13 +66,24 @@
 					<li><img class="inline" src="../help/images/help_name&version.png"> version of the extension. close any opened panel.</li>
 				</ul>
 			</div>
+			
+			<div class="section">
+				<h3>The second part filters the list and apply actions to all visible mangas</h3>
+				<ul>
+					<li><img class="inline" src="../help/images/help_filter.png"> hide all mangas in the list whose title doesn't contain what is typed inside.</li>
+					<li><img class="inline icons" src="../icons/already_read.svg"> toggle the display of mangas with unread chapters.</li>
+					<li><img class="inline icons" src="../icons/unread.svg">toggle the display of fully read mangas.</li>
+					<li><img class="inline icons" src="../icons/refresh.svg"> refresh the list.</li>
+					<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background"><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
+				</ul>
+			</div>
 			<!--
 			<div class="section">
-				<h3>The second line filters the list and apply actions to all visible mangas</h3>
+				<h3>The third (and last) part is the list</h3>
 				<ul>
+					<li>Each line represents a manga (name, number of unread chapters, and <span title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="It will open the selected chapter in a new tab"><b>read</b></span> button at the end).</li>
 					<li title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive."><b>update the list :</b> will start updating your mangas list (during this time, it will display "..."). You can close the popup during the update, it will continue in the background. </span></li> 
-					<li></li>
-					<li>Each line represents a manga (name, number of unread chapters, and <span title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="It will open the selected chapter in a new tab"><b>read</b></span> button at the end).</li></ul>
+					</ul>
 			</div>
 			<div class="separator"><h2><b>The Options Page</b> gives you access to two main functions :</h2></div>
 			<div class="section">
@@ -106,8 +117,10 @@
 
 
 		<div class="list_top">
-			<input type="search" placeholder="filter list..." id="filter_list" title="type to filter the list" autofocus><!--
-			--><div id="filter_clear" class="inline input_button" title="clear the text filter"><img class="small_icons" src="../icons/no.svg"></img></div>
+			<div class="inline field_container">
+				<input type="search" placeholder="filter list..." id="filter_list" title="type to filter the list" autofocus><!--
+				--><div id="filter_clear" class="inline input_button" title="clear the text filter"><img class="small_icons" src="../icons/no.svg"></img></div>
+			</div>
 			<img id="unread_filter" class="inline icons selected" src="../icons/unread.svg" title="filter unread mangas"></img>
 			<img id="already_read_filter" class="inline icons selected" src="../icons/already_read.svg" title="filter read mangas"></img>
 			<img id="refresh_list" class="inline icons" src="../icons/refresh.svg" title="refresh the list"></img>
