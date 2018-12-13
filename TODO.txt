@@ -31,6 +31,10 @@ GOALS :
 -- store mangas list in general scope variable in background script, and save it to storage each time it is modified, but all access are to be done on the variable
 -- initialize mangas list variable after calling db_update
 
+- refresh list more often and at the right time
+-- refresh individual mangas
+-- take into account the page loading time to refresh the mangas when clicking a "read in new tab" button
+
 
 
 §§WEBSITES LIST

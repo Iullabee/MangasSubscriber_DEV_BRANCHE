@@ -53,7 +53,7 @@
 				<h3>The Icon</h3>
 				<img class="inline" src="../help/images/help_icon.png"><ul><li>On the icon is displayed the number of mangas that have at least one chapter you have yet to read (no matter how many unread chapters a manga has, it will be counted as one).</li> 
 					<li>When you click it, it will bring up the popup menu.</li>
-					<li title="Instead, to open the popup, use the page menu (generally triple dot in the top right corner), scroll it down to your addons list, and tap [MangasSub].">It is unavailable on firefox for android !</li></ul>
+					<li class="tooltip" title="Instead, to open the popup, use the page menu (generally triple dot in the top right corner), scroll it down to your addons list, and tap [MangasSub].">It is unavailable on firefox for android !</li></ul>
 			</div>
 			<div class="separator"><h2><b>The PopUp</b> consists of different parts :</h2></div>
 			<div class="zoom"><img class="small_image" src="../help/images/help_list.png"></div>
@@ -74,17 +74,18 @@
 					<li><img class="inline icons" src="../icons/already_read.svg"> toggle the display of mangas with unread chapters.</li>
 					<li><img class="inline icons" src="../icons/unread.svg">toggle the display of fully read mangas.</li>
 					<li><img class="inline icons" src="../icons/refresh.svg"> refresh the list.</li>
-					<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background"><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
+					<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background"><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span>, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
 				</ul>
 			</div>
-			<!--
+			
 			<div class="section">
 				<h3>The third (and last) part is the list</h3>
 				<ul>
-					<li>Each line represents a manga (name, number of unread chapters, and <span title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="It will open the selected chapter in a new tab"><b>read</b></span> button at the end).</li>
-					<li title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive."><b>update the list :</b> will start updating your mangas list (during this time, it will display "..."). You can close the popup during the update, it will continue in the background. </span></li> 
-					</ul>
+					<li>Each line represents a manga (name, number of unread chapters, and <span class="tooltip" title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="open the selected chapter in a new tab"><img class="inline icons" src="../icons/read.svg"> open selected chapter at the end).</li>
+					<li>Hovering over a manga will extend it to show additional options applying to that manga only : <img class="inline icons" src="../icons/trash.svg"> remove from the list, <span  class="tooltip" title="It's the website on which the manga will be updated when 'check all sites' is disabled. By default, it's the one you registered the manga on."><img class="inline" src="../help/images/help_websiteselect.png"> select the primary website</span>, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background. It will ignore the 'don't update with the rest of the list' option."><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span></li>
+				</ul>
 			</div>
+			<!--
 			<div class="separator"><h2><b>The Options Page</b> gives you access to two main functions :</h2></div>
 			<div class="section">
 				<h3>The Options</h3>
