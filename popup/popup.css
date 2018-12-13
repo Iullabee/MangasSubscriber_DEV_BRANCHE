@@ -401,9 +401,11 @@ MODAL DELETE
 }
 .modal_title{
 	width: 100%;
-	font-size: 1.5em;
+	font-size: 1.75em;
 	text-align: center;
 	text-decoration: bold;
+	text-decoration: underline red;
+	padding: 18px 12px;
 }
 .modal_content {
 	position: absolute;
@@ -411,22 +413,24 @@ MODAL DELETE
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background-color: white;
-	padding: 1em 1.5em;
+	padding: 12px 18px;
 	border-radius: 0.5em;
+	width: 500px;
+	max-width: 500px;
 }
 #delete_modal_list {
-	width: 500px;
-	max-height: 500px;
+	width: 464px;
+	max-height: 464px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
 
 .delete_modal_list_line {
 	font-size: 1.25em;
-	width: 450px;
-	max-width: 450px;
+	width: 447px;
 	background-color: white;
 	overflow: hidden;
+	padding: 6px 0px;
 	border-bottom: 1px solid black;
 }
 .delete_modal_list_line:hover {
@@ -434,8 +438,8 @@ MODAL DELETE
 }
 .delete_modal_list_line .name_text{
 	padding-left: 0px;
-	width: 422px;
-	max-width: 422px;
+	width: 419px;
+	max-width: 419px;
 }
 .modal_agree {
 	float: left;
