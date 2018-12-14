@@ -21,7 +21,7 @@
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
 			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
 			<div id="auto_update" title="0 to disable it"><div class="inline onehalf">automatically update the list every : </div><input type="number" id="auto_update_interval" min="0" max="24" value="0" title="0-24 hours"> hours</div>
-			<div id="export">export mangas list</div>
+			<div id="export">export list to file</div>
 			<div id="import_as_text" class="">
 				<div id="import_as_text_desc" class="inline">import list from text</div>
 				<div id="import_as_text" class="inline left_padding field_container">
@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div id="import_as_file">import list from file</div>
-			<div id="export_online">export mangas list to pastebin</div>
+			<div id="export_online">export list to pastebin</div>
 			<div id="import_online">import list from pastebin</div>
 		</div>
 	<!------- OPTIONS PANEL END! ------->
@@ -85,17 +85,23 @@
 					<li>Hovering over a manga will extend it to show additional options applying to that manga only : <img class="inline icons" src="../icons/trash.svg"> remove from the list, <span  class="tooltip" title="It's the website on which the manga will be updated when 'check all sites' is disabled. By default, it's the one you registered the manga on."><img class="inline" src="../help/images/help_websiteselect.png"> select the primary website</span>, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background. It will ignore the 'don't update with the rest of the list' option."><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span></li>
 				</ul>
 			</div>
-			<!--
-			<div class="separator"><h2><b>The Options Page</b> gives you access to two main functions :</h2></div>
+			
+			<div class="separator"><h2><b>The Options Panel</b> gives you the following possibilities :</h2></div>
 			<div class="section">
 				<h3>The Options</h3>
-				<img class="inline zoom small_image" src="../help/images/help_options.png"></img><div class="inline"><ul><li><span class="tooltip_container"><span class="tooltip">By default it is off. Be careful here, as using it for general use will significantly increase update times. Recommended use is to turn it on, manually update the mangas that have a leap in chapters through the options page list, and then turn it off.</span><b>check all sites :</b></span> lets you choose whether to check only a manga's preferred website when looking for new chapters, or all available websites.</li> 
-					<li><b>navigation bar :</b> will let you navigate between <span class="tooltip_container"><span class="tooltip">It only directs to chapters the extension is aware of (ie : chapters that have been found during an update or while reading). Some buttons may not appear when not applicable (for instance, previous when the previous chapter is also the first).</span>chapters (first, previous, next and last)</span> when reading a subscribed manga.</li>
-					<li><b>export mangas list :</b> will export your list to a local json file.</li>
-					<li> <span class="tooltip_container"><span class="tooltip">click [choose a file] to select a source, then tick either merge (will merge the import with the current data, keeping whatever chapter is already read in either one as read in the final result) or replace (will wipe current data to replace it with the import), then click "import mangas list".</span><b>import mangas list :</b></span> will import data saved in a local file.</li> 
-					<li> <span class="tooltip_container"><span class="tooltip">That list can be filtered using the <b>search</b> field.</span><b>manage your subscriptions :</b></span> will open your complete manga list. It offers more options than the popup list.</li> </ul></div>
+				<div class="zoom"><img class="small_image" src="../help/images/help_options.png"></img></div>
+				<ul>
+					<li><span class="tooltip" title="By default it is off. Be careful here, as using it for general use will significantly increase update times. Recommended use is to turn it on, manually update the mangas that have a leap in chapters, and then turn it off.""><b>check all sites :</b></span> lets you choose whether to check only a manga's preferred website when looking for new chapters, or all available websites.</li> 
+					<li><span class="tooltip" title="It only directs to chapters the extension is aware of (ie : chapters that have been found during an update or while reading). Some buttons may not appear when not applicable (for instance, previous when the previous chapter is also the first)."><b>navigation bar :</b></span> will let you navigate between chapters (first, previous, next and last) when reading a subscribed manga.</li>
+					<li><span class="tooltip" title="0~24 hours, 0 to turn it off."><b>automatically update :</b></span> will update the list every X hours.</li>
+					<li><b>export list to file :</b> will export your list to a local json file.</li>
+					<li><span class="tooltip" title="The local data will be overwritten."><b>import mangas list from text :</b></span> will import data copy/pasted in the field.</li>
+					<li><span class="tooltip" title="The local data will be overwritten."><b>import mangas list from file :</b></span> will open a webpage to import data saved in a file.</li> 
+					<li><span class="tooltip" title="The data previously exported to pastebin will be overwritten."><b>export list to pastebin :</b></span> will anonymously export your list to pastebin.</li>
+					<li><span class="tooltip" title="The local data will be overwritten."><b>import list from pastebin :</b></span> will import data previously exported to pastebin.</li>
+				</ul>
 			</div>
-			<div class="section">
+			<!--<div class="section">
 				<h3>The Console</h3>
 				<img class="inline zoom small_image" src="../help/images/help_console.png"><div class="inline"><ul><li>It will show you what's happening while you're updating.</li> 
 					<li><b>updating :</b> shows/hides the mangas you have started updating, and on which website.</li>
