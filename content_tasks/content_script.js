@@ -4,6 +4,12 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"readmangatoday":"readmng.com/",
 					};
 
+//fix fanfox annoying urls
+(function fanfoxURLFix() {
+	if (this.location.href.indexOf("fanfox.net//") >= 0)
+		this.location.href = this.location.href.replace("fanfox.net//", "fanfox.net/");
+})();
+
 window.addEventListener("load", readMangaChapter);
 function readMangaChapter() {
 	var url = window.location.href;
