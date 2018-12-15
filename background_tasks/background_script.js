@@ -269,7 +269,6 @@ async function importMangasList(parsed_json){
 	if (back_up){
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
-		updateMangasList();
 	}
 	return ;
 }
