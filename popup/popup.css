@@ -44,6 +44,10 @@ body {
     vertical-align: middle;
 }
 
+.left_padding {
+	padding-left: 15px;
+}
+
 .field_container {
 	height: 27px;
 	line-height: 27px;
@@ -216,9 +220,6 @@ OPTIONS PANEL
 .import_options {
 	font-size: 0.75em;
 }
-.left_padding {
-	padding-left: 15px;
-}
 #import_as_text_field {
 	width: 500px;
 }
@@ -239,7 +240,7 @@ OPTIONS END
 HELP PANEL
 ****************************************/
 #help {
-    overflow-y: scroll;
+	overflow-y: scroll;
 }
 
 .section {
@@ -255,8 +256,17 @@ h1 {
     text-align: center;
 }
 
-li {
-    margin-left: 20px;
+h2 {
+	color: #5b00b5;
+}
+
+.separator {
+	border-top: 5px ridge silver;
+	padding: 30px 0px 30px 20px;
+}
+
+ul {
+    padding-left: 30px;
 }
 
 .zoom img {
