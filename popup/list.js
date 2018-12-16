@@ -4,7 +4,6 @@ async function createMangasList() {
 		
 					
     var mangas = await background.getMangasList();
-    var prefered_websites = await background.getPreferredWebsites();
    
     //sorting the mangas alphabetically
     mangas = Object.keys(mangas).sort().reduce((r, k) => (r[k] = mangas[k], r), {});
@@ -98,6 +97,7 @@ async function createMangasList() {
         dom_read_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
                                     let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByClassName("chapters_select")[0].options[my_manga.getElementsByClassName("chapters_select")[0].selectedIndex].value); 
+                                    //TODO - find a wait to wait for the new tab to be fully loaded before calling createMangasList()
                                     await browser.tabs.create({url:manga_url, active:false});
                                     createMangasList();
                                 }
@@ -200,7 +200,7 @@ async function createMangasList() {
                                         chapters_list.classList.remove("unread_chapter");
                                         chapters_list.classList.add("read_chapter");
                                     }
-                                    createMangasList();
+                                    refreshList();
                                 }
                 , false);
         dom_read_all_button_td.appendChild(dom_read_all_button);
@@ -245,7 +245,7 @@ async function createMangasList() {
             let dom_option = document.createElement("option");
             let dom_option_text = document.createTextNode(website_name);
             dom_option.appendChild(dom_option_text);
-            if (website_name == prefered_websites[name])
+            if (website_name == mangas[name]["website_name"])
                 dom_option.selected = "selected";
             dom_choose_preferred_website.appendChild(dom_option);
         }

@@ -262,9 +262,12 @@ async function getSyncListURL() {
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
 	if (back_up){
-		mangas_list = back_up;
+		mangas_list = back_up["mangas_list"];
+		mangassubscriber_prefs = back_up["MangasSubscriberPrefs"];
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
+		//update badge
+		setBadgeNumber();
 	}
 	return ;
 }
@@ -484,15 +487,6 @@ async function toggleNavigationBar(){
 
 async function getNavigationBar(){
 	return mangassubscriber_prefs["navigation_bar"];
-}
-
-//returns an object containing each manganame as a key, associated to its preferred website -- can't return just the preferred website for one manga and call it each time we need it, it takes too much time to do that for each manga in options_page
-async function getPreferredWebsites(){
-	let preferred_websites = {};
-	for (let manga in mangas_list) {
-		preferred_websites[manga] = mangas_list[manga]["website_name"];
-	}
-	return preferred_websites;
 }
 
 //sets website_name as preferred website for manga_name
