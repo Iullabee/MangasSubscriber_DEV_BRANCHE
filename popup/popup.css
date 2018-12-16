@@ -223,9 +223,6 @@ OPTIONS PANEL
 #import_as_text_field {
 	width: 500px;
 }
-#import_as_text_agree {
-	/*top: -2px;*/
-}
 
 #auto_update_interval {
 	width: 75px;

@@ -1,5 +1,5 @@
-
-
+var mangas_list = {};
+var mangassubscriber_prefs = {};
 
 var websites_list = {
 	"mangahere":{name:"mangahere",
@@ -185,36 +185,31 @@ browser.runtime.onMessage.addListener(readMangaChapter);
 async function readMangaChapter(message, sender) {
 	if  (message.target == "background" && message.url){
 		var url = message.url;
-		var manga = {};
 		var manga_name = getMangaName(url);
 		var current_chapter = getCurrentChapter(url);
-		let to_log = await getMangasList();
 
-		manga = to_log[manga_name];
-		if (manga) {
+		if (mangas_list[manga_name]) {
 			if (current_chapter) {
-				if (manga.chapters_list[current_chapter] && manga.chapters_list[current_chapter]["status"] != "read") {
-					manga.chapters_list[current_chapter]["status"] = "read";
-					to_log[manga_name] = manga;
-					browser.storage.local.set({"mangas_list" : to_log});
-				} else if (! manga.chapters_list[current_chapter]) {
-					manga.chapters_list[current_chapter] = {"status" : "read", "url" : url};
-					to_log[manga_name] = manga;
-					browser.storage.local.set({"mangas_list" : to_log});
+				if (mangas_list[manga_name].chapters_list[current_chapter] && mangas_list[manga_name].chapters_list[current_chapter]["status"] != "read") {
+					mangas_list[manga_name].chapters_list[current_chapter]["status"] = "read";
+					browser.storage.local.set({"mangas_list" : mangas_list});
+				} else if (! mangas_list[manga_name].chapters_list[current_chapter]) {
+					mangas_list[manga_name].chapters_list[current_chapter] = {"status" : "read", "url" : url};
+					browser.storage.local.set({"mangas_list" : mangas_list[manga_name]});
 				}
 				if (sender){
 					//send navigation info to content_script
-					let chapters_numbers = Object.keys(manga.chapters_list).sort((a,b)=>{return parseFloat(a)-parseFloat(b);});
+					let chapters_numbers = Object.keys(mangas_list[manga_name].chapters_list).sort((a,b)=>{return parseFloat(a)-parseFloat(b);});
 					let index = chapters_numbers.indexOf(current_chapter);
 					if (index >= 0) {
 						//first chapter (if current chapter isn't the first)
-						let first_chapter = index > 0 ? manga.chapters_list[chapters_numbers[0]].url : "";
+						let first_chapter = index > 0 ? mangas_list[manga_name].chapters_list[chapters_numbers[0]].url : "";
 						//previous chapter (if there is at least one chapter between first and current)
-						let previous_chapter = index > 1 ? manga.chapters_list[chapters_numbers[index-1]].url : "";
+						let previous_chapter = index > 1 ? mangas_list[manga_name].chapters_list[chapters_numbers[index-1]].url : "";
 						//next chapter (if there is at least one chapter between current and last)
-						let next_chapter = index < (chapters_numbers.length-2) ? manga.chapters_list[chapters_numbers[index+1]].url : "";
+						let next_chapter = index < (chapters_numbers.length-2) ? mangas_list[manga_name].chapters_list[chapters_numbers[index+1]].url : "";
 						//last chapter (if current chapter isn't the last)
-						let last_chapter = index < (chapters_numbers.length-1) ? manga.chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
+						let last_chapter = index < (chapters_numbers.length-1) ? mangas_list[manga_name].chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
 						
 						if (await getNavigationBar())
 							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
@@ -267,6 +262,7 @@ async function getSyncListURL() {
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
 	if (back_up){
+		mangas_list = back_up;
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
 	}
@@ -277,11 +273,10 @@ async function importMangasList(parsed_json){
 async function updateMangasList(mangas_selection, ignore_no_update){
 	if (browser.browserAction.setBadgeText)
 		browser.browserAction.setBadgeText({"text" : "UPD"});
-	//fetch current list
-	var mangas_list = await getMangasList();
-	var updated_chapters_list = {};
-	var check_all_sites = await getCheckAllSites();
+	let updated_chapters_list = {};
+	let check_all_sites = await getCheckAllSites();
 	let to_update_list = {};
+	let update_promises = [];
 
 	if (mangas_selection) {
 		for (var i in mangas_selection) {
@@ -310,18 +305,21 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 																				mangas_list[manga].chapters_list[chapter] = {"status":mangas_list[manga].chapters_list[chapter]["status"] , "url":updated_chapters[chapter]["url"]};
 																			}
 																		}
-																		await browser.storage.local.set({"mangas_list" : mangas_list});
-																		setBadgeNumber();
+																		browser.storage.local.set({"mangas_list" : mangas_list});
 																	},
 																	function(error){
 																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+error}}); //warning the popup
 																	}
 					);
+					update_promises.push(updated_chapters_list[manga][website_name]);
 				}
 			} 
 		}
 	}
-
+	//map a catch() clause to the promises so that promise.all.then triggers even if some promises are rejected
+	Promise.all(update_promises.map(p => p.catch(() => undefined))).then( () => {
+		setBadgeNumber();
+	});
 	return;
 }
 
@@ -337,8 +335,12 @@ async function getMangasList(){
 	return (await browser.storage.local.get("mangas_list"))["mangas_list"];
 }
 
-async function isMangaFollowed(manga_name){
-	var check = (await getMangasList())[manga_name];
+async function getMangasSubscriberPrefs(){
+	return (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+}
+
+function isMangaFollowed(manga_name){
+	var check = mangas_list[manga_name];
 	
 	return check ? true : false;
 }
@@ -361,9 +363,8 @@ async function followManga(url){
 				"chapters_list":chapters_list};
 
 	//add manga to storage
-	var list = await getMangasList();
-	list[manga_name] = manga;
-	await browser.storage.local.set({"mangas_list" : list});
+	mangas_list[manga_name] = manga;
+	await browser.storage.local.set({"mangas_list" : mangas_list});
 	//update badge
 	setBadgeNumber();
 	//update follow button
@@ -372,23 +373,20 @@ async function followManga(url){
 
 //delete mangas from an array of names
 async function deleteMangas(mangas){
-	//get list
-	var list = await getMangasList();
 	//remove mangas from list
 	for (let name in mangas) {
-		delete list[mangas[name]];
+		delete mangas_list[mangas[name]];
 	}
 	//update storage
-	await browser.storage.local.set({"mangas_list" : list});
+	await browser.storage.local.set({"mangas_list" : mangas_list});
 	//update badge
 	setBadgeNumber();
 	return ;
 }
 
 async function setMangaUpdate(manga_name, update_state) {
-	var mangas_list = await getMangasList();
 	mangas_list[manga_name]["update"] = update_state;
-	await browser.storage.local.set({"mangas_list":mangas_list});
+	browser.storage.local.set({"mangas_list":mangas_list});
 	return;
 }
 
@@ -431,7 +429,7 @@ async function getAllChapters(manga_name, website_name){
 }
 
 async function reconstructChapterURL(manga_name, chapter){
-	return (await getMangasList())[manga_name]["chapters_list"][chapter]["url"];
+	return mangas_list[manga_name]["chapters_list"][chapter]["url"];
 }
 
 
@@ -451,12 +449,11 @@ async function getSource(source_url){
 
 async function setBadgeNumber() {
 	var number = 0;
-	var mangas = await getMangasList();
 	
-	for (let name in mangas){
+	for (let name in mangas_list){
 		let updated = false;
-		for (let index in mangas[name]["chapters_list"]) {
-			if (mangas[name]["chapters_list"][index]["status"] == "unread") {
+		for (let index in mangas_list[name]["chapters_list"]) {
+			if (mangas_list[name]["chapters_list"][index]["status"] == "unread") {
 				updated = true;
 				break;
 			}
@@ -464,44 +461,90 @@ async function setBadgeNumber() {
 		if (updated)
 			number++;
 	}
-	number > 0 ? number = number.toString() : number = "";
+	
 	if (browser.browserAction.setBadgeText)
-		browser.browserAction.setBadgeText({"text" : number});
+		browser.browserAction.setBadgeText({"text" : number > 0 ? number.toString() : ""});
 }
 
 async function toggleCheckAllSites(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	prefs["check_all_sites"] = !prefs["check_all_sites"];
-	await browser.storage.local.set({"MangasSubscriberPrefs" : prefs});
+	mangassubscriber_prefs["check_all_sites"] = ! mangassubscriber_prefs["check_all_sites"];
+	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 	return;
 }
 
 async function getCheckAllSites(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	return prefs["check_all_sites"];
+	return mangassubscriber_prefs["check_all_sites"];
 }
 
 async function toggleNavigationBar(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	prefs["navigation_bar"] = !prefs["navigation_bar"];
-	await browser.storage.local.set({"MangasSubscriberPrefs" : prefs});
+	mangassubscriber_prefs["navigation_bar"] = ! mangassubscriber_prefs["navigation_bar"];
+	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 	return;
 }
 
 async function getNavigationBar(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	return prefs["navigation_bar"];
+	return mangassubscriber_prefs["navigation_bar"];
 }
 
+//returns an object containing each manganame as a key, associated to its preferred website -- can't return just the preferred website for one manga and call it each time we need it, it takes too much time to do that for each manga in options_page
+async function getPreferredWebsites(){
+	let preferred_websites = {};
+	for (let manga in mangas_list) {
+		preferred_websites[manga] = mangas_list[manga]["website_name"];
+	}
+	return preferred_websites;
+}
+
+//sets website_name as preferred website for manga_name
+async function setPreferredWebsite(manga_name, website_name){
+	mangas_list[manga_name]["website_name"] = website_name;
+	await browser.storage.local.set({"mangas_list":mangas_list});
+}
+
+
+
+var isAutoUpdating;
+
+//set auto update interval and start the auto update
+async function setAutoUpdate(interval){
+	let hours = 3600000;
+	mangassubscriber_prefs["auto_update"] = interval;
+	await browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
+	
+	clearTimeout(isAutoUpdating);
+	if (interval > 0) isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+}
+
+
+//get auto update interval
+async function getAutoUpdateInterval(){
+	return mangassubscriber_prefs["auto_update"];
+}
+
+
+//auto update
+async function autoUpdate(){
+	let hours = 3600000;
+	let interval = await getAutoUpdateInterval();
+	
+	clearTimeout(isAutoUpdating);
+	if (interval > 0) {
+		updateMangasList();
+		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+	}
+}
+
+
+
 async function db_update(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	var to_log = null;
+	let prefs = await getMangasSubscriberPrefs();
+	let to_log = null;
 
 	if (!prefs){
 		if (browser.browserAction.setBadgeText)
 			browser.browserAction.setBadgeText({"text" : "UPD"});
 		//fetch current list
-		var mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+		let mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 		
 		for (let manga in mangas_list) {
 			if (mangas_list[manga]["website_name"] == "http://fanfox.net/manga/"){
@@ -527,7 +570,7 @@ async function db_update(){
 					"mangas_list":mangas_list};
 	} else {
 		if (prefs["DB_version"] == "1.0.0") {
-			to_log = await await browser.storage.local.get();
+			to_log = await browser.storage.local.get();
 			to_log["MangasSubscriberPrefs"]["DB_version"] = "1.0.1";
 			to_log["MangasSubscriberPrefs"]["auto_update"] = 0;
 			for (let manga in to_log["mangas_list"]) {
@@ -546,62 +589,9 @@ async function db_update(){
 	}
 	return;
 }
-
-//returns an object containing each manganame as a key, associated to its preferred website -- can't return just the preferred website for one manga and call it each time we need it, it takes too much time to do that for each manga in options_page
-async function getPreferredWebsites(){
-	let mangas_list = await getMangasList();
-	let preferred_websites = {};
-	for (let manga in mangas_list) {
-		preferred_websites[manga] = mangas_list[manga]["website_name"];
-	}
-	return preferred_websites;
-}
-
-//sets website_name as preferred website for manga_name
-async function setPreferredWebsite(manga_name, website_name){
-	let mangas_list = await getMangasList();
-	mangas_list[manga_name]["website_name"] = website_name;
-	await browser.storage.local.set({"mangas_list":mangas_list});
-}
-
-
-
-var isAutoUpdating;
-
-//set auto update interval and start the auto update
-async function setAutoUpdate(interval){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	let hours = 3600000;
-	prefs["auto_update"] = interval;
-	await browser.storage.local.set({"MangasSubscriberPrefs":prefs});
-	
-	clearTimeout(isAutoUpdating);
-	if (interval > 0) isAutoUpdating = setTimeout(autoUpdate, interval*hours);
-}
-
-
-//get auto update interval
-async function getAutoUpdateInterval(){
-	var prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
-	return prefs["auto_update"];
-}
-
-
-//auto update
-async function autoUpdate(){
-	let hours = 3600000;
-	let interval = await getAutoUpdateInterval();
-	
-	clearTimeout(isAutoUpdating);
-	if (interval > 0) {
-		updateMangasList();
-		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
-	}
-}
-
-
-
-
-db_update();
-//update badge
-setBadgeNumber();
+db_update().then(async () => {
+	mangas_list = await getMangasList();
+	mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	//update badge
+	setBadgeNumber();
+});
