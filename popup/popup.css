@@ -406,15 +406,7 @@ MODAL DELETE
 	transition: visibility 0s linear 0.5s, opacity 0.5s, transform 0.5s;
 	z-index: 100;
 }
-.modal_title{
-	width: 100%;
-	font-size: 1.75em;
-	text-align: center;
-	text-decoration: bold;
-	text-decoration: underline red;
-	padding: 18px 12px;
-}
-.modal_content {
+.modal_window {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -425,12 +417,69 @@ MODAL DELETE
 	width: 500px;
 	max-width: 500px;
 }
-#delete_modal_list {
+
+#modal_title{
+	width: 100%;
+	font-size: 1.75em;
+	text-align: center;
+	text-decoration: bold;
+	text-decoration: underline red;
+	padding: 18px 12px;
+}
+
+#modal_content {
 	width: 464px;
 	max-height: 464px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
+
+#modal_agree {
+	float: left;
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: lightgray;
+	border: 1px solid red;
+}
+#modal_agree:hover {
+	background-color: darkgray;
+}
+#modal_cancel {
+	float: right;
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: lightgray;
+	border: 1px solid black;
+}
+#modal_cancel:hover {
+	background-color: darkgray;
+}
+#modal_dismiss {
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: lightgray;
+	border: 1px solid black;
+}
+#modal_dismiss:hover {
+	background-color: darkgray;
+}
+.show_modal {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1.0);
+	transition: visibility 0s linear 0s, opacity 0.5s, transform 0.5s;
+}
+
+
 
 .delete_modal_list_line {
 	font-size: 1.25em;
@@ -447,36 +496,6 @@ MODAL DELETE
 	padding-left: 0px;
 	width: 419px;
 	max-width: 419px;
-}
-.modal_agree {
-	float: left;
-	padding: 5px;
-	text-align: center;
-	cursor: pointer;
-	border-radius: 5px;
-	background-color: lightgray;
-	border: 1px solid red;
-}
-.modal_agree:hover {
-	background-color: darkgray;
-}
-.modal_cancel {
-	float: right;
-	padding: 5px;
-	text-align: center;
-	cursor: pointer;
-	border-radius: 5px;
-	background-color: lightgray;
-	border: 1px solid black;
-}
-.modal_cancel:hover {
-	background-color: darkgray;
-}
-.show_modal {
-	opacity: 1;
-	visibility: visible;
-	transform: scale(1.0);
-	transition: visibility 0s linear 0s, opacity 0.5s, transform 0.5s;
 }
 /****************************************
 MODAL DELETE END

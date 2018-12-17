@@ -114,7 +114,7 @@ async function createMangasList() {
         dom_delete_button.src = "../icons/trash.svg"
         dom_delete_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
-                                    let delete_modal_list = document.getElementById("delete_modal_list");
+                                    let delete_modal_list = [];
                                     
                                     let list_line = document.createElement("div");
                                     list_line.manga_name = my_manga.manga_name;
@@ -139,8 +139,28 @@ async function createMangasList() {
                                         list_line.getElementsByTagName("img")[0].src = "../icons/" + (list_line.delete?"yes":"no") + ".svg";
                                     });
 
-                                    delete_modal_list.appendChild(list_line);
-                                    toggleModal("delete_modal");
+                                    delete_modal_list.push(list_line);
+                                    
+
+                                    let title = "you're about to delete the following mangas :";
+                                    let onAgree = async function (e) {
+                                        e.stopPropagation();
+                                        let list = document.getElementById("modal_content");
+                                        let mangas = [];
+                                        var background = await browser.runtime.getBackgroundPage();
+
+                                        for (let i in list.children) {
+                                            if (list.children.hasOwnProperty(i) && list.children[i].delete) mangas.push(list.children[i].manga_name);
+                                        }
+                                        hideModal();
+                                        if (mangas != []) {
+                                            await background.deleteMangas(mangas);
+                                            createMangasList();
+                                        }
+                                        document.getElementById("modal_agree").removeEventListener('click', onAgree);
+                                    };
+                                    
+                                    revealModal(title, delete_modal_list, onAgree);
 
                                 }
                 , false);
@@ -346,42 +366,70 @@ function initializeReadFilter() {
 } 
 initializeReadFilter();
 
-//modal window to confirm mangas deletion
-function toggleModal(id) {
-    let modal = document.getElementById(id);
-    modal.classList.toggle("show_modal");
+//set and show the modal
+function revealModal(title, content_elements, onAgree) {
+    let modal = document.getElementById("modal");
+    let modal_title = document.getElementById("modal_title");
+    modal_title.innerText = title;
+    let modal_content = document.getElementById("modal_content");
+    for (let i in content_elements) {
+        modal_content.appendChild(content_elements[i]);
+    }
+    if (onAgree) {
+        let modal_agree = document.getElementById("modal_agree");
+        modal_agree.addEventListener("click", onAgree, true);
+        modal_agree.classList.remove("hidden");
+        let modal_cancel = document.getElementById("modal_cancel");
+        modal_cancel.classList.remove("hidden");
+        let modal_dismiss = document.getElementById("modal_dismiss");
+        modal_dismiss.classList.add("hidden");
+    } else {
+        let modal_agree = document.getElementById("modal_agree");
+        modal_agree.classList.add("hidden");
+        let modal_cancel = document.getElementById("modal_cancel");
+        modal_cancel.classList.add("hidden");
+        let modal_dismiss = document.getElementById("modal_dismiss");
+        modal_dismiss.classList.remove("hidden");
+    }
+    modal.classList.add("show_modal");
 }
 
-document.getElementById("delete_modal").addEventListener("click", async (e) => {
+//reset and hide the modal
+function hideModal() {
+    let modal_title = document.getElementById("modal_title");
+    modal_title.innerText = "";
+    
+    let modal_content = document.getElementById("modal_content");
+    while (modal_content.firstChild) {modal_content.removeChild(modal_content.firstChild);}
+    
+    let modal_agree = document.getElementById("modal_agree");
+    modal_agree.classList.add("hidden");
+    
+    let modal_cancel = document.getElementById("modal_cancel");
+    modal_cancel.classList.add("hidden");
+    
+    let modal_dismiss = document.getElementById("modal_dismiss");
+    modal_dismiss.classList.add("hidden");
+    
+    let modal = document.getElementById("modal");
+    modal.classList.remove("show_modal");
+}
+
+document.getElementById("modal").addEventListener("click", async (e) => {
     e.stopPropagation();
-    let list = document.getElementById("delete_modal_list");
-    while (list.firstChild) {list.removeChild(list.firstChild);}
-    toggleModal("delete_modal");
+    hideModal();
 });
 
-document.getElementById("delete_modal_cancel").addEventListener("click", async (e) => {
+document.getElementById("modal_cancel").addEventListener("click", async (e) => {
     e.stopPropagation();
-    let list = document.getElementById("delete_modal_list");
-    while (list.firstChild) {list.removeChild(list.firstChild);}
-    toggleModal("delete_modal");
+    hideModal();
 });
 
-document.getElementById("delete_modal_agree").addEventListener("click", async (e) => {
+document.getElementById("modal_dismiss").addEventListener("click", async (e) => {
     e.stopPropagation();
-    let list = document.getElementById("delete_modal_list");
-    let mangas = [];
-    var background = await browser.runtime.getBackgroundPage();
-
-    while (list.firstChild) {
-        if (list.firstChild.delete) mangas.push(list.firstChild.manga_name);
-        list.removeChild(list.firstChild);
-    }
-    toggleModal("delete_modal");
-    if (mangas != []) {
-        await background.deleteMangas(mangas);
-        createMangasList();
-    }
+    hideModal();
 });
+
 ///////////////////////////////////////
 
 //[apply to all visible mangas] actions
@@ -460,7 +508,7 @@ document.getElementById("list_update_toggle_icon").addEventListener("click", asy
 //delete all visible mangas
 document.getElementById("list_delete_icon").addEventListener("click", async (e) => {
     let visible_list = document.getElementById("list").getElementsByClassName("visible");
-    let delete_modal_list = document.getElementById("delete_modal_list");
+    let delete_modal_list = [];
 
     for (let manga in visible_list) {
         if (visible_list.hasOwnProperty(manga)) {
@@ -489,11 +537,29 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
                 list_line.getElementsByTagName("img")[0].src = "../icons/" + (list_line.delete?"yes":"no") + ".svg";
             });
 
-            delete_modal_list.appendChild(list_line);
+            delete_modal_list.push(list_line);
 
         }
     }
-    toggleModal("delete_modal");
+    let title = "you're about to delete the following mangas :";
+    let onAgree = async function (e) {
+        e.stopPropagation();
+        let list = document.getElementById("modal_content");
+        let mangas = [];
+        var background = await browser.runtime.getBackgroundPage();
+
+        for (let i in list.children) {
+            if (list.children.hasOwnProperty(i) && list.children[i].delete) mangas.push(list.children[i].manga_name);
+        }
+        hideModal();
+        if (mangas != []) {
+            await background.deleteMangas(mangas);
+            createMangasList();
+        }
+        document.getElementById("modal_agree").removeEventListener('click', onAgree);
+    };
+    
+    revealModal(title, delete_modal_list, onAgree);
 });
 
 //refresh list
