@@ -4,11 +4,8 @@ GOALS :
 
 §§REFACTORING UI
 
-- migrate help to the popup :
--- redo help page as panel and add css and javascript
-
-- change the way the modal window works (make it more generic)
--- pass title and content along with callback on agree when it is revealed
+-bugfix :
+-- filter read/unread buttons status not taken into account (nor reset) when refreshing the list. need to either take them into account or reset them.
 
 
 
@@ -26,10 +23,6 @@ GOALS :
 
 
 §§OPTIMIZATIONS
-
-- avoid excessive storage access
--- store mangas list in general scope variable in background script, and save it to storage each time it is modified, but all access are to be done on the variable
--- initialize mangas list variable after calling db_update
 
 - refresh list more often and at the right time
 -- refresh individual mangas
