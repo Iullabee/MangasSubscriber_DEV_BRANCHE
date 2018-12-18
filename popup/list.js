@@ -287,6 +287,8 @@ async function createMangasList() {
         dom_mangas_list.appendChild(read_mangas[dom_manga]);
     }
 
+    filterList();
+
     //get back to scroll position
     if (document.getElementById("list_container").scrollmemory) {
         window.scrollTo(0, document.getElementById("list_container").scrollmemory);
@@ -315,9 +317,9 @@ function filterList() {
                     : false;
 
                 list[manga].reading_status == "read" ? 
-                filter_already_read ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
-                    : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
-                : false;
+                   filter_already_read ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
+                        : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
+                    : false;
             }
         }
     }
