@@ -333,7 +333,7 @@ LIST SECTION
 	width: 783px;
 	max-width: 783px;
 	background-color: white;
-	transition: height 1s;
+	transition: height 0.5s;
 	height: 39px;
 	overflow: hidden;
 	border-bottom: 1px solid black;

@@ -53,14 +53,14 @@ async function updateConsole(message) {
 		let console_display = document.getElementById("console_display");
 		let user_scrolled = !(console_display.scrollHeight - console_display.clientHeight <= console_display.scrollTop + 1);
 
-		let existing_line = document.getElementById(log.manga+log.from);
+		let existing_line = document.getElementById(log.manga + " - " + log.from);
 
 		if (!existing_line) {
 			//displaying updates status
 			//main line (name + website + status)
 			let manga = document.createElement("div");
 			manga.classList.add("console_line_container", document.getElementById("console_updating").status == "hiding" ? ("hidden") : "dummy");
-			manga.setAttribute("id", log.manga+log.from);
+			manga.setAttribute("id", log.manga + " - " + log.from);
 			manga.status = log.status;
 
 			//name 
