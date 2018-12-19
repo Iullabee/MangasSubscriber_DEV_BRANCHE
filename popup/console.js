@@ -1,7 +1,7 @@
 //toggle "updating" console messages display
 document.getElementById("console_updating").addEventListener("click", async (e) => {
 	//initializing if it's not
-	e.target.status ? "" : e.target.status = "hiding";
+	e.target.status ? "" : e.target.status = "showing";
 
 
 	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
@@ -18,7 +18,7 @@ document.getElementById("console_updating").addEventListener("click", async (e) 
 //toggle "completed" console messages display
 document.getElementById("console_completed").addEventListener("click", async (e) => {
 	//initializing if it's not
-	e.target.status ? "" : e.target.status = "hiding";
+	e.target.status ? "" : e.target.status = "showing";
 
 
 	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
@@ -49,70 +49,74 @@ browser.runtime.onMessage.addListener(updateConsole);
 
 async function updateConsole(message) {
 	if  (message.target == "popup" && message.log){
-		var log = message.log;
-		var console_display = document.getElementById("console_display");
-		var user_scrolled = !(console_display.scrollHeight - console_display.clientHeight <= console_display.scrollTop + 1);
+		let log = message.log;
+		let console_display = document.getElementById("console_display");
+		let user_scrolled = !(console_display.scrollHeight - console_display.clientHeight <= console_display.scrollTop + 1);
 
-		//displaying updates status
-		//main line (name + website + status)
-		let manga = document.createElement("div");
-		manga.classList.add("console_line_container");
-		manga.setAttribute("id", log.manga+log.from+log.status);
-		manga.status = log.status;
+		let existing_line = document.getElementById(log.manga+log.from);
 
-		//name 
-		let retrieving = document.createElement("div");
-		retrieving.classList.add("left", "console_line");
-		//name tooltip
-		retrieving.title = log.manga.replace(/_/g, " ");
-		//add text to the name
-		let retrieving_text = document.createElement("span");
-		retrieving_text.classList.add("console_name_text");
-		let retrieving_text_node = document.createTextNode("retrieving "+log.manga.replace(/_/g, " "));
-		retrieving_text.appendChild(retrieving_text_node);
-		retrieving.appendChild(retrieving_text);
-		manga.appendChild(retrieving);
+		if (!existing_line) {
+			//displaying updates status
+			//main line (name + website + status)
+			let manga = document.createElement("div");
+			manga.classList.add("console_line_container", document.getElementById("console_updating").status == "hiding" ? ("hidden") : "dummy");
+			manga.setAttribute("id", log.manga+log.from);
+			manga.status = log.status;
 
-		//website 
-		let from = document.createElement("div");
-		from.classList.add("console_from", "left", "console_line");
-		let from_text_node = document.createTextNode(" from "+log.from);
-		from.appendChild(from_text_node);
-		manga.appendChild(from);
+			//name 
+			let retrieving = document.createElement("div");
+			retrieving.classList.add("left", "console_line", "console_name_text");
+			//name tooltip
+			retrieving.title = log.manga.replace(/_/g, " ");
+			retrieving.innerText = "retrieving "+log.manga.replace(/_/g, " ");
+			manga.appendChild(retrieving);
 
-		//status 
-		let status = document.createElement("div");
-		status.classList.add("left", "console_status", "console_line");
-		if (log.status == "completed") {
-			status.classList.add("green_text");
-			manga.classList.add("hidden");
-		}  else if (log.status == "errors") {
-			status.classList.add("red_text");
-		} else manga.classList.add("hidden");
-		let status_text_node = document.createTextNode(" - status : "+log.status);
-		status.appendChild(status_text_node);
-		manga.appendChild(status);
+			//website 
+			let from = document.createElement("div");
+			from.classList.add("console_from", "left", "console_line");
+			from.innerText = " from "+log.from;
+			manga.appendChild(from);
 
-		//toggle details display
-		manga.addEventListener("click", 
-								function(e){	if (log.details != "") {
-														let details = document.getElementById(this.id+"details");
-														details.classList.toggle("hidden");
-													}
-												}
-								, false);
-		console_display.appendChild(manga);
+			//status 
+			let status = document.createElement("div");
+			status.classList.add("left", "console_status", "console_line");
+			status.innerText = " - status : "+log.status;
+			manga.appendChild(status);
 
-		//details line
-		let manga_details = document.createElement("div");
-		manga_details.setAttribute("id", log.manga+log.from+log.status+"details");
-		let details = document.createElement("span");
-		details.classList.add((log.status == "errors" ? "red_text" : "dummy"), "left", "console_details");
-		let details_text_node = document.createTextNode((log.details != "" ? " details : "+log.details : ""));
-		details.appendChild(details_text_node);
-		manga_details.classList.add(log.status == "errors" ? "dummy" : "hidden");
-		manga_details.appendChild(details);
-		console_display.appendChild(manga_details);
+			//toggle details display
+			manga.addEventListener("click", function(e){this.getElementsByClassName("console_details")[0].innerText != "" ? this.getElementsByClassName("console_details")[0].classList.toggle("hidden") : false;});
+			console_display.appendChild(manga);
+
+			//details line
+			let manga_details = document.createElement("div");
+			manga_details.classList.add((log.status == "errors" ? "red_text" : "hidden"), "left", "console_details");
+			manga_details.innerText = log.details != "" ? " details : "+log.details : "";
+			manga.appendChild(manga_details);
+			
+		} else {
+			existing_line.status = log.status;
+			let status = existing_line.getElementsByClassName("console_status")[0];
+			status.innerText = " - status : "+log.status;
+			if (log.status == "completed") {
+				status.classList.remove("red_text");
+				status.classList.add("green_text");
+				document.getElementById("console_completed").status == "hiding" ? existing_line.classList.add("hidden") : existing_line.classList.remove("hidden");
+			}  else if (log.status == "errors") {
+				existing_line.classList.remove("hidden");
+				status.classList.remove("green_text");
+				status.classList.add("red_text");
+				document.getElementById("console_errors").status == "hiding" ? existing_line.classList.add("hidden") : existing_line.classList.remove("hidden");
+			} else {
+				status.classList.remove("red_text");
+				status.classList.remove("green_text");
+				document.getElementById("console_updating").status == "hiding" ? existing_line.classList.add("hidden") : existing_line.classList.remove("hidden");
+			}
+
+			let details = existing_line.getElementsByClassName("console_details")[0];
+			details.innerText = log.details != "" ? " details : "+log.details : "";
+			details.classList.remove("red_text", "hidden");
+			details.classList.add((log.status == "errors" ? "red_text" : "hidden"), "left", "console_details");
+		}
 		
 		if (!user_scrolled)
 			console_display.scrollTop = console_display.scrollHeight - console_display.clientHeight;

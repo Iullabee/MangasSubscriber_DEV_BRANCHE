@@ -4,11 +4,6 @@ GOALS :
 
 §§REFACTORING UI
 
-- bugfix :
--- filter read/unread buttons status not taken into account (nor reset) when refreshing the list. need to either take them into account or reset them.
-
-- tidy stuff :
--- update console lines instead of creating new ones
 
 
 §§FUNCTIONALITIES
