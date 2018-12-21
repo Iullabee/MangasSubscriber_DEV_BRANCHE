@@ -48,7 +48,7 @@ var websites_list = {
 							}
 						}
 					}
-					
+
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){	
@@ -102,24 +102,42 @@ var websites_list = {
 					//extract the chapter list
 					var parser = new DOMParser();
 					var doc = parser.parseFromString(source, "text/html");
-					if (doc.getElementById("chapterlist")) {
-						let list = doc.getElementById("chapterlist").getElementsByTagName("li");
+					//handle case where manga is marked mature (need the user to enable them at least once manually on the site)
+					let list = doc.querySelectorAll("#chapterlist li a");
+					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
+					else {
 						for (let i = 0; i<list.length; i++){
-							if(list[i].getElementsByTagName("a")[0].href){
+							if(list[i].href){
 								var reg = new RegExp(this.separator, "g");
-								let url_tail = list[i].getElementsByTagName("a")[0].href.replace(reg, " ").split(manga_name+"/")[1];
+								let url_tail = list[i].href.replace(reg, " ").split(manga_name+"/")[1];
 								if(url_tail) {
 									url_tail = url_tail.split("c")[1];
 
 									let chapter_number = "";
 									chapter_number = url_tail.split("/")[0];
 									if (chapter_number)
-										chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
-								} else throw new Error(" "+manga_name+" has a different name on "+this.name);
-							} else throw new Error(" can't find "+manga_name+" on "+this.name);
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].href.split("manga/")[1]};
+								}
+							}
 						}
 					}
+					
 					return chapters_list;
+				},
+				searchFor: async function (manga_name){	
+					var source = "truc";
+
+					//get search page results for manga_name
+					var reg = new RegExp(" ", "g");
+					manga_name = manga_name.replace(reg, "+");		
+					var source_url = "fanfox.net/search?title="+manga_name;
+					source = await getSource(source_url);
+
+					//extract mangas found
+					var parser = new DOMParser();
+					var doc = parser.parseFromString(source, "text/html");
+					
+					return doc.querySelectorAll("ul.manga-list-4-list li a");
 				}
 	},
 	"mangatown":{name:"mangatown",
