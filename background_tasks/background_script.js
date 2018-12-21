@@ -5,94 +5,121 @@ var websites_list = {
 	"mangahere":{name:"mangahere",
 				url:"mangahere.cc/manga/",
 				separator:"_",
-				getMangaName: function (url){var reg = new RegExp(this.separator, "g");
+				getMangaName: function (url){
+					var reg = new RegExp(this.separator, "g");
 					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
 				},
-				reconstructMangaUrl: function (manga_name) {var reg = new RegExp(" ", "g");
+				reconstructMangaUrl: function (manga_name) {
+					var reg = new RegExp(" ", "g");
 					return this.url + manga_name.replace(reg, this.separator) + "/";
 				},
-				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
-													//get rid of website and manga name,
-													var url_tail = url.split(this.reconstructMangaUrl(manga_name))[1];
-													//if there is a chapter number
-													if (url_tail.split("c")[1]){
-														//get rid of volume and page number
-														url_tail = url_tail.split("c")[1].split("/")[0];
-													}
-													return url_tail;
+				getCurrentChapter:  function (url){
+					var manga_name =  this.getMangaName(url);
+					//get rid of website and manga name,
+					var url_tail = url.split(this.reconstructMangaUrl(manga_name))[1];
+					//if there is a chapter number
+					if (url_tail.split("c")[1]){
+						//get rid of volume and page number
+						url_tail = url_tail.split("c")[1].split("/")[0];
+					}
+					return url_tail;
 				},
-				getAllChapters: async function (manga_name){var chapters_list = {};
-															var source = "truc";
+				getAllChapters: async function (manga_name){
+					var chapters_list = {};
+					var source = "truc";
 
-															//get manga's home page
-															var source_url = this.reconstructMangaUrl(manga_name);
-															source = await getSource(source_url);
+					//get manga's home page
+					var source_url = this.reconstructMangaUrl(manga_name);
+					source = await getSource(source_url);
 
-															//extract the chapter list
-															var parser = new DOMParser();
-															var doc = parser.parseFromString(source, "text/html");
-															if (doc.getElementsByClassName("detail_list")[0]) {
-																var list = doc.getElementsByClassName("detail_list")[0].getElementsByClassName("left");
-																for (let i = 0; i<list.length; i++){
-																	if(list[i].getElementsByClassName("color_0077")[0].href){
-																		//get the url, get rid of the website and manga name (split(source_url)[1]), get rid of everything left before chapter number (split("c")[1]) and get rid of the last / (slice (0,-1))
-																		let chapter_number = list[i].getElementsByClassName("color_0077")[0].href.split(source_url)[1].split("c")[1].slice(0,-1);
-																		if (chapter_number)
-																			chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].getElementsByClassName("color_0077")[0].href.replace("moz-extension", "http")};
-																	}
-																}
-															} else throw new Error(" can't find "+manga_name+" on "+this.name);
-															return chapters_list;
+					//extract the chapter list
+					var parser = new DOMParser();
+					var doc = parser.parseFromString(source, "text/html");
+					
+					let list = doc.querySelectorAll(".detail_list a.color_0077");
+					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
+					else {
+						for (let i = 0; i<list.length; i++){
+							if(list[i].href){
+								//get the url, get rid of the website and manga name (split(source_url)[1]), get rid of everything left before chapter number (split("c")[1]) and get rid of the last / (slice (0,-1))
+								let chapter_number = list[i].href.split(source_url)[1].split("c")[1].slice(0,-1);
+								if (chapter_number)
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
+							}
+						}
+					}
+					
+					return chapters_list;
+				},
+				searchFor: async function (manga_name){	
+					var source = "truc";
+
+					//get search page results for manga_name
+					var reg = new RegExp(" ", "g");
+					manga_name = manga_name.replace(reg, "+");		
+					var source_url = "mangahere.cc/search.php?name="+manga_name;
+					source = await getSource(source_url);
+
+					//extract mangas found
+					var parser = new DOMParser();
+					var doc = parser.parseFromString(source, "text/html");
+					
+					return doc.querySelectorAll("a.manga_info");
 				}
+				
 	},
 	"fanfox":{name:"fanfox",
 				url:"fanfox.net/manga/",
 				separator:"_",
-				getMangaName: function (url){var reg = new RegExp(this.separator, "g");
+				getMangaName: function (url){
+					var reg = new RegExp(this.separator, "g");
 					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
 				},
-				reconstructMangaUrl: function (manga_name) {var reg = new RegExp(" ", "g");
+				reconstructMangaUrl: function (manga_name) {
+					var reg = new RegExp(" ", "g");
 					return this.url + manga_name.replace(reg, this.separator) + "/";
 				},
-				getCurrentChapter:  function (url){var manga_name =  this.getMangaName(url);
-													//get rid of website and manga name,
-													var url_tail = url.split(this.reconstructMangaUrl(manga_name))[1];
-													//if there is a chapter number
-													if (url_tail.split("c")[1]){
-														//get rid of volume and page number
-														url_tail = url_tail.split("c")[1].split("/")[0];
-													}
-													
-													return url_tail;
+				getCurrentChapter:  function (url){
+					var manga_name =  this.getMangaName(url);
+					//get rid of website and manga name,
+					var url_tail = url.split(this.reconstructMangaUrl(manga_name))[1];
+					//if there is a chapter number
+					if (url_tail.split("c")[1]){
+						//get rid of volume and page number
+						url_tail = url_tail.split("c")[1].split("/")[0];
+					}
+					
+					return url_tail;
 				},
-				getAllChapters: async function (manga_name){var chapters_list = {};
-															var source = "truc";
+				getAllChapters: async function (manga_name){
+					var chapters_list = {};
+					var source = "truc";
 
-															//get manga's home page
-															var source_url = this.reconstructMangaUrl(manga_name);
-															source = await getSource(source_url);
+					//get manga's home page
+					var source_url = this.reconstructMangaUrl(manga_name);
+					source = await getSource(source_url);
 
-															//extract the chapter list
-															var parser = new DOMParser();
-															var doc = parser.parseFromString(source, "text/html");
-															if (doc.getElementById("chapterlist")) {
-																let list = doc.getElementById("chapterlist").getElementsByTagName("li");
-																for (let i = 0; i<list.length; i++){
-																	if(list[i].getElementsByTagName("a")[0].href){
-																		var reg = new RegExp(this.separator, "g");
-																		let url_tail = list[i].getElementsByTagName("a")[0].href.replace(reg, " ").split(manga_name+"/")[1];
-																		if(url_tail) {
-																			url_tail = url_tail.split("c")[1];
+					//extract the chapter list
+					var parser = new DOMParser();
+					var doc = parser.parseFromString(source, "text/html");
+					if (doc.getElementById("chapterlist")) {
+						let list = doc.getElementById("chapterlist").getElementsByTagName("li");
+						for (let i = 0; i<list.length; i++){
+							if(list[i].getElementsByTagName("a")[0].href){
+								var reg = new RegExp(this.separator, "g");
+								let url_tail = list[i].getElementsByTagName("a")[0].href.replace(reg, " ").split(manga_name+"/")[1];
+								if(url_tail) {
+									url_tail = url_tail.split("c")[1];
 
-																			let chapter_number = "";
-																			chapter_number = url_tail.split("/")[0];
-																			if (chapter_number)
-																				chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
-																		} else throw new Error(" "+manga_name+" has a different name on "+this.name);
-																	} else throw new Error(" can't find "+manga_name+" on "+this.name);
-																}
-															}
-															return chapters_list;
+									let chapter_number = "";
+									chapter_number = url_tail.split("/")[0];
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "http://" + this.url + list[i].getElementsByTagName("a")[0].href.split("manga/")[1]};
+								} else throw new Error(" "+manga_name+" has a different name on "+this.name);
+							} else throw new Error(" can't find "+manga_name+" on "+this.name);
+						}
+					}
+					return chapters_list;
 				}
 	},
 	"mangatown":{name:"mangatown",
