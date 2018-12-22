@@ -114,7 +114,7 @@ document.getElementById("export_online").addEventListener("click", async (e) => 
 	} else {
 		export_text.textContent = "error, try again";
 	}
-	setTimeout(()=>{export_text.textContent = "export mangas list to pastebin";},3000);
+	setTimeout(()=>{export_text.textContent = "export list to pastebin";},3000);
 });
 //import the mangas list online
 document.getElementById("import_online").addEventListener("click", async (e) => {

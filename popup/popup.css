@@ -124,7 +124,7 @@ PANELS SECTION
     border: 1px solid black;
     background: white;
 	z-index: 5;
-	transition: height 1s;
+	transition: height 0.5s;
 }
 
 .visible_panel {
