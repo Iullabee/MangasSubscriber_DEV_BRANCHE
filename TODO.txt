@@ -25,6 +25,10 @@ GOALS :
 -- refresh individual mangas
 -- take into account the page loading time to refresh the mangas when clicking a "read in new tab" button
 
+- add an option to limit how many mangas are displayed at once in the list
+-- mangas past that limit are not part of the dom (no element to represent htem), they are created when displaying the next block (and previous block is destroyed)
+-- either put in a numerical limit (ex : 200) or pick mangas based on their first letter ( a - b - c - etc)
+
 
 
 §§WEBSITES LIST
