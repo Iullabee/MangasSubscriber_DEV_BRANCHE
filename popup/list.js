@@ -167,6 +167,51 @@ async function createMangasList() {
         dom_delete_button_td.appendChild(dom_delete_button);
         dom_manga.appendChild(dom_delete_button_td);
 
+
+
+
+
+//TEST SEARCHFOR FUNCTION BUTTON
+let dom_test_button_td = document.createElement("div");
+dom_test_button_td.classList.add("list_cell", "left");
+dom_test_button_td.title = "delete this manga from your list";
+let dom_test_button = document.createElement("img");
+dom_test_button.classList.add("icons");
+dom_test_button.src = "../icons/logo.svg"
+dom_test_button.addEventListener("click", 
+        async function(e){	let my_manga = e.target.parentElement.parentElement;
+            
+                            let background = await browser.runtime.getBackgroundPage();
+                            let elementSSS = await background.websites_list["readmangatoday"].searchFor(my_manga.manga_name);
+
+                            let title = "test search function :";
+                            let results = [];
+                            for (let i in elementSSS) {
+                                if (elementSSS.hasOwnProperty(i)) {
+                                    let list_line = document.createElement("div");
+                                    list_line.classList.add("delete_modal_list_line");
+                                    let link = document.createElement("a");
+                                    link.innerText = i;
+                                    link.href = elementSSS[i];
+                                    list_line.appendChild(link);
+                                    results.push(list_line);
+                                }
+                                
+
+                            }
+                            revealModal(title, results);
+
+                        }
+        , false);
+        dom_test_button_td.appendChild(dom_test_button);
+dom_manga.appendChild(dom_test_button_td);
+
+
+
+
+
+
+
         //a spacer to avoid missclicks
         let dom_spacer_td = document.createElement("div");
         dom_spacer_td.classList.add("list_cell", "right");
