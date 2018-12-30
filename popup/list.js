@@ -167,51 +167,6 @@ async function createMangasList() {
         dom_delete_button_td.appendChild(dom_delete_button);
         dom_manga.appendChild(dom_delete_button_td);
 
-
-
-
-
-//TEST SEARCHFOR FUNCTION BUTTON
-let dom_test_button_td = document.createElement("div");
-dom_test_button_td.classList.add("list_cell", "left");
-dom_test_button_td.title = "delete this manga from your list";
-let dom_test_button = document.createElement("img");
-dom_test_button.classList.add("icons");
-dom_test_button.src = "../icons/logo.svg"
-dom_test_button.addEventListener("click", 
-        async function(e){	let my_manga = e.target.parentElement.parentElement;
-            
-                            let background = await browser.runtime.getBackgroundPage();
-                            let elementSSS = await background.websites_list["readmangatoday"].searchFor(my_manga.manga_name);
-
-                            let title = "test search function :";
-                            let results = [];
-                            for (let i in elementSSS) {
-                                if (elementSSS.hasOwnProperty(i)) {
-                                    let list_line = document.createElement("div");
-                                    list_line.classList.add("delete_modal_list_line");
-                                    let link = document.createElement("a");
-                                    link.innerText = i;
-                                    link.href = elementSSS[i];
-                                    list_line.appendChild(link);
-                                    results.push(list_line);
-                                }
-                                
-
-                            }
-                            revealModal(title, results);
-
-                        }
-        , false);
-        dom_test_button_td.appendChild(dom_test_button);
-dom_manga.appendChild(dom_test_button_td);
-
-
-
-
-
-
-
         //a spacer to avoid missclicks
         let dom_spacer_td = document.createElement("div");
         dom_spacer_td.classList.add("list_cell", "right");
@@ -279,16 +234,15 @@ dom_manga.appendChild(dom_test_button_td);
         let dom_update_button = document.createElement("img");
         dom_update_button.update_state = manga["update"];
         dom_update_button.classList.add("icons");
-        dom_update_button.src = "../icons/update.svg"
+        dom_update_button.src = "../icons/update.svg";
         dom_update_button.addEventListener("click", 
                 async function(e){	let my_manga = e.target.parentElement.parentElement;
                                     await background.updateMangasList([my_manga.manga_name], true);
                                     refreshList();
                                 }
                 , false);
-                dom_update_button_td.appendChild(dom_update_button);
+        dom_update_button_td.appendChild(dom_update_button);
         dom_manga.appendChild(dom_update_button_td);
-
 
         //option to choose preferred website
         let dom_choose_preferred_website_cell = document.createElement("div");
@@ -297,19 +251,164 @@ dom_manga.appendChild(dom_test_button_td);
         let dom_choose_preferred_website = document.createElement("select");
         dom_choose_preferred_website.classList.add("websites_select");
         //update preferred website when selected option changes
-        dom_choose_preferred_website.addEventListener("change", async function(e){let my_manga = e.target.parentElement.parentElement;
-                                                                                background.setPreferredWebsite(my_manga.manga_name, e.target.value);}, false);
+        dom_choose_preferred_website.addEventListener("change", 
+                async function(e){  let my_manga = e.target.parentElement.parentElement;
+                                    //background.setPreferredWebsite(my_manga.manga_name, e.target.value);
+                                    let background = await browser.runtime.getBackgroundPage();
+                                    
+                                    let title = "follow ["+my_manga.manga_name+"] on :";
+                                    let results = [];
+                                    for (let website_name in background.websites_list) {
+                                        if (background.websites_list.hasOwnProperty(website_name)) {
+                                            let list_line = document.createElement("div");
+                                            list_line.classList.add("website_modal_list_line");
+                                            list_line.website_name = website_name;
+                                            list_line.preferred = background.mangas_list[my_manga.manga_name]["website_name"] == website_name ? true : false;
+                                            list_line.registered = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name] ? true : false;
+                                            
+                                            let favorite = document.createElement("img");
+                                            favorite.classList.add("icons", "favorite");
+                                            favorite.src = list_line.preferred ? "../icons/favorite.svg" : "../icons/unfavorite.svg";
+                                            //eventlistener on click to set this site as favorite and mark the others as normal
+                                            favorite.addEventListener("click", (e) => {
+                                                if (!list_line.registered) {
+                                                    var clicker = list_line.getElementsByClassName("name_text")[0];
+                                                    var event = new Event('click', {
+                                                        'bubbles': false,
+                                                        'cancelable': true
+                                                    });
+                                                    clicker.dispatchEvent(event);
+                                                }
+                                                let already_favorite = list_line.preferred;
+                                                let modal_content = document.getElementById("modal_content");
+                                                let lines = modal_content.getElementsByClassName("website_modal_list_line");
+                                                for (let i = 0; i < lines.length; i++) {
+                                                    lines[i].preferred = false;
+                                                    lines[i].getElementsByClassName("favorite")[0].src = "../icons/unfavorite.svg";
+                                                }
+                                                list_line.preferred = ! already_favorite;
+                                                favorite.src = list_line.preferred ? "../icons/favorite.svg" : "../icons/unfavorite.svg";
+                                            });
+                                            list_line.appendChild(favorite);
+
+                                            let toggleRegistered = async function (event) {
+                                                event.stopPropagation();
+                                                let links_list = event.target.parentElement.getElementsByClassName("links_list")[0];
+                                                if (event.target.parentElement.registered) {
+                                                    while (links_list.firstChild) {links_list.removeChild(links_list.firstChild);}
+                                                    links_list.classList.add("hidden");
+                                                    event.target.parentElement.registered = false;
+                                                } else {
+                                                    let links = await background.websites_list[website_name].searchFor(my_manga.manga_name);
+                                                    let already_checked = false;
+                                                    for (let name in links) {
+                                                        if (links.hasOwnProperty(name)) {
+                                                            let container = document.createElement("div");
+                                                            let radioInput = document.createElement("input");
+                                                            radioInput.setAttribute("type", "radio");
+                                                            radioInput.setAttribute("name", website_name);
+                                                            !already_checked ? (radioInput.setAttribute("checked", "checked"), already_checked = true) : false;
+                                                            radioInput.setAttribute("id", website_name+links[name]);
+                                                            radioInput.link = links[name];
+                                                            container.appendChild(radioInput);
+                
+                                                            let label = document.createElement("label");
+                                                            label.htmlFor = website_name+links[name];
+                                                            label.innerText = background.getMangaName(links[name]) + " ";
+                                                            let link = document.createElement("a");
+                                                            link.href = links[name];
+                                                            link.innerText = "(link)";
+                                                            label.appendChild(link);
+                                                            container.appendChild(label);
+                                                            links_list.appendChild(container);
+                                                        }
+                                                    }
+                                                    links_list.classList.remove("hidden");
+                                                    event.target.parentElement.registered = true;
+                                                }
+                                                event.target.parentElement.getElementsByClassName("registered")[0].src = event.target.parentElement.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                                            }
+
+                                            let name = document.createElement("span");
+                                            name.classList.add("name_text");
+                                            name.innerText = website_name;
+                                            //eventlistener on click to set toggle this site as registered
+                                            name.addEventListener("click", toggleRegistered);
+                                            list_line.appendChild(name);
+
+                                            let registered = document.createElement("img");
+                                            registered.classList.add("icons", "registered");
+                                            registered.src = list_line.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                                            //eventlistener on click to set toggle this site as registered
+                                            registered.addEventListener("click", toggleRegistered);
+                                            list_line.appendChild(registered);
+
+                                            let links_list = document.createElement("div");
+                                            links_list.classList.add("links_list");
+                                            
+                                            if (list_line.registered) {
+                                                let container = document.createElement("div");
+                                                let radioInput = document.createElement("input");
+                                                radioInput.setAttribute("type", "radio");
+                                                radioInput.setAttribute("name", website_name);
+                                                radioInput.setAttribute("checked", "checked");
+                                                radioInput.setAttribute("id", website_name+background.mangas_list[my_manga.manga_name]["registered_websites"][website_name]);
+                                                radioInput.link = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
+                                                container.appendChild(radioInput);
+    
+                                                let label = document.createElement("label");
+                                                label.htmlFor = website_name+background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
+                                                label.innerText = background.getMangaName(background.mangas_list[my_manga.manga_name]["registered_websites"][website_name]) + " ";
+                                                let link = document.createElement("a");
+                                                link.href = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
+                                                link.innerText = "(link)";
+                                                label.appendChild(link);
+                                                container.appendChild(label);
+                                                links_list.appendChild(container);
+                                            } else {
+                                                links_list.classList.add("hidden");
+                                            }
+                                            list_line.appendChild(links_list);
+                                            results.push(list_line);
+                                        }
+                                        
+                                    }
+                                    //proceed button callback
+                                    let onAgree = async function (e) {
+                                        e.stopPropagation();
+                                        let list = document.getElementById("modal_content");
+                                        let websites = {};
+                                        let preferred = "";
+                                        var background = await browser.runtime.getBackgroundPage();
+                                
+                                        for (let i in list.children) {
+                                            if (list.children.hasOwnProperty(i)){
+                                                if (list.children[i].preferred) preferred = list.children[i].website_name;
+                                                if (list.children[i].registered) websites[list.children[i].website_name] = list.children[i].querySelector("input[name="+list.children[i].website_name+"]:checked").link;
+                                            }
+                                        }
+                                        hideModal();
+                                        await background.setPreferredWebsite(my_manga.manga_name, preferred);
+                                        if (websites != {}) {
+                                            await background.registerWebsites(my_manga.manga_name, websites);
+                                            createMangasList();
+                                        }
+                                        document.getElementById("modal_agree").removeEventListener('click', onAgree);
+                                    };
+                                    revealModal(title, results, onAgree);
+                                }
+                , false);
         //add options
         let dom_option_title = document.createElement("option");
-        dom_option_title_text = document.createTextNode("preferred website");
+        dom_option_title_text = document.createTextNode("add/remove websites");
         dom_option_title.appendChild(dom_option_title_text);
-        dom_option_title.setAttribute("disabled", "disabled");
         dom_choose_preferred_website.appendChild(dom_option_title);
 
-        for (let website_name in background.websites_list){
+        for (let website_name in background.mangas_list[name].registered_websites){
             let dom_option = document.createElement("option");
             let dom_option_text = document.createTextNode(website_name);
             dom_option.appendChild(dom_option_text);
+            dom_option.setAttribute("disabled", "disabled");
             if (website_name == mangas[name]["website_name"])
                 dom_option.selected = "selected";
             dom_choose_preferred_website.appendChild(dom_option);
@@ -415,7 +514,7 @@ initializeReadFilter();
 
 //set and show the modal
 function revealModal(title, content_elements, onAgree) {
-    let modal = document.getElementById("modal");
+    let modal = document.getElementById("modal_background");
     let modal_title = document.getElementById("modal_title");
     modal_title.innerText = title;
     let modal_content = document.getElementById("modal_content");
@@ -424,7 +523,7 @@ function revealModal(title, content_elements, onAgree) {
     }
     if (onAgree) {
         let modal_agree = document.getElementById("modal_agree");
-        modal_agree.addEventListener("click", onAgree, true);
+        modal_agree.addEventListener("click", onAgree, false);
         modal_agree.classList.remove("hidden");
         let modal_cancel = document.getElementById("modal_cancel");
         modal_cancel.classList.remove("hidden");
@@ -458,11 +557,11 @@ function hideModal() {
     let modal_dismiss = document.getElementById("modal_dismiss");
     modal_dismiss.classList.add("hidden");
     
-    let modal = document.getElementById("modal");
+    let modal = document.getElementById("modal_background");
     modal.classList.remove("show_modal");
 }
 
-document.getElementById("modal").addEventListener("click", async (e) => {
+document.getElementById("modal_background").addEventListener("click", async (e) => {
     e.stopPropagation();
     hideModal();
 });
@@ -475,6 +574,11 @@ document.getElementById("modal_cancel").addEventListener("click", async (e) => {
 document.getElementById("modal_dismiss").addEventListener("click", async (e) => {
     e.stopPropagation();
     hideModal();
+});
+
+document.getElementById("modal_window").addEventListener("click", async (e) => {
+    //just stopping propagation in the modal window to avoid modal_background destroying the modal
+    e.stopPropagation();
 });
 
 ///////////////////////////////////////

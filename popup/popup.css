@@ -393,7 +393,7 @@ LIST SECTION
 /****************************************
 MODAL DELETE
 ****************************************/
-.modal {
+.modal_background {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -406,7 +406,7 @@ MODAL DELETE
 	transition: visibility 0s linear 0.5s, opacity 0.5s, transform 0.5s;
 	z-index: 100;
 }
-.modal_window {
+#modal_window {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -496,6 +496,23 @@ MODAL DELETE
 	padding-left: 0px;
 	width: 419px;
 	max-width: 419px;
+}
+
+.website_modal_list_line {
+	font-size: 1.25em;
+	width: 447px;
+	background-color: white;
+	overflow: hidden;
+	padding: 6px 0px;
+	border-bottom: 1px solid black;
+}
+.website_modal_list_line:hover {
+	background-color: #e5e5e5;
+}
+.website_modal_list_line .name_text{
+	padding-left: 10px;
+	width: 391px;
+	max-width: 391px;
 }
 /****************************************
 MODAL DELETE END
