@@ -8,7 +8,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
-					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website and manga name,
@@ -55,7 +55,7 @@ var websites_list = {
 
 					//get search page results for manga_name
 					manga_name = manga_name.replace(/ /g, "+");		
-					var source_url = "mangahere.cc/search.php?name="+manga_name;
+					var source_url = "https://mangahere.cc/search.php?name="+manga_name;
 					try {
 						//get search page
 						source = await getSource(source_url);
@@ -84,7 +84,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
-					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website and manga name,
@@ -132,7 +132,7 @@ var websites_list = {
 
 					//get search page results for manga_name
 					manga_name = manga_name.replace(/ /g, "+");		
-					var source_url = "fanfox.net/search?title="+manga_name;
+					var source_url = "https://fanfox.net/search?title="+manga_name;
 					try {
 						//get search page
 						source = await getSource(source_url);
@@ -160,7 +160,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
-					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website and manga name,
@@ -203,7 +203,7 @@ var websites_list = {
 				},
 				searchFor: async function (manga_name){	
 					//get search page results for manga_name
-					var source_url = "mangatown.com/search.php?name="+manga_name;
+					var source_url = "https://mangatown.com/search.php?name="+manga_name;
 					try {
 						//get search page
 						source = await getSource(source_url);
@@ -231,7 +231,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
-					return this.url + url.split(this.url)[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split(this.url)[1].split("/")[0] + "/";
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website, manga name and page numbeer
@@ -456,6 +456,12 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 
 
 async function registerWebsites(manga_name, websites){
+	for (let name in websites) {
+		if (websites.hasOwnProperty(name)) {
+			let website = getWebsite(websites[name]);
+			websites[name] = website.getMangaRootURL(websites[name]);
+		}
+	}
 	mangas_list[manga_name]["registered_websites"] = websites;
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
@@ -574,7 +580,7 @@ async function getSource(source_url){
 	var data = "";
 
 	try{
-		response = await fetch("https://"+source_url);
+		response = await fetch(source_url);
 		data = await response.text();
 	} catch (error){
 		throw error;
