@@ -29,16 +29,16 @@ function readMangaChapter() {
 	} else {
 		switch (website) {
 			case "mangahere":
-				is_placeholder = document.getElementsByClassName("mangaread_error")[0] || document.getElementsByClassName("error_404")[0] ? true : false;
+				is_placeholder = document.querySelectorAll("#viewer.read_img")[0] ? false : true;
 				break;
 			case "mangafox":
-				is_placeholder = document.getElementsByClassName("reader-main") ? false : true;
+				is_placeholder = document.querySelectorAll("img.loaded.reader-main-img")[0] ? false : true;
 				break;
 			case "mangatown":
-				is_placeholder = document.getElementById("viewer") ? false : true;
+				is_placeholder = document.querySelectorAll("#viewer.read_img")[0] ? false : true;
 				break;
 			case "readmangatoday":
-				is_placeholder = document.getElementById("chapter_img") ? false : true;
+				is_placeholder = document.querySelectorAll("#chapter_img")[0] ? false : true;
 				break;
 		}
 	}
