@@ -32,3 +32,5 @@ GOALS :
 
 - support more websites :
 -- separate the websites list object from background page for easier maintainability
+
+- unify how chapter numbers are recognized
