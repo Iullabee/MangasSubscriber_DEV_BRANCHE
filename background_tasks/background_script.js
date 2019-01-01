@@ -4,10 +4,8 @@ var mangassubscriber_prefs = {};
 var websites_list = {
 	"mangahere":{name:"mangahere",
 				url:"mangahere.cc/manga/",
-				separator:"_",
 				getMangaName: function (url){
-					var reg = new RegExp(this.separator, "g");
-					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
 					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
@@ -56,8 +54,7 @@ var websites_list = {
 					var source = "truc";
 
 					//get search page results for manga_name
-					var reg = new RegExp(" ", "g");
-					manga_name = manga_name.replace(reg, "+");		
+					manga_name = manga_name.replace(/ /g, "+");		
 					var source_url = "mangahere.cc/search.php?name="+manga_name;
 					try {
 						//get search page
@@ -83,10 +80,8 @@ var websites_list = {
 	},
 	"fanfox":{name:"fanfox",
 				url:"fanfox.net/manga/",
-				separator:"_",
 				getMangaName: function (url){
-					var reg = new RegExp(this.separator, "g");
-					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
 					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
@@ -136,8 +131,7 @@ var websites_list = {
 					var source = "truc";
 
 					//get search page results for manga_name
-					var reg = new RegExp(" ", "g");
-					manga_name = manga_name.replace(reg, "+");		
+					manga_name = manga_name.replace(/ /g, "+");		
 					var source_url = "fanfox.net/search?title="+manga_name;
 					try {
 						//get search page
@@ -162,10 +156,8 @@ var websites_list = {
 	},
 	"mangatown":{name:"mangatown",
 				url:"mangatown.com/manga/",
-				separator:"_",
 				getMangaName: function (url){
-					var reg = new RegExp(this.separator, "g");
-					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
 					return this.url + url.split("/manga/")[1].split("/")[0] + "/";
@@ -235,10 +227,8 @@ var websites_list = {
 	},
 	"readmangatoday":{name:"readmangatoday",
 				url:"readmng.com/",
-				separator:"-",
 				getMangaName: function (url){
-					var reg = new RegExp(this.separator, "g");
-					return url.split(this.url)[1].split("/")[0].replace(reg, " ");
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
 					return this.url + url.split(this.url)[1].split("/")[0] + "/";
@@ -301,6 +291,9 @@ var websites_list = {
 	}
 };
 
+function cleanMangaName (name) {
+	return name.replace(/[\W_]+/g , " ");
+}
 
 //listen to content script, and set manga chapter as "read"
 browser.runtime.onMessage.addListener(readMangaChapter);

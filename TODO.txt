@@ -8,12 +8,7 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- change the way users choose websites to update on :
--- get rid of selectors in websites structure and use manga root for that website when updating
--- change background.updateMangasList to use mangas_list[name]["registered_websites"]
-
-- search function to look up mangas on all websites ? :
--- create a search function in each website object (could be used when updating in case a manga has different name on different sites?)
+- search function to look up mangas on all websites ?
 
 - add button to navigation bar (or list options ? ) to mark chapter as unread
 
