@@ -27,8 +27,12 @@ var websites_list = {
 					var chapters_list = {};
 					var source = "truc";
 
-					//get manga's home page
-					source = await getSource(manga_url);
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
 
 					//extract the chapter list
 					var parser = new DOMParser();
@@ -55,7 +59,12 @@ var websites_list = {
 					var reg = new RegExp(" ", "g");
 					manga_name = manga_name.replace(reg, "+");		
 					var source_url = "mangahere.cc/search.php?name="+manga_name;
-					source = await getSource(source_url);
+					try {
+						//get search page
+						source = await getSource(source_url);
+					} catch (error) {
+						throw error;
+					}
 					
 					//extract mangas found
 					var parser = new DOMParser();
@@ -98,8 +107,12 @@ var websites_list = {
 					var chapters_list = {};
 					var source = "truc";
 
-					//get manga's home page
-					source = await getSource(manga_url);
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
 
 					//extract the chapter list
 					var parser = new DOMParser();
@@ -126,7 +139,12 @@ var websites_list = {
 					var reg = new RegExp(" ", "g");
 					manga_name = manga_name.replace(reg, "+");		
 					var source_url = "fanfox.net/search?title="+manga_name;
-					source = await getSource(source_url);
+					try {
+						//get search page
+						source = await getSource(source_url);
+					} catch (error) {
+						throw error;
+					}
 
 					//extract mangas found
 					var parser = new DOMParser();
@@ -167,8 +185,12 @@ var websites_list = {
 					var chapters_list = {};
 					var source = "truc";
 
-					//get manga's home page
-					source = await getSource(manga_url);
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
 
 					//extract the chapter list
 					var parser = new DOMParser();
@@ -190,7 +212,12 @@ var websites_list = {
 				searchFor: async function (manga_name){	
 					//get search page results for manga_name
 					var source_url = "mangatown.com/search.php?name="+manga_name;
-					source = await getSource(source_url);
+					try {
+						//get search page
+						source = await getSource(source_url);
+					} catch (error) {
+						throw error;
+					}
 					
 					//extract mangas found
 					var parser = new DOMParser();
@@ -228,8 +255,12 @@ var websites_list = {
 					var chapters_list = {};
 					var source = "truc";
 
-					//get manga's home page
-					source = await getSource(manga_url);
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
 
 					//extract the chapter list
 					var parser = new DOMParser();
@@ -359,7 +390,9 @@ async function importMangasList(parsed_json){
 		/*for (let i in mangas_list) {
 			if (mangas_list.hasOwnProperty(i)) {
 				mangas_list[i]["registered_websites"] = {};
-				mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].reconstructMangaUrl(i);
+				let url = "";
+				for (let a in mangas_list[i]["chapters_list"]) { if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {url = mangas_list[i]["chapters_list"][a]["url"]; break;}}
+				mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
 			}
 		}*/
 		mangassubscriber_prefs = back_up["MangasSubscriberPrefs"];
@@ -550,8 +583,8 @@ async function getSource(source_url){
 	try{
 		response = await fetch("https://"+source_url);
 		data = await response.text();
-	} catch (e){
-		console.log(e);
+	} catch (error){
+		throw error;
 	}
 	
 	return data;
