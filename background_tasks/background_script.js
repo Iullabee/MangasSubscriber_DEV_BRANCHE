@@ -485,7 +485,7 @@ async function registerWebsites(manga_name, websites){
 			websites[name] = website.getMangaRootURL(websites[name]);
 		}
 	}
-	mangas_list[manga_name]["registered_websites"] = websites;
+	mangas_list[manga_name]["registered_websites"] = Object.assign({}, websites); //websites is a reference to an object created in the popup, it becomes DeadObject whent he popup is destroyed, Object.assign creates a copy to avoid that.
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
 }
