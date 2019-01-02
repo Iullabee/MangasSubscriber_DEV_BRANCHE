@@ -19,6 +19,9 @@ var websites_list = {
 						//get rid of volume and page number
 						url_tail = url_tail.split("c")[1].split("/")[0];
 					}
+					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+						url_tail = url_tail.slice(1);
+					}
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -95,7 +98,9 @@ var websites_list = {
 						//get rid of volume and page number
 						url_tail = url_tail.split("c")[1].split("/")[0];
 					}
-					
+					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+						url_tail = url_tail.slice(1);
+					}
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -171,6 +176,9 @@ var websites_list = {
 						//get rid of volume and page number
 						url_tail = url_tail.split("c")[1].split("/")[0];
 					}
+					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+						url_tail = url_tail.slice(1);
+					}
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -238,7 +246,9 @@ var websites_list = {
 					var url_tail = url.split(this.url)[1]
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
 					url_tail = url_tail.split("/")[0];
-					
+					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+						url_tail = url_tail.slice(1);
+					}
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -380,18 +390,31 @@ async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
 	if (back_up){
 		mangas_list = back_up["mangas_list"];
-		/*for (let i in mangas_list) {
+		for (let i in mangas_list) {
 			if (mangas_list.hasOwnProperty(i)) {
 				mangas_list[i]["registered_websites"] = {};
 				let url = "";
-				for (let a in mangas_list[i]["chapters_list"]) { if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {url = mangas_list[i]["chapters_list"][a]["url"]; break;}}
+				for (let a in mangas_list[i]["chapters_list"]) {
+					 if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {
+						url = mangas_list[i]["chapters_list"][a]["url"]; 
+						let new_chapter_number = a; 
+						while (new_chapter_number.charAt(0) == "0" && new_chapter_number.split(".")[0].length > 1) {
+							new_chapter_number = new_chapter_number.slice(1);
+						}
+						if (new_chapter_number != a) {
+							mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
+							delete mangas_list[i]["chapters_list"][a];
+						}
+						
+					}
+				}
 				mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
 			}
-		}*/
+		}
 		mangassubscriber_prefs = back_up["MangasSubscriberPrefs"];
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
-		//await browser.storage.local.set({"mangas_list" : mangas_list});
+		await browser.storage.local.set({"mangas_list" : mangas_list});
 		//update badge
 		setBadgeNumber();
 	}
