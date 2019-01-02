@@ -317,6 +317,7 @@ async function createMangasList() {
                                                             label.innerText = background.getMangaName(links[name]) + " ";
                                                             let link = document.createElement("a");
                                                             link.href = links[name];
+                                                            link.target = "_blank";
                                                             link.innerText = "(link)";
                                                             label.appendChild(link);
                                                             container.appendChild(label);
@@ -361,6 +362,7 @@ async function createMangasList() {
                                                 label.innerText = background.getMangaName(background.mangas_list[my_manga.manga_name]["registered_websites"][website_name]) + " ";
                                                 let link = document.createElement("a");
                                                 link.href = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
+                                                link.target = "_blank";
                                                 link.innerText = "(link)";
                                                 label.appendChild(link);
                                                 container.appendChild(label);
