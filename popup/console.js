@@ -3,7 +3,6 @@ document.getElementById("console_updating").addEventListener("click", async (e) 
 	//initializing if it's not
 	e.target.status ? "" : e.target.status = "showing";
 
-
 	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
 	let messages = document.getElementsByClassName("console_line_container");
 	if (messages.length > 0) {
@@ -14,6 +13,8 @@ document.getElementById("console_updating").addEventListener("click", async (e) 
 	}
 	e.target.status == "showing" ? e.target.firstChild.textContent = "updating (hide)" : e.target.firstChild.textContent = "updating (show)";
 });
+
+
 
 //toggle "completed" console messages display
 document.getElementById("console_completed").addEventListener("click", async (e) => {
@@ -32,6 +33,8 @@ document.getElementById("console_completed").addEventListener("click", async (e)
 	e.target.status == "showing" ? e.target.firstChild.textContent = "completed (hide)" : e.target.firstChild.textContent = "completed (show)";
 });
 
+
+
 //turn console_errors div into a copy errors details to clipboard button if console_errors_number > 0
 document.getElementById("console_errors").addEventListener("click", (e) => {
 	let details = document.getElementsByClassName("console_details");
@@ -43,6 +46,8 @@ document.getElementById("console_errors").addEventListener("click", (e) => {
 	}
 	navigator.clipboard.writeText(details_text);
 });
+
+
 
 //listen to background script, and display console messages
 browser.runtime.onMessage.addListener(updateConsole);
@@ -141,7 +146,6 @@ async function updateConsole(message) {
         
         //updating browser action when update is finished
 		if (document.getElementById("console_updating_number").value == 0) {
-            var background = await browser.runtime.getBackgroundPage();
             background.setBadgeNumber();
             await createMangasList();
 		}

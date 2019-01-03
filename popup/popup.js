@@ -1,10 +1,13 @@
+//store the background page in a global var
+var background = null;
+(async ()=>{background = await browser.runtime.getBackgroundPage();})();
+
 //display the version
 document.getElementById("version").textContent = browser.runtime.getManifest().version;
 
 //initialize follow button
 async function initializeFollowButton(){
 	var manga_name = "notAManga";
-	var background = await browser.runtime.getBackgroundPage();
 	var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
 	manga_name = background.getMangaName(url);
 	if (manga_name == "notAManga"){
@@ -23,7 +26,6 @@ initializeFollowButton();
 
 
 document.getElementById("follow").addEventListener("click", async (e) => {
-	var background = await browser.runtime.getBackgroundPage();
 	switch (document.getElementById("follow").title) {
 		case "follow this manga" :
 			var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
@@ -42,7 +44,6 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 			}
 			break;
 	}
-
 });
 
 function selectTab (id) {
