@@ -279,7 +279,10 @@ async function createMangasList() {
                             links_list.classList.add("hidden");
                             event.target.parentElement.registered = false;
                         } else {
+                            links_list.classList.remove("hidden");
+                            links_list.innerText = "     searching, please wait...";
                             let links = await background.websites_list[website_name].searchFor(my_manga.manga_name);
+                            links_list.innerText = "";
                             let already_checked = false;
                             for (let name in links) {
                                 if (links.hasOwnProperty(name)) {
@@ -304,7 +307,6 @@ async function createMangasList() {
                                     links_list.appendChild(container);
                                 }
                             }
-                            links_list.classList.remove("hidden");
                             event.target.parentElement.registered = true;
                         }
                         event.target.parentElement.getElementsByClassName("registered")[0].src = event.target.parentElement.registered ? "../icons/yes.svg" : "../icons/no.svg";

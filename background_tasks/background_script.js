@@ -53,28 +53,35 @@ var websites_list = {
 
 					return chapters_list;
 				},
-				searchFor: async function (manga_name){	
+				searchFor: async function (manga_name){
+					var results = {};
 					var source = "truc";
-
-					//get search page results for manga_name
-					manga_name = manga_name.replace(/ /g, "+");		
-					var source_url = "https://mangahere.cc/search.php?name="+manga_name;
-					try {
-						//get search page
-						source = await getSource(source_url);
-					} catch (error) {
-						throw error;
-					}
-					
-					//extract mangas found
+					var index = manga_name.split(" ").length;
 					var parser = new DOMParser();
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("a.manga_info");
-					let results = {};
-					for (let i in list) {
-						if (i>=5) break;
-						if (list.hasOwnProperty(i))
-							results[list[i].title] = list[i].href.replace("moz-extension", "https");
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name	
+						let source_url = "https://mangahere.cc/search.php?name="+manga_name.replace(/ /g, "+");
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("a.manga_info");
+						for (let i=0; i<list.length; i++) {
+							if (i>=5) break;
+							if (list.hasOwnProperty(i))
+								results[list[i].innerText] = list[i].href.replace("moz-extension", "https");
+						}
+						if (Object.keys(results).length) break; // if results are found, break and return
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+						
+						//if no results, wait before trying again with shortened name to avoid triggering mangahere's antispam answer
+						await new Promise( (resolve, reject) => {setTimeout(() => {resolve(true);}, 5500)});
 					}
 
 					return results;
@@ -132,28 +139,33 @@ var websites_list = {
 					
 					return chapters_list;
 				},
-				searchFor: async function (manga_name){	
-					var source = "truc";
-
-					//get search page results for manga_name
-					manga_name = manga_name.replace(/ /g, "+");		
-					var source_url = "https://fanfox.net/search?title="+manga_name;
-					try {
-						//get search page
-						source = await getSource(source_url);
-					} catch (error) {
-						throw error;
-					}
-
-					//extract mangas found
-					var parser = new DOMParser();
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
+				searchFor: async function (manga_name){
 					let results = {};
-					for (let i in list) {
-						if (i>=5) break;
-						if (list.hasOwnProperty(i))
-							results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+					var source = "truc";
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name
+						let source_url = "https://fanfox.net/search?title="+manga_name.replace(/ /g, "+");
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+	
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
+						for (let i in list) {
+							if (i>=5) break;
+							if (list.hasOwnProperty(i))
+								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+						}
+
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
 					}
 
 					return results;
@@ -207,27 +219,39 @@ var websites_list = {
 							}
 						}
 					}
+
 					return chapters_list;
 				},
-				searchFor: async function (manga_name){	
-					//get search page results for manga_name
-					var source_url = "https://mangatown.com/search.php?name="+manga_name;
-					try {
-						//get search page
-						source = await getSource(source_url);
-					} catch (error) {
-						throw error;
-					}
-					
-					//extract mangas found
-					var parser = new DOMParser();
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("ul.manga_pic_list li a.manga_cover");
+				searchFor: async function (manga_name){
 					let results = {};
-					for (let i in list) {
-						if (i>=5) break;
-						if (list.hasOwnProperty(i))
-							results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+					var source = "truc";
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name
+						source_url = "https://mangatown.com/search.php?name="+manga_name;
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+						
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("ul.manga_pic_list li a.manga_cover");
+						for (let i in list) {
+							if (i>=5) break;
+							if (list.hasOwnProperty(i))
+								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+						}
+						if (Object.keys(results).length) break; // if results are found, break and return
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+						
+						//if no results, wait before trying again with shortened name to avoid triggering mangatown's antispam answer
+						await new Promise( (resolve, reject) => {setTimeout(() => {resolve(true);}, 5500)});
 					}
 
 					return results;
@@ -279,21 +303,28 @@ var websites_list = {
 					}
 					return chapters_list;
 				},
-				searchFor: async function (manga_name){	
-					let response = await fetch(`https://www.readmng.com/search`, {
-						method: "POST",
-						headers: {"Content-Type": "application/x-www-form-urlencoded"},
-						body: (encodeURIComponent("query") + '=' + encodeURIComponent(manga_name)).replace(/%20/g, '+'),
-					});
-					var parser = new DOMParser();
-					var doc = parser.parseFromString(await response.text(), "text/html");
-					
-					let list = doc.querySelectorAll(".style-list .box .title h2 a");
+				searchFor: async function (manga_name){
 					let results = {};
-					for (let i in list) {
-						if (i>=5) break;
-						if (list.hasOwnProperty(i))
-							results[list[i].title] = list[i].href.replace("moz-extension", "http");
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						let response = await fetch(`https://www.readmng.com/search`, {
+							method: "POST",
+							headers: {"Content-Type": "application/x-www-form-urlencoded"},
+							body: ("query" + '=' + manga_name.replace(/ /g, "+")),
+						});
+						let doc = parser.parseFromString(await response.text(), "text/html");
+						
+						let list = doc.querySelectorAll(".style-list .box .title h2 a");
+						for (let i in list) {
+							if (i>=5) break;
+							if (list.hasOwnProperty(i))
+								results[list[i].title] = list[i].href.replace("moz-extension", "http");
+						}
+						
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
 					}
 
 					return results;

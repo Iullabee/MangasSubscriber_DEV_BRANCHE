@@ -16,9 +16,6 @@ GOALS :
 -- tags can be defined by the user
 -- popup can filter the list by tags (multi select)
 
-- modify searchFor functions to better handle different names on different websites (especially names containing non alphanumerical characters like coma or dots)
--- if it doesnt find any result in the source, ask for new srouce after cutting name in last space
-
 
 
 §§OPTIMIZATIONS
