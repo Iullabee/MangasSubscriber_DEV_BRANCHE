@@ -111,7 +111,7 @@ async function createMangasList() {
             let list_line = document.createElement("div");
             list_line.manga_name = my_manga.manga_name;
             list_line.delete = true;
-            list_line.classList.add("delete_modal_list_line");
+            list_line.classList.add("modal_list_line", "delete_modal_list_line");
             
             let dom_name_node = document.createElement("span");
             dom_name_node.classList.add("name_text");
@@ -241,11 +241,13 @@ async function createMangasList() {
             for (let website_name in background.websites_list) {
                 if (background.websites_list.hasOwnProperty(website_name)) {
                     let list_line = document.createElement("div");
-                    list_line.classList.add("website_modal_list_line");
+                    list_line.classList.add("modal_list_line", "website_modal_list_line");
                     list_line.website_name = website_name;
                     list_line.preferred = background.mangas_list[my_manga.manga_name]["website_name"] == website_name ? true : false;
                     list_line.registered = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name] ? true : false;
                     
+                    let title = document.createElement("h2");
+
                     let favorite = document.createElement("img");
                     favorite.classList.add("icons", "favorite");
                     favorite.src = list_line.preferred ? "../icons/favorite.svg" : "../icons/unfavorite.svg";
@@ -269,15 +271,16 @@ async function createMangasList() {
                         list_line.preferred = ! already_favorite;
                         favorite.src = list_line.preferred ? "../icons/favorite.svg" : "../icons/unfavorite.svg";
                     });
-                    list_line.appendChild(favorite);
+                    title.appendChild(favorite);
 
                     let toggleRegistered = async function (event) {
                         event.stopPropagation();
-                        let links_list = event.target.parentElement.getElementsByClassName("links_list")[0];
-                        if (event.target.parentElement.registered) {
+                        let website = event.target.parentElement.parentElement;
+                        let links_list = website.getElementsByClassName("links_list")[0];
+                        if (website.registered) {
                             while (links_list.firstChild) {links_list.removeChild(links_list.firstChild);}
                             links_list.classList.add("hidden");
-                            event.target.parentElement.registered = false;
+                            website.registered = false;
                         } else {
                             links_list.classList.remove("hidden");
                             links_list.innerText = "     searching, please wait...";
@@ -307,9 +310,9 @@ async function createMangasList() {
                                     links_list.appendChild(container);
                                 }
                             }
-                            event.target.parentElement.registered = true;
+                            website.registered = true;
                         }
-                        event.target.parentElement.getElementsByClassName("registered")[0].src = event.target.parentElement.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                        website.getElementsByClassName("registered")[0].src = website.registered ? "../icons/yes.svg" : "../icons/no.svg";
                     }
 
                     let name = document.createElement("span");
@@ -317,14 +320,16 @@ async function createMangasList() {
                     name.innerText = website_name;
                     //eventlistener on click to set toggle this site as registered
                     name.addEventListener("click", toggleRegistered);
-                    list_line.appendChild(name);
+                    title.appendChild(name);
 
                     let registered = document.createElement("img");
                     registered.classList.add("icons", "registered");
                     registered.src = list_line.registered ? "../icons/yes.svg" : "../icons/no.svg";
                     //eventlistener on click to set toggle this site as registered
                     registered.addEventListener("click", toggleRegistered);
-                    list_line.appendChild(registered);
+                    title.appendChild(registered);
+
+                    list_line.appendChild(title);
 
                     let links_list = document.createElement("div");
                     links_list.classList.add("links_list");
@@ -570,7 +575,7 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
             let list_line = document.createElement("div");
             list_line.manga_name = my_manga.manga_name;
             list_line.delete = true;
-            list_line.classList.add("delete_modal_list_line");
+            list_line.classList.add("modal_list_line", "delete_modal_list_line");
             
             let dom_name_node = document.createElement("span");
             dom_name_node.classList.add("list_cell", "name_text");

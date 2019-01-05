@@ -15,6 +15,7 @@
 			<div id="options_toggle" class="right tab" title="show/hide options"><img id="options_icon" class="icons large_icons" src="../icons/options.svg"></img></div>
 			<div id="console_toggle" class="right tab" title="show/hide console"><img id="console_icon" class="icons large_icons" src="../icons/console.svg"></img></div>
 			<div id="help_toggle" class="right tab" title="show/hide help"><img id="help_icon" class="icons large_icons" src="../icons/help.svg"></img></div>
+			<div id="search_toggle" class="right tab" title="show/hide search"><img id="search_icon" class="icons large_icons" src="../icons/search.svg"></img></div>
 		</div>
 	<!------- OPTIONS PANEL START ------->
 		<div id="options" class="panel">
@@ -121,6 +122,15 @@
 		</div>
 	<!------- HELP PANEL END! ------->
 
+	<!------- CONSOLE PANEL START ------->
+		<div id="search" class="panel">
+			<div class="inline field_container">
+				<input type="search" placeholder="search for..." id="search_field" title="type to search for something on all websites. [enter] to validate."><!--
+				--><div id="search_field_clear" class="inline input_button" title="clear the search bar"><img class="small_icons" src="../icons/no.svg"></img></div>
+			</div>
+		</div>
+	<!------- CONSOLE PANEL END! ------->
+
 
 
 		<div class="list_top">
@@ -155,6 +165,7 @@
 		<script src="options.js"></script>
 		<script src="console.js"></script>
 		<script src="modal.js"></script>
+		<script src="search.js"></script>
 	</body>
 
 </html>

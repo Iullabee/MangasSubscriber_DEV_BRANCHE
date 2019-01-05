@@ -55,7 +55,7 @@ function selectTab (id) {
 }
 
 document.getElementById("menu").addEventListener("click", async (e) => {
-    var tabs = {"options_toggle":"options", "console_toggle":"console", "help_toggle":"help"};
+    var tabs = {"options_toggle":"options", "console_toggle":"console", "help_toggle":"help", "search_toggle":"search"};
     let refresh_list = true;
     //if target has a panel attached
     if (tabs[e.target.parentElement.id]) {
@@ -76,7 +76,7 @@ document.getElementById("menu").addEventListener("click", async (e) => {
         //hide panels
         for (let i in tabs) document.getElementById(tabs[i]).classList.remove("visible_panel");
     }
-    if (refresh_list) setTimeout(createMangasList, 1000); //wait for the sliding animation to finish before refreshing the list to avoid stuttering
+    if (refresh_list) setTimeout(createMangasList, 500); //wait for the sliding animation to finish before refreshing the list to avoid stuttering
     
 });
 

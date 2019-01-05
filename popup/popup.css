@@ -74,6 +74,14 @@ body {
 	transform: translate(-50%, -50%);
 }
 
+h1 {
+    text-align: center;
+}
+
+h2 {
+	color: #5b00b5;
+}
+
 /****************************************
 MENU SECTION
 ****************************************/
@@ -249,14 +257,6 @@ HELP PANEL
 	width: 50%;
 }
 
-h1 {
-    text-align: center;
-}
-
-h2 {
-	color: #5b00b5;
-}
-
 .separator {
 	border-top: 5px ridge silver;
 	padding: 30px 0px 30px 20px;
@@ -280,6 +280,27 @@ ul {
 }
 /****************************************
 HELP END
+****************************************/
+
+
+
+/****************************************
+SEARCH PANEL
+****************************************/
+#search {
+	overflow-y: scroll;
+}
+
+#search .field_container {
+	width: 100%;
+	z-index: 110;
+}
+
+#search_field{
+	width: calc(100% - 27px);
+}
+/****************************************
+SEARCH END
 ****************************************/
 
 /****************************************
@@ -391,7 +412,7 @@ LIST SECTION
 }
 
 /****************************************
-MODAL DELETE
+MODAL
 ****************************************/
 .modal_background {
 	position: fixed;
@@ -478,10 +499,7 @@ MODAL DELETE
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.5s, transform 0.5s;
 }
-
-
-
-.delete_modal_list_line {
+.modal_list_line {
 	font-size: 1.25em;
 	width: 447px;
 	background-color: white;
@@ -489,8 +507,13 @@ MODAL DELETE
 	padding: 6px 0px;
 	border-bottom: 1px solid black;
 }
-.delete_modal_list_line:hover {
+.modal_list_line:hover {
 	background-color: #e5e5e5;
+}
+
+
+.delete_modal_list_line {
+	
 }
 .delete_modal_list_line .name_text{
 	padding-left: 0px;
@@ -499,23 +522,22 @@ MODAL DELETE
 }
 
 .website_modal_list_line {
-	font-size: 1.25em;
-	width: 447px;
-	background-color: white;
-	overflow: hidden;
-	padding: 6px 0px;
-	border-bottom: 1px solid black;
-}
-.website_modal_list_line:hover {
-	background-color: #e5e5e5;
 }
 .website_modal_list_line .name_text{
 	padding-left: 10px;
 	width: 391px;
 	max-width: 391px;
 }
+
+.search_modal_list_line {
+}
+.search_modal_list_line .name_text{
+	padding-left: 10px;
+	width: 100%;
+	max-width: 100%;
+}
 /****************************************
-MODAL DELETE END
+MODAL END
 ****************************************/
 
 /****************************************
