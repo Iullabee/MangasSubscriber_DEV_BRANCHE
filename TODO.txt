@@ -8,8 +8,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- search function to look up mangas on all websites ?
-
 - add button to navigation bar (or list options ? ) to mark chapter as unread
 
 - add a tags {} property to the mangas' structure in mangas_list

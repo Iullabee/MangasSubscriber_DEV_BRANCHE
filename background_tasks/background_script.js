@@ -352,7 +352,7 @@ async function readMangaChapter(message, sender) {
 					browser.storage.local.set({"mangas_list" : mangas_list});
 				} else if (! mangas_list[manga_name].chapters_list[current_chapter]) {
 					mangas_list[manga_name].chapters_list[current_chapter] = {"status" : "read", "url" : url};
-					browser.storage.local.set({"mangas_list" : mangas_list[manga_name]});
+					browser.storage.local.set({"mangas_list" : mangas_list});
 				}
 				if (sender){
 					//send navigation info to content_script
