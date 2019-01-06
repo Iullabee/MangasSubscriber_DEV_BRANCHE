@@ -12,16 +12,14 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website and manga name,
-					var url_tail = url.split("/manga/")[1]
+					var url_tail = url.split("/manga/")[1];
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					//if there is a chapter number
-					if (url_tail.split("c")[1]){
-						//get rid of volume and page number
-						url_tail = url_tail.split("c")[1].split("/")[0];
+					//if there is a chapter number and a page number
+					if (url_tail.split("c")[1] && (url_tail.split("c")[1].split("/")[1] || url_tail.charAt(url_tail.length -1) == "/")){
+						//get rid of page number
+						url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
 					}
-					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-						url_tail = url_tail.slice(1);
-					}
+					
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -98,16 +96,14 @@ var websites_list = {
 				},
 				getCurrentChapter:  function (url){
 					//get rid of website and manga name,
-					var url_tail = url.split("/manga/")[1]
+					var url_tail = url.split("/manga/")[1];
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					//if there is a chapter number
-					if (url_tail.split("c")[1]){
-						//get rid of volume and page number
-						url_tail = url_tail.split("c")[1].split("/")[0];
+					//if there is a chapter number and a page number
+					if (url_tail.split("c")[1] && (url_tail.split("c")[1].split("/")[1] || url_tail.charAt(url_tail.length -1) == "/")){
+						//get rid of page number
+						url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
 					}
-					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-						url_tail = url_tail.slice(1);
-					}
+
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -183,13 +179,10 @@ var websites_list = {
 					//get rid of website and manga name,
 					var url_tail = url.split("/manga/")[1]
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					//if there is a chapter number
-					if (url_tail.split("c")[1]){
-						//get rid of volume and page number
-						url_tail = url_tail.split("c")[1].split("/")[0];
-					}
-					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-						url_tail = url_tail.slice(1);
+					//if there is a chapter number and a page number
+					if (url_tail.split("c")[1] && (url_tail.split("c")[1].split("/")[1] || url_tail.charAt(url_tail.length -1) == "/")){
+						//get rid of page number
+						url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
 					}
 					return url_tail;
 				},
@@ -266,13 +259,19 @@ var websites_list = {
 					return "https://" + this.url + url.split(this.url)[1].split("/")[0] + "/";
 				},
 				getCurrentChapter:  function (url){
-					//get rid of website, manga name and page numbeer
+					//get rid of website and manga name,
 					var url_tail = url.split(this.url)[1]
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					url_tail = url_tail.split("/")[0];
-					while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-						url_tail = url_tail.slice(1);
+					//if there is a page number
+					if (url_tail.split("/")[1] || url_tail.charAt(url_tail.length -1) == "/"){
+						//get rid of page number
+						url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
 					}
+					//buffering chapter number with zeros and a c
+					while (url_tail.split(".")[0].length < 3) {
+						url_tail = "0" + url_tail;
+					}
+					url_tail = "c" + url_tail;
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
@@ -423,23 +422,25 @@ async function importMangasList(parsed_json){
 		mangas_list = back_up["mangas_list"];
 		for (let i in mangas_list) {
 			if (mangas_list.hasOwnProperty(i)) {
-				mangas_list[i]["registered_websites"] = {};
+				if (! mangas_list[i]["registered_websites"]) {
+					mangas_list[i]["registered_websites"] = {};
+					mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
+				}
+				
 				let url = "";
 				for (let a in mangas_list[i]["chapters_list"]) {
-					 if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {
-						url = mangas_list[i]["chapters_list"][a]["url"]; 
-						let new_chapter_number = a; 
-						while (new_chapter_number.charAt(0) == "0" && new_chapter_number.split(".")[0].length > 1) {
-							new_chapter_number = new_chapter_number.slice(1);
+					if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {
+						url = mangas_list[i]["chapters_list"][a]["url"];
+						if (url == "") delete mangas_list[i]["chapters_list"][a];
+						else {
+							let new_chapter_number = getWebsite(url).getCurrentChapter(url); 
+							if (new_chapter_number != a) {
+								mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
+								delete mangas_list[i]["chapters_list"][a];
+							}
 						}
-						if (new_chapter_number != a) {
-							mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
-							delete mangas_list[i]["chapters_list"][a];
-						}
-						
 					}
 				}
-				mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
 			}
 		}
 		mangassubscriber_prefs = back_up["MangasSubscriberPrefs"];
@@ -516,7 +517,7 @@ async function registerWebsites(manga_name, websites){
 			websites[name] = website.getMangaRootURL(websites[name]);
 		}
 	}
-	mangas_list[manga_name]["registered_websites"] = Object.assign({}, websites); //websites is a reference to an object created in the popup, it becomes DeadObject whent he popup is destroyed, Object.assign creates a copy to avoid that.
+	mangas_list[manga_name]["registered_websites"] = Object.assign({}, websites); //websites is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
 }
