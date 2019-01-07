@@ -552,7 +552,7 @@ async function followManga(url){
 	var current_chapter = website.getCurrentChapter(url);
 	
 	for (let chapter_number in chapters_list){
-		chapters_list[chapter_number]["status"] = parseFloat(chapter_number) <= parseFloat(current_chapter) ? "read" : "unread";
+		chapters_list[chapter_number]["status"] = sortAlphaNum(chapter_number, current_chapter) <= 0 ? "read" : "unread";
 	}
 	let registered_websites = {};
 	registered_websites[website.name] = manga_root_url;
