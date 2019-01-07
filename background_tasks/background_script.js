@@ -355,7 +355,7 @@ async function readMangaChapter(message, sender) {
 				}
 				if (sender){
 					//send navigation info to content_script
-					let chapters_numbers = Object.keys(mangas_list[manga_name].chapters_list).sort((a,b)=>{return parseFloat(a)-parseFloat(b);});
+					let chapters_numbers = Object.keys(mangas_list[manga_name].chapters_list).sort(sortAlphaNum);
 					let index = chapters_numbers.indexOf(current_chapter);
 					if (index >= 0) {
 						//first chapter (if current chapter isn't the first)
@@ -422,11 +422,9 @@ async function importMangasList(parsed_json){
 		mangas_list = back_up["mangas_list"];
 		for (let i in mangas_list) {
 			if (mangas_list.hasOwnProperty(i)) {
-				if (! mangas_list[i]["registered_websites"]) {
-					mangas_list[i]["registered_websites"] = {};
-					mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
+				if (! mangas_list[i]["tags"]) {
+					mangas_list[i]["tags"] = {};
 				}
-				
 				let url = "";
 				for (let a in mangas_list[i]["chapters_list"]) {
 					if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {
@@ -440,6 +438,10 @@ async function importMangasList(parsed_json){
 							}
 						}
 					}
+				}
+				if (! mangas_list[i]["registered_websites"]) {
+					mangas_list[i]["registered_websites"] = {};
+					mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
 				}
 			}
 		}
@@ -558,7 +560,8 @@ async function followManga(url){
 	manga = {"website_name":website.name,
 			"update":true,	
 			"chapters_list":chapters_list,
-			"registered_websites":registered_websites};
+			"registered_websites":registered_websites,
+			"tags":{}};
 
 	//add manga to storage
 	mangas_list[manga_name] = manga;
@@ -721,6 +724,21 @@ async function autoUpdate(){
 		updateMangasList();
 		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
 	}
+}
+
+
+function sortAlphaNum(a, b) {
+    var reA = /[^a-zA-Z]/g;
+    var reN = /[^0-9.]/g;
+    var aA = a.replace(reA, "");
+    var bA = b.replace(reA, "");
+    if (aA === bA) {
+        var aN = parseFloat(a.replace(reN, ""));
+        var bN = parseFloat(b.replace(reN, ""));
+        return aN === bN ? 0 : aN > bN ? 1 : -1;
+    } else {
+        return aA > bA ? 1 : -1;
+    }
 }
 
 

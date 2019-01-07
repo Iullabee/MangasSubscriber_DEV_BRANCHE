@@ -1,19 +1,4 @@
 
-
-function sortAlphaNum(a, b) {
-    var reA = /[^a-zA-Z]/g;
-    var reN = /[^0-9.]/g;
-    var aA = a.replace(reA, "");
-    var bA = b.replace(reA, "");
-    if (aA === bA) {
-        var aN = parseFloat(a.replace(reN, ""));
-        var bN = parseFloat(b.replace(reN, ""));
-        return aN === bN ? 0 : aN > bN ? 1 : -1;
-    } else {
-        return aA > bA ? 1 : -1;
-    }
-}
-
 async function createMangasList() {
     var mangas = await background.getMangasList();
    
@@ -38,8 +23,8 @@ async function createMangasList() {
         for (let chapter in manga.chapters_list){
             manga.chapters_list[chapter]["status"] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
         }
-        unread_chapters.sort(sortAlphaNum);
-        read_chapters.sort(sortAlphaNum).reverse();
+        unread_chapters.sort(background.sortAlphaNum);
+        read_chapters.sort(background.sortAlphaNum).reverse();
         
         //construct row element with manga & website name properties,   
         let dom_manga = document.createElement("div");
