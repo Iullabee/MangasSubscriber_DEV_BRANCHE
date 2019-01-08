@@ -525,6 +525,13 @@ async function registerWebsites(manga_name, websites){
 }
 
 
+async function registerTags(manga_name, tags){
+	mangas_list[manga_name]["tags"] = Object.assign({}, tags); //tags is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
+	browser.storage.local.set({"mangas_list" : mangas_list});
+	return;
+}
+
+
 
 
 async function getMangasList(){

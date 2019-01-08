@@ -403,6 +403,172 @@ async function createMangasList() {
         dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
         dom_manga.appendChild(dom_choose_preferred_website_cell);
 
+
+
+
+
+
+
+
+
+
+
+
+        //option to choose preferred website
+        let dom_choose_tags_cell = document.createElement("div");
+        dom_choose_tags_cell.classList.add("list_cell", "right");
+        dom_choose_tags_cell.title = "add or remove tags for this manga";
+        let dom_choose_tags = document.createElement("select");
+        dom_choose_tags.classList.add("websites_select");
+        //update preferred website when selected option changes
+        dom_choose_tags.addEventListener("change", async function(e){  
+            let my_manga = e.target.parentElement.parentElement;
+                                    
+            let title = "add tags to ["+my_manga.manga_name+"] :";
+            let results = [];
+            let every_tag = {};
+            for (let manga in background.mangas_list) {
+                if (background.mangas_list.hasOwnProperty(manga)) {
+                    for (let tag_name in background.mangas_list[manga]["tags"]) {
+                        if (background.mangas_list[manga]["tags"].hasOwnProperty(tag_name)) {
+                            every_tag[tag_name] = tag_name;
+                        }
+                    }
+                }
+            }
+            for (let tag_name in every_tag) {
+                if (every_tag.hasOwnProperty(tag_name)) {
+                    let tag = document.createElement("div");
+                    tag.classList.add("modal_list_line", "website_modal_list_line");
+                    tag.tag_name = tag_name;
+                    tag.registered = background.mangas_list[my_manga.manga_name]["tags"][tag_name] ? true : false;
+                    
+                    tag.addEventListener("click", (e)=>{
+                        e.stopPropagation();
+                        tag.registered = ! tag.registered;
+                        tag.getElementsByTagName("img")[0].src = "../icons/" + (tag.registered?"yes":"no") + ".svg";
+                    });
+
+                    let name = document.createElement("span");
+                    name.classList.add("name_text");
+                    name.innerText = tag_name;
+                    tag.appendChild(name);
+
+                    let registered = document.createElement("img");
+                    registered.classList.add("icons", "registered");
+                    registered.src = tag.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                    tag.appendChild(registered);
+                    
+                    results.push(tag);
+                }
+            }
+            let create_tag = document.createElement("input");
+            create_tag.type = "search";
+            create_tag.placeholder = "create a new tag...";
+            create_tag.title = "type you new tag here and press [enter].";
+            create_tag.addEventListener("change", (event)=>{
+                event.stopPropagation();
+                let tag_name = event.target.value;
+                let already_exist = false;
+                let list = document.getElementById("modal_content");
+                
+                for (let i in list.children) {
+                    if (list.children.hasOwnProperty(i) && list.children[i].tag_name == tag_name){
+                        already_exist = true;
+                    }
+                }
+                if (!already_exist) {
+                    let tag = document.createElement("div");
+                    tag.classList.add("modal_list_line", "website_modal_list_line");
+                    tag.tag_name = tag_name;
+                    tag.registered = true;
+                    
+                    tag.addEventListener("click", (e)=>{
+                        e.stopPropagation();
+                        tag.registered = ! tag.registered;
+                        tag.getElementsByTagName("img")[0].src = "../icons/" + (tag.registered?"yes":"no") + ".svg";
+                    });
+        
+
+                    let name = document.createElement("span");
+                    name.classList.add("name_text");
+                    name.innerText = tag_name;
+                    tag.appendChild(name);
+
+                    let registered = document.createElement("img");
+                    registered.classList.add("icons", "registered");
+                    registered.src = tag.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                    tag.appendChild(registered);
+                    
+                    list.insertBefore(tag, event.target);
+                }
+            });
+            results.push(create_tag);
+            
+            //proceed button callback
+            let onAgree = async function (e) {
+                e.stopPropagation();
+                let list = document.getElementById("modal_content");
+                let tags = {};
+        
+                for (let i in list.children) {
+                    if (list.children.hasOwnProperty(i) && list.children[i].tag_name && list.children[i].registered){
+                        tags[list.children[i].tag_name] = list.children[i].tag_name;
+                    }
+                }
+                hideModal();
+                if (tags != {}) {
+                    await background.registerTags(my_manga.manga_name, tags);
+                    createMangasList();
+                }
+                document.getElementById("modal_agree").removeEventListener('click', onAgree);
+            };
+            revealModal(title, results, onAgree);
+        });
+        //add options
+        let dom_tags_option_title = document.createElement("option");
+        dom_tags_option_title_text = document.createTextNode("add/remove tags");
+        dom_tags_option_title.appendChild(dom_tags_option_title_text);
+        dom_choose_tags.appendChild(dom_tags_option_title);
+
+        if (Object.keys(background.mangas_list[name].tags).length == 0) {
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode(" ");
+            dom_option.appendChild(dom_option_text);
+            dom_option.setAttribute("disabled", "disabled");
+            dom_option.selected = "selected";
+            dom_choose_tags.appendChild(dom_option);
+        } else {
+            for (let tag_name in background.mangas_list[name].tags){
+                let dom_option = document.createElement("option");
+                let dom_option_text = document.createTextNode(tag_name);
+                dom_option.appendChild(dom_option_text);
+                dom_option.setAttribute("disabled", "disabled");
+                dom_option.selected = "selected";
+                dom_choose_tags.appendChild(dom_option);
+            }
+        }
+        dom_choose_tags_cell.appendChild(dom_choose_tags);
+        dom_manga.appendChild(dom_choose_tags_cell);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //add manga to the unread array or to the read array
         if (unread_chapters.length)
             unread_mangas.push(dom_manga);
