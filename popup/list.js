@@ -531,6 +531,7 @@ async function createMangasList() {
         dom_tags_option_title.appendChild(dom_tags_option_title_text);
         dom_choose_tags.appendChild(dom_tags_option_title);
 
+        dom_manga.tags = "";
         if (Object.keys(background.mangas_list[name].tags).length == 0) {
             let dom_option = document.createElement("option");
             let dom_option_text = document.createTextNode(" ");
@@ -546,6 +547,7 @@ async function createMangasList() {
                 dom_option.setAttribute("disabled", "disabled");
                 dom_option.selected = "selected";
                 dom_choose_tags.appendChild(dom_option);
+                dom_manga.tags = dom_manga.tags + tag_name;
             }
         }
         dom_choose_tags_cell.appendChild(dom_choose_tags);
@@ -599,23 +601,18 @@ function filterList() {
     let filter_field = document.getElementById("filter_list").value;
     let filter_unread = document.getElementById("unread_filter").filter_out;
     let filter_already_read = document.getElementById("already_read_filter").filter_out;
+    let filter_tags = document.getElementById("tags_filter").value;
 	//filter the list
 	for (let manga in list) {
         if (list.hasOwnProperty(manga)) {
-            if (!(list[manga].manga_name.includes(filter_field))) {
-                list[manga].classList.add("hidden");
-                list[manga].classList.remove("visible");
-            } else {
-                list[manga].reading_status == "unread" ? 
-                    filter_unread ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
-                        : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
-                    : false;
-
-                list[manga].reading_status == "read" ? 
-                   filter_already_read ? (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"))
-                        : (list[manga].classList.remove("hidden"), list[manga].classList.add("visible"))
-                    : false;
-            }
+            let is_visible = 
+                !(list[manga].manga_name.includes(filter_field)) ? false
+                : list[manga].reading_status == "unread" && filter_unread ? false
+                : list[manga].reading_status == "read" && filter_already_read ? false
+                : filter_tags != "use all tags" && !(list[manga].tags.includes(filter_tags)) ? false
+            : true;
+            is_visible ? (list[manga].classList.remove("hidden"), list[manga].classList.add("visible")) 
+                : (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"));
         }
     }
 }
@@ -662,6 +659,33 @@ function initializeReadFilter() {
     document.getElementById("already_read_filter").classList.add("selected");
 } 
 initializeReadFilter();
+
+//filter on tags
+document.getElementById("tags_filter").addEventListener("change", async (e) => {    
+    filterList();
+});
+//initialize read_filter
+function initializeTagsFilter() {
+    let tags_filter = document.getElementById("tags_filter");
+    let tags = {};
+    for (let manga in background.mangas_list) {
+        if (background.mangas_list.hasOwnProperty(manga)) {
+            for (let tag in background.mangas_list[manga]["tags"]) {
+                if (background.mangas_list[manga]["tags"].hasOwnProperty(tag))
+                    tags[tag] = tag;
+            }
+        }
+    }
+    for (let tag in tags) {
+        if (tags.hasOwnProperty(tag)) {
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode(tag);
+            dom_option.appendChild(dom_option_text);
+            tags_filter.appendChild(dom_option);
+        }
+    }
+} 
+initializeTagsFilter();
 
 ///////////////////////////////////////
 
