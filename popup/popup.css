@@ -536,6 +536,15 @@ MODAL
 	width: 100%;
 	max-width: 100%;
 }
+
+.tags_modal_list_line {
+}
+.tags_modal_list_line .name_text{
+	font-size: 1.25em;
+	padding-left: 10px;
+	width: 391px;
+	max-width: 391px;
+}
 /****************************************
 MODAL END
 ****************************************/

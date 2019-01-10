@@ -479,7 +479,7 @@ async function createMangasList() {
                 }
                 if (!already_exist) {
                     let tag = document.createElement("div");
-                    tag.classList.add("modal_list_line", "website_modal_list_line");
+                    tag.classList.add("modal_list_line", "tags_modal_list_line");
                     tag.tag_name = tag_name;
                     tag.registered = true;
                     
@@ -496,7 +496,7 @@ async function createMangasList() {
                     tag.appendChild(name);
 
                     let registered = document.createElement("img");
-                    registered.classList.add("icons", "registered");
+                    registered.classList.add("icons");
                     registered.src = tag.registered ? "../icons/yes.svg" : "../icons/no.svg";
                     tag.appendChild(registered);
                     
