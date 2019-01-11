@@ -10,8 +10,6 @@ GOALS :
 
 - add button to navigation bar (or list options ? ) to mark chapter as unread
 
-- option for the user to choose how many results are returned when searching on a website
-
 
 
 §§OPTIMIZATIONS

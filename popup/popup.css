@@ -232,7 +232,7 @@ OPTIONS PANEL
 	width: 500px;
 }
 
-#auto_update_interval {
+#auto_update_interval, #search_limit_number {
 	width: 75px;
 }
 /****************************************
@@ -505,8 +505,9 @@ MODAL
 	background-color: white;
 	overflow: hidden;
 	padding: 6px 0px;
-	border-bottom: 1px solid black;
+	border-bottom: 4px ridge lightgray;
 }
+
 .modal_list_line:hover {
 	background-color: #e5e5e5;
 }
@@ -544,6 +545,9 @@ MODAL
 	padding-left: 10px;
 	width: 391px;
 	max-width: 391px;
+}
+.result_line {
+	border-bottom: 1px dashed lightgray;
 }
 /****************************************
 MODAL END

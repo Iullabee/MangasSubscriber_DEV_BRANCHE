@@ -60,6 +60,29 @@ displayAutoUpdateInterval();
 
 
 
+//change the search results limit (waits 0.5s after user stops changing it before setting it to avoid firing a ton of background stuff from scrolling the numbers)
+document.getElementById("search_limit_number").addEventListener("change", async (e) => {
+	if (delay) clearTimeout(delay);
+    delay = setTimeout(async ()=>{
+        delay = null;
+        await background.setSearchLimit(e.target.value);
+        displayAutoUpdateInterval();
+    }, 500);
+});
+
+
+
+//display the auto update interval
+async function displaySearchLimit(){
+	var search_limit_number = await background.getSearchLimit();
+    document.getElementById("search_limit_number").value = search_limit_number;
+}
+
+//initialize the auto update interval
+displaySearchLimit();
+
+
+
 //export the mangas list
 document.getElementById("export").addEventListener("click", async (e) => {
 
@@ -76,27 +99,6 @@ document.getElementById("export").addEventListener("click", async (e) => {
 });
 
 
-
-//import the mangas list
-async function importListAsText() {
-    let json = document.getElementById("import_as_text_field").value;
-    if (json != "") {
-        let parsed_json = JSON.parse(json);
-        document.getElementById("import_as_text_desc").textContent = "...";
-
-        var fail = await background.importMangasList(parsed_json);
-        if (!fail){
-            document.getElementById("import_as_text_desc").textContent = "list imported";
-            document.getElementById("import_as_text_field").value = "";
-        } else {
-            document.getElementById("import_as_text_desc").textContent = "error, try again";
-        }
-        setTimeout(()=>{document.getElementById("import_as_text_desc").textContent = "import mangas list";},3000);
-    }
-}
-
-document.getElementById("import_as_text_agree").addEventListener("click", (e)=>importListAsText(), false);
-document.getElementById("import_as_text_field").addEventListener("change", (e)=>importListAsText(), false);
 
 document.getElementById("import_as_file").addEventListener("click", async (e) => {
 	browser.runtime.openOptionsPage();

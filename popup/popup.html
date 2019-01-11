@@ -21,15 +21,9 @@
 		<div id="options" class="panel">
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
 			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
-			<div id="auto_update" title="0 to disable it"><div class="inline onehalf">automatically update the list every : </div><input type="number" id="auto_update_interval" min="0" max="24" value="0" title="0-24 hours"> hours</div>
+			<div id="auto_update" title="0 to disable it"><div class="inline onehalf">automatically update the list every : </div><input type="number" id="auto_update_interval" min="0" max="168" value="0" title="0-168 hours (= 7 days)"> hours</div>
+			<div id="search_limit" title="0 to show all results"><div class="inline onehalf">limit searches to the first : </div><input type="number" id="search_limit_number" min="0" value="0"> results</div>
 			<div id="export">export list to file</div>
-			<div id="import_as_text" class="">
-				<div id="import_as_text_desc" class="inline">import list from text</div>
-				<div id="import_as_text" class="inline left_padding field_container">
-					<input type="text" id="import_as_text_field" maxlength="100000000000" placeholder="copy/paste the content of your backup file..." title="max. 100 billions (100 000 000 000) characters!"/><!--
-					--><div id="import_as_text_agree" class="inline input_button" title="import"><img class="small_icons" src="../icons/yes.svg"></img></div>
-				</div>
-			</div>
 			<div id="import_as_file">import list from file</div>
 			<div id="export_online">export list to pastebin</div>
 			<div id="import_online">import list from pastebin</div>

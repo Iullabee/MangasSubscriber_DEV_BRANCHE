@@ -7,7 +7,7 @@ function searchWebsitesFor () {
         for (let website_name in background.websites_list) {
             if (background.websites_list.hasOwnProperty(website_name)) {
                 let list_line = document.createElement("div");
-                list_line.classList.add("search_modal_list_line");
+                list_line.classList.add("modal_list_line", "search_modal_list_line");
                 
                 let toggleHidden = async function (event) {
                     event.stopPropagation();
@@ -31,6 +31,7 @@ function searchWebsitesFor () {
                     for (let name in links) {
                         if (links.hasOwnProperty(name)) {
                             let container = document.createElement("div");
+                            container.classList.add("result_line");
                             let name_span = document.createElement("span");
                             name_span.innerText = background.getMangaName(links[name]) + " ";
                             let link = document.createElement("a");
