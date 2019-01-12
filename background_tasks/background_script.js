@@ -10,7 +10,8 @@ var websites_list = {
 				getMangaRootURL: function (url) {
 					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
-				getCurrentChapter:  function (url){
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
 					var url_tail = url.split("/manga/")[1];
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
@@ -51,7 +52,7 @@ var websites_list = {
 					else {
 						for (let i = 0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = this.getCurrentChapter(list[i].href);
+								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number)
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "https")};
 							}
@@ -60,6 +61,7 @@ var websites_list = {
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					var results = {};
 					var source = "truc";
 					var index = manga_name.split(" ").length;
@@ -101,7 +103,8 @@ var websites_list = {
 				getMangaRootURL: function (url) {
 					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
-				getCurrentChapter:  function (url){
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
 					var url_tail = url.split("/manga/")[1];
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
@@ -143,7 +146,7 @@ var websites_list = {
 					else {
 						for (let i = 0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since fanfox uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
+								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since fanfox uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
 								if (chapter_number)
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
 							}
@@ -152,6 +155,7 @@ var websites_list = {
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					let results = {};
 					var source = "truc";
 					let index = manga_name.split(" ").length;
@@ -190,7 +194,8 @@ var websites_list = {
 				getMangaRootURL: function (url) {
 					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
-				getCurrentChapter:  function (url){
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
 					var url_tail = url.split("/manga/")[1]
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
@@ -231,7 +236,7 @@ var websites_list = {
 					else {
 						for (let i = 0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = this.getCurrentChapter(list[i].href);
+								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number)
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
 							}
@@ -240,6 +245,7 @@ var websites_list = {
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					let results = {};
 					var source = "truc";
 					let index = manga_name.split(" ").length;
@@ -281,7 +287,8 @@ var websites_list = {
 				getMangaRootURL: function (url) {
 					return "https://" + this.url + url.split(this.url)[1].split("/")[0] + "/";
 				},
-				getCurrentChapter:  function (url){
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
 					var url_tail = url.split(this.url)[1]
 					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
@@ -324,7 +331,7 @@ var websites_list = {
 					else {
 						for (let i = 0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = this.getCurrentChapter(list[i].href);
+								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number)
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
 							}
@@ -333,6 +340,7 @@ var websites_list = {
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					let results = {};
 					let index = manga_name.split(" ").length;
 					var parser = new DOMParser();
@@ -402,7 +410,8 @@ async function followManga(url){
 	var manga_name = website.getMangaName(url);
 	let manga_root_url = website.getMangaRootURL(url);
 	var chapters_list = await website.getAllChapters(manga_root_url);
-	var current_chapter = website.getCurrentChapter(url);
+	var current_chapter = await website.getCurrentChapter(url);
+	let mangas_list = await getMangasList();
 	
 	for (let chapter_number in chapters_list){
 		chapters_list[chapter_number]["status"] = sortAlphaNum(chapter_number, current_chapter) <= 0 ? "read" : "unread";
@@ -434,6 +443,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 	let check_all_sites = await getCheckAllSites();
 	let to_update_list = {};
 	let update_promises = [];
+	let mangas_list = await getMangasList();
 
 	if (mangas_selection) {
 		for (var i in mangas_selection) {
@@ -489,7 +499,9 @@ async function readMangaChapter(message, sender) {
 	if  (message.target == "background" && message.url){
 		var url = message.url;
 		var manga_name = getMangaName(url);
-		var current_chapter = getCurrentChapter(url);
+		var current_chapter = await getCurrentChapter(url);
+
+		let mangas_list = await getMangasList();
 
 		if (mangas_list[manga_name]) {
 			if (current_chapter) {
@@ -529,6 +541,8 @@ async function readMangaChapter(message, sender) {
 
 //delete mangas from an array of names
 async function deleteMangas(mangas){
+	let mangas_list = await getMangasList();
+
 	//remove mangas from list
 	for (let name in mangas) {
 		delete mangas_list[mangas[name]];
@@ -598,7 +612,7 @@ async function importMangasList(parsed_json){
 						url = mangas_list[i]["chapters_list"][a]["url"];
 						if (url == "") delete mangas_list[i]["chapters_list"][a];
 						else {
-							let new_chapter_number = getWebsite(url).getCurrentChapter(url); 
+							let new_chapter_number = await getWebsite(url).getCurrentChapter(url); 
 							if (new_chapter_number != a) {
 								mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
 								delete mangas_list[i]["chapters_list"][a];
@@ -632,6 +646,8 @@ async function registerWebsites(manga_name, websites){
 			websites[name] = website.getMangaRootURL(websites[name]);
 		}
 	}
+
+	let mangas_list = await getMangasList();
 	mangas_list[manga_name]["registered_websites"] = Object.assign({}, websites); //websites is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
@@ -639,6 +655,8 @@ async function registerWebsites(manga_name, websites){
 
 
 async function registerTags(manga_name, tags){
+	let mangas_list = await getMangasList();
+
 	mangas_list[manga_name]["tags"] = Object.assign({}, tags); //tags is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
@@ -647,6 +665,8 @@ async function registerTags(manga_name, tags){
 
 
 async function setMangaUpdate(manga_name, update_state) {
+	let mangas_list = await getMangasList();
+
 	mangas_list[manga_name]["update"] = update_state;
 	browser.storage.local.set({"mangas_list":mangas_list});
 	return;
@@ -655,11 +675,15 @@ async function setMangaUpdate(manga_name, update_state) {
 
 
 async function getMangasList(){
-	return (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	if (Object.keys(mangas_list).length == 0)
+		mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
+	return mangas_list;
 }
 
 async function getMangasSubscriberPrefs(){
-	return (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	if (Object.keys(mangassubscriber_prefs).length == 0)
+		mangassubscriber_prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
+	return mangassubscriber_prefs;
 }
 
 
@@ -671,6 +695,9 @@ async function getSyncListURL() {
 
 
 async function toggleUnifiedChapterNumbers(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	let mangas_list = await getMangasList();
+
 	mangassubscriber_prefs["unified_chapter_numbers"] = ! mangassubscriber_prefs["unified_chapter_numbers"];
 	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 
@@ -682,7 +709,7 @@ async function toggleUnifiedChapterNumbers(){
 					url = mangas_list[i]["chapters_list"][a]["url"];
 					if (url == "") delete mangas_list[i]["chapters_list"][a];
 					else {
-						let new_chapter_number = getWebsite(url).getCurrentChapter(url); 
+						let new_chapter_number = await getWebsite(url).getCurrentChapter(url); 
 						if (new_chapter_number != a) {
 							mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
 							delete mangas_list[i]["chapters_list"][a];
@@ -697,30 +724,35 @@ async function toggleUnifiedChapterNumbers(){
 }
 
 async function getUnifiedChapterNumbers(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["unified_chapter_numbers"];
 }
 
 
 
 async function toggleCheckAllSites(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	mangassubscriber_prefs["check_all_sites"] = ! mangassubscriber_prefs["check_all_sites"];
 	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 	return;
 }
 
 async function getCheckAllSites(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["check_all_sites"];
 }
 
 
 
 async function toggleNavigationBar(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	mangassubscriber_prefs["navigation_bar"] = ! mangassubscriber_prefs["navigation_bar"];
 	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 	return;
 }
 
 async function getNavigationBar(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["navigation_bar"];
 }
 
@@ -728,6 +760,7 @@ async function getNavigationBar(){
 
 //sets website_name as preferred website for manga_name
 async function setPreferredWebsite(manga_name, website_name){
+	let mangas_list = await getMangasList();
 	mangas_list[manga_name]["website_name"] = website_name;
 	browser.storage.local.set({"mangas_list":mangas_list});
 	return;
@@ -738,6 +771,7 @@ async function setPreferredWebsite(manga_name, website_name){
 var isAutoUpdating;
 //set auto update interval and start the auto update
 async function setAutoUpdate(interval){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	let hours = 3600000;
 	mangassubscriber_prefs["auto_update"] = interval;
 	await browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
@@ -747,7 +781,8 @@ async function setAutoUpdate(interval){
 }
 
 //get auto update interval
-function getAutoUpdateInterval(){
+async function getAutoUpdateInterval(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["auto_update"];
 }
 
@@ -767,21 +802,16 @@ async function autoUpdate(){
 
 //set limit on search results
 async function setSearchLimit(limit){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	mangassubscriber_prefs["search_limit"] = limit;
 	await browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
 }
 
-
 //get search results limit
-function getSearchLimit(){
+async function getSearchLimit(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["search_limit"];
 }
-
-
-
-
-
-
 
 
 
@@ -808,10 +838,10 @@ function getMangaName(url){
 }
 
 //get the chapter currently being read
-function getCurrentChapter(url){
+async function getCurrentChapter(url){
 	var website = getWebsite(url);
 	if (website != "notAMangaWebsite")
-		return website.getCurrentChapter(url);
+		return await website.getCurrentChapter(url);
 	else return "";
 }
 
@@ -825,11 +855,13 @@ async function getAllChapters(manga_name, website_name){
 
 //get the chapter url
 async function reconstructChapterURL(manga_name, chapter){
+	let mangas_list = await getMangasList();
 	return mangas_list[manga_name]["chapters_list"][chapter]["url"];
 }
 
 //check if the manga is followed
-function isMangaFollowed(manga_name){
+async function isMangaFollowed(manga_name){
+	let mangas_list = await getMangasList();
 	var check = mangas_list[manga_name];
 	
 	return check ? true : false;
@@ -840,6 +872,7 @@ function isMangaFollowed(manga_name){
 //set/update the number of unread mangas on the badge
 async function setBadgeNumber() {
 	var number = 0;
+	let mangas_list = await getMangasList();
 	
 	for (let name in mangas_list){
 		let updated = false;
@@ -859,62 +892,22 @@ async function setBadgeNumber() {
 
 
 
-
-
-async function db_update(){
+async function install(){
 	let prefs = await getMangasSubscriberPrefs();
+	let list = await getMangasList();
 	let to_log = null;
 
-	if (!prefs){
-		if (browser.browserAction.setBadgeText)
-			browser.browserAction.setBadgeText({"text" : "UPD"});
-		//fetch current list
-		let mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
-		
-		for (let manga in mangas_list) {
-			if (mangas_list[manga]["website_name"] == "http://fanfox.net/manga/"){
-				mangas_list[manga]["website_name"] = "fanfox";	
-			}
-			if (mangas_list[manga]["website_name"] == "http://www.mangahere.cc/manga/"){
-				mangas_list[manga]["website_name"] = "mangahere";	
-			}
-			if (mangas_list[manga]["website_name"] == "http://www.mangatown.com/manga/"){
-				mangas_list[manga]["website_name"] = "mangatown";	
-			}
-			if (mangas_list[manga]["update"] == "true")
-			mangas_list[manga]["update"] = true;
-			if (mangas_list[manga]["update"] == "false")
-			mangas_list[manga]["update"] = false;
-			for (let index in mangas_list[manga]["chapters_list"]) {
-				mangas_list[manga]["chapters_list"][index.split("c")[1]] = {"status":mangas_list[manga]["chapters_list"][index], "url":""};
-				delete(mangas_list[manga]["chapters_list"][index]);
-			}
-		}
-		if (!mangas_list) mangas_list = {};
-		to_log = {"MangasSubscriberPrefs": {"DB_version":"1.0.0", "check_all_sites":false, "navigation_bar":true},
-					"mangas_list":mangas_list};
-	} else {
-		if (prefs["DB_version"] == "1.0.0") {
-			to_log = await browser.storage.local.get();
-			to_log["MangasSubscriberPrefs"]["DB_version"] = "1.0.1";
-			to_log["MangasSubscriberPrefs"]["auto_update"] = 0;
-			for (let manga in to_log["mangas_list"]) {
-				to_log["mangas_list"][manga.replace(/_/g, " ")] = to_log["mangas_list"][manga];
-				delete(to_log["mangas_list"][manga]);
-			}
-		}
-	}
+	if (Object.keys(prefs).length == 0)	prefs = {"DB_version":"2.0.0", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5};
+	if (Object.keys(list).length == 0) list = {};
+
+	to_log = {"MangasSubscriberPrefs": prefs, "mangas_list": list};
 	
-	if (to_log){
-		await browser.storage.local.clear();
-		await browser.storage.local.set(to_log);
-		await updateMangasList(false, true);
-		//update badge
-		setBadgeNumber();
-	}
+	await browser.storage.local.clear();
+	await browser.storage.local.set(to_log);
+		
 	return;
 }
-db_update().then(async () => {
+install().then(async () => {
 	mangas_list = await getMangasList();
 	mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	//update badge
