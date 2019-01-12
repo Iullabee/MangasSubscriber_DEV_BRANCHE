@@ -1,3 +1,19 @@
+//toggle the "unified chapter numbers" option
+document.getElementById("unified_chapter_numbers").addEventListener("click", async (e) => {
+	await background.toggleUnifiedChapterNumbers();
+	displayUnifiedChapterNumbers();
+});
+
+//display the status of the "unified chapter numbers" option
+async function displayUnifiedChapterNumbers(){
+	var check_all = await background.getUnifiedChapterNumbers();
+    document.getElementById("unified_chapter_numbers_tickbox").src = check_all ? "../icons/yes.svg" : "../icons/no.svg";
+}
+//initialize the "unified chapter numbers" option
+displayUnifiedChapterNumbers();
+
+
+
 //toggle the "check all sites when updating the list" option
 document.getElementById("check_all_sites").addEventListener("click", async (e) => {
 	await background.toggleCheckAllSites();

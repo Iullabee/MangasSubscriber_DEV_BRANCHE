@@ -4,6 +4,8 @@ GOALS :
 
 §§REFACTORING UI
 
+- actualize help panel
+
 
 
 §§FUNCTIONALITIES
