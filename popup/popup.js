@@ -2,8 +2,11 @@
 var background = null;
 (async ()=>{background = await browser.runtime.getBackgroundPage();})();
 
+
 //display the version
 document.getElementById("version").textContent = browser.runtime.getManifest().version;
+
+
 
 //initialize follow button
 async function initializeFollowButton(){
@@ -21,9 +24,7 @@ async function initializeFollowButton(){
 		document.getElementById("follow_icon").src = "../icons/follow.svg";
 	}
 }
-
 initializeFollowButton();
-
 
 document.getElementById("follow").addEventListener("click", async (e) => {
 	switch (document.getElementById("follow").title) {
@@ -38,13 +39,15 @@ document.getElementById("follow").addEventListener("click", async (e) => {
 				setTimeout(async ()=>{document.getElementById("follow").title = "already followed"; createMangasList();},3000);
 			} else {
                 document.getElementById("follow").title = "error, try again";
-                document.getElementById("follow_icon").src = "../icons/followed.svg";
+                document.getElementById("follow_icon").src = "../icons/follow.svg";
                 document.getElementById("follow_icon").style.border = "2px solid red";
 				setTimeout(()=>{document.getElementById("follow").title = "follow this manga"; document.getElementById("follow_icon").style.border = "";},3000);
 			}
 			break;
 	}
 });
+
+
 
 function selectTab (id) {
     let selected_tab = document.getElementsByClassName("selected_tab")[0];
@@ -77,6 +80,5 @@ document.getElementById("menu").addEventListener("click", async (e) => {
         for (let i in tabs) document.getElementById(tabs[i]).classList.remove("visible_panel");
     }
     if (refresh_list) setTimeout(createMangasList, 500); //wait for the sliding animation to finish before refreshing the list to avoid stuttering
-    
 });
 

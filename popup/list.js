@@ -12,7 +12,6 @@ async function createMangasList() {
         dom_mangas_list.removeChild(dom_mangas_list.firstChild);
     }
 
-    var filter_list = document.getElementById("filter_list").value;
     //for each manga, 
     for (let name in mangas){
         var manga = mangas[name];
@@ -32,7 +31,7 @@ async function createMangasList() {
         dom_manga.website_name = manga.website_name;
         dom_manga.reading_status = unread_chapters[0] ? "unread" : "read";
         dom_manga.update_state = manga["update"];
-        dom_manga.classList.add("list_line", filter_list && !(name.includes(filter_list)) ? "hidden" : "visible");
+        dom_manga.classList.add("list_line", "visible");
         //displaying the manga name 
         let dom_manga_text = document.createElement("div");
         dom_manga_text.classList.add("list_cell");
@@ -109,6 +108,9 @@ async function createMangasList() {
             let my_manga = e.target.parentElement.parentElement;
             let delete_modal_list = [];
             
+            //creating modal title
+            let title = "you're about to delete the following mangas :";
+            //creating modal body
             let list_line = document.createElement("div");
             list_line.manga_name = my_manga.manga_name;
             list_line.delete = true;
@@ -132,8 +134,7 @@ async function createMangasList() {
                 list_line.getElementsByTagName("img")[0].src = "../icons/" + (list_line.delete?"yes":"no") + ".svg";
             });
             delete_modal_list.push(list_line);
-
-            let title = "you're about to delete the following mangas :";
+            //creating modal confirmation
             let onAgree = async function (e) {
                 e.stopPropagation();
                 let list = document.getElementById("modal_content");
@@ -227,17 +228,37 @@ async function createMangasList() {
         dom_update_button_td.appendChild(dom_update_button);
         dom_manga.appendChild(dom_update_button_td);
 
-        //option to choose preferred website
-        let dom_choose_preferred_website_cell = document.createElement("div");
-        dom_choose_preferred_website_cell.classList.add("list_cell", "right");
-        dom_choose_preferred_website_cell.title = "choose the preferred website on which to update/read this manga";
-        let dom_choose_preferred_website = document.createElement("select");
-        dom_choose_preferred_website.classList.add("websites_select");
-        //update preferred website when selected option changes
-        dom_choose_preferred_website.addEventListener("change", async function(e){  
+        //option to register websites on which to follow this manga
+        let dom_register_website_cell = document.createElement("div");
+        dom_register_website_cell.classList.add("list_cell", "right");
+        dom_register_website_cell.title = "choose the websites on which to update/read this manga";
+        let dom_register_website = document.createElement("select");
+        dom_register_website.classList.add("websites_select");
+        //add registered websites list as options to the select
+        let dom_option_title = document.createElement("option");
+        dom_option_title_text = document.createTextNode("add/remove websites");
+        dom_option_title.appendChild(dom_option_title_text);
+        dom_register_website.appendChild(dom_option_title);
+
+        for (let website_name in background.mangas_list[name].registered_websites){
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode(website_name);
+            dom_option.appendChild(dom_option_text);
+            dom_option.setAttribute("disabled", "disabled");
+            if (website_name == mangas[name]["website_name"])
+                dom_option.selected = "selected";
+                dom_register_website.appendChild(dom_option);
+        }
+        dom_register_website_cell.appendChild(dom_register_website);
+        dom_manga.appendChild(dom_register_website_cell);
+
+        //update registered websites when selected option changes
+        dom_register_website.addEventListener("change", async function(e){  
             let my_manga = e.target.parentElement.parentElement;
-                                    
+
+            //creating modal title
             let title = "follow ["+my_manga.manga_name+"] on :";
+            //creating modal body
             let results = [];
             for (let website_name in background.websites_list) {
                 if (background.websites_list.hasOwnProperty(website_name)) {
@@ -362,7 +383,7 @@ async function createMangasList() {
                     results.push(list_line);
                 }
             }
-            //proceed button callback
+            //creating modal confirmation
             let onAgree = async function (e) {
                 e.stopPropagation();
                 let list = document.getElementById("modal_content");
@@ -385,46 +406,50 @@ async function createMangasList() {
             };
             revealModal(title, results, onAgree);
         });
-        //add options
-        let dom_option_title = document.createElement("option");
-        dom_option_title_text = document.createTextNode("add/remove websites");
-        dom_option_title.appendChild(dom_option_title_text);
-        dom_choose_preferred_website.appendChild(dom_option_title);
 
-        for (let website_name in background.mangas_list[name].registered_websites){
-            let dom_option = document.createElement("option");
-            let dom_option_text = document.createTextNode(website_name);
-            dom_option.appendChild(dom_option_text);
-            dom_option.setAttribute("disabled", "disabled");
-            if (website_name == mangas[name]["website_name"])
-                dom_option.selected = "selected";
-            dom_choose_preferred_website.appendChild(dom_option);
-        }
-        dom_choose_preferred_website_cell.appendChild(dom_choose_preferred_website);
-        dom_manga.appendChild(dom_choose_preferred_website_cell);
-
-
-
-
-
-
-
-
-
-
-
-
-        //option to choose preferred website
+        //option to eassign tags to the manga
         let dom_choose_tags_cell = document.createElement("div");
         dom_choose_tags_cell.classList.add("list_cell", "right");
         dom_choose_tags_cell.title = "add or remove tags for this manga";
         let dom_choose_tags = document.createElement("select");
         dom_choose_tags.classList.add("websites_select");
-        //update preferred website when selected option changes
+        //add tags list as options for the select
+        let dom_tags_option_title = document.createElement("option");
+        dom_tags_option_title_text = document.createTextNode("add/remove tags");
+        dom_tags_option_title.appendChild(dom_tags_option_title_text);
+        dom_choose_tags.appendChild(dom_tags_option_title);
+
+        dom_manga.tags = "";
+        if (Object.keys(background.mangas_list[name].tags).length == 0) {
+            //if no tags are found, create dummy option to say so
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode("no tag found");
+            dom_option.appendChild(dom_option_text);
+            dom_option.setAttribute("disabled", "disabled");
+            dom_option.selected = "selected";
+            dom_choose_tags.appendChild(dom_option);
+        } else {
+            //otherwise, create an option for each tag
+            for (let tag_name in background.mangas_list[name].tags){
+                let dom_option = document.createElement("option");
+                let dom_option_text = document.createTextNode(tag_name);
+                dom_option.appendChild(dom_option_text);
+                dom_option.setAttribute("disabled", "disabled");
+                dom_option.selected = "selected";
+                dom_choose_tags.appendChild(dom_option);
+                dom_manga.tags = dom_manga.tags + tag_name; //add the tag name to the tags property of the manga dom element to filter on
+            }
+        }
+        dom_choose_tags_cell.appendChild(dom_choose_tags);
+        dom_manga.appendChild(dom_choose_tags_cell);
+
+        //update tags list when selected option changes
         dom_choose_tags.addEventListener("change", async function(e){  
             let my_manga = e.target.parentElement.parentElement;
-                                    
+
+            //creating modal title
             let title = "add tags to ["+my_manga.manga_name+"] :";
+            //creating modal body
             let results = [];
             let every_tag = {};
             for (let manga in background.mangas_list) {
@@ -488,7 +513,6 @@ async function createMangasList() {
                         tag.registered = ! tag.registered;
                         tag.getElementsByTagName("img")[0].src = "../icons/" + (tag.registered?"yes":"no") + ".svg";
                     });
-        
 
                     let name = document.createElement("span");
                     name.classList.add("name_text");
@@ -504,8 +528,7 @@ async function createMangasList() {
                 }
             });
             results.push(create_tag);
-            
-            //proceed button callback
+            //creating modal confirmation
             let onAgree = async function (e) {
                 e.stopPropagation();
                 let list = document.getElementById("modal_content");
@@ -525,61 +548,18 @@ async function createMangasList() {
             };
             revealModal(title, results, onAgree);
         });
-        //add options
-        let dom_tags_option_title = document.createElement("option");
-        dom_tags_option_title_text = document.createTextNode("add/remove tags");
-        dom_tags_option_title.appendChild(dom_tags_option_title_text);
-        dom_choose_tags.appendChild(dom_tags_option_title);
-
-        dom_manga.tags = "";
-        if (Object.keys(background.mangas_list[name].tags).length == 0) {
-            let dom_option = document.createElement("option");
-            let dom_option_text = document.createTextNode(" ");
-            dom_option.appendChild(dom_option_text);
-            dom_option.setAttribute("disabled", "disabled");
-            dom_option.selected = "selected";
-            dom_choose_tags.appendChild(dom_option);
-        } else {
-            for (let tag_name in background.mangas_list[name].tags){
-                let dom_option = document.createElement("option");
-                let dom_option_text = document.createTextNode(tag_name);
-                dom_option.appendChild(dom_option_text);
-                dom_option.setAttribute("disabled", "disabled");
-                dom_option.selected = "selected";
-                dom_choose_tags.appendChild(dom_option);
-                dom_manga.tags = dom_manga.tags + tag_name;
-            }
-        }
-        dom_choose_tags_cell.appendChild(dom_choose_tags);
-        dom_manga.appendChild(dom_choose_tags_cell);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         //add manga to the unread array or to the read array
         if (unread_chapters.length)
             unread_mangas.push(dom_manga);
         else read_mangas.push(dom_manga);
     }
-    
+
+    //add the unread mangas to the list
     for (let dom_manga in unread_mangas){
         dom_mangas_list.appendChild(unread_mangas[dom_manga]);
     }
+    //then add the read mangas to the list
     for (let dom_manga in read_mangas){
         dom_mangas_list.appendChild(read_mangas[dom_manga]);
     }
@@ -594,6 +574,8 @@ async function createMangasList() {
 }
 
 createMangasList();
+
+
 
 //filter the list
 function filterList() {
@@ -632,6 +614,8 @@ document.getElementById("filter_clear").addEventListener("click", async (e) => {
     filter.dispatchEvent(event);
 });
 
+
+
 //filter unread mangas
 document.getElementById("unread_filter").addEventListener("click", async (e) => {
     e.target.filter_out = ! e.target.filter_out;
@@ -646,6 +630,8 @@ function initializeUnreadFilter() {
 } 
 initializeUnreadFilter();
 
+
+
 //filter read mangas
 document.getElementById("already_read_filter").addEventListener("click", async (e) => {
     e.target.filter_out = ! e.target.filter_out;
@@ -659,6 +645,8 @@ function initializeReadFilter() {
     document.getElementById("already_read_filter").classList.add("selected");
 } 
 initializeReadFilter();
+
+
 
 //filter on tags
 document.getElementById("tags_filter").addEventListener("change", async (e) => {    
@@ -704,6 +692,7 @@ document.getElementById("list_read_icon").addEventListener("click", async (e) =>
 });
 
 
+
 //update all visible mangas
 document.getElementById("list_update_icon").addEventListener("click", async (e) => {
     let visible_list = document.getElementById("list").getElementsByClassName("visible");
@@ -717,6 +706,8 @@ document.getElementById("list_update_icon").addEventListener("click", async (e) 
     await background.updateMangasList(update_list, false);
     refreshList();
 });
+
+
 
 //mark all chapters as "read" for all visible mangas
 document.getElementById("list_read_all_icon").addEventListener("click", async (e) => {
@@ -741,6 +732,8 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
     });
 });
 
+
+
 //toggle "update with the rest of the list" option for all visible mangas
 document.getElementById("list_update_toggle_icon").addEventListener("click", async (e) => {
     let visible_list = document.getElementById("list").getElementsByClassName("visible");
@@ -754,11 +747,16 @@ document.getElementById("list_update_toggle_icon").addEventListener("click", asy
     refreshList();
 });
 
+
+
 //delete all visible mangas
 document.getElementById("list_delete_icon").addEventListener("click", async (e) => {
     let visible_list = document.getElementById("list").getElementsByClassName("visible");
     let delete_modal_list = [];
 
+    //creating modal title
+    let title = "you're about to delete the following mangas :";
+    //creating modal body
     for (let manga in visible_list) {
         if (visible_list.hasOwnProperty(manga)) {
             let my_manga = visible_list[manga];
@@ -789,8 +787,7 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
             delete_modal_list.push(list_line);
         }
     }
-    
-    let title = "you're about to delete the following mangas :";
+    //creating modal confirm
     let onAgree = async function (e) {
         e.stopPropagation();
         let list = document.getElementById("modal_content");
@@ -809,6 +806,8 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
     
     revealModal(title, delete_modal_list, onAgree);
 });
+
+
 
 //refresh list
 function refreshList() {

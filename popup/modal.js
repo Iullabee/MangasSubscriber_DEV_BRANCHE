@@ -1,4 +1,3 @@
-
 //set and show the modal
 function revealModal(title, content_elements, onAgree) {
     let modal = document.getElementById("modal_background");

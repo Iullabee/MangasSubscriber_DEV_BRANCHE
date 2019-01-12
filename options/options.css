@@ -21,7 +21,6 @@
 .cell {
     display: table-cell;
     vertical-align: middle;
-    /*text-align: center;*/
     padding: 0px 15px;
 }
 

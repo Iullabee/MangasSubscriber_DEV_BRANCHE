@@ -4,18 +4,15 @@ document.getElementById("check_all_sites").addEventListener("click", async (e) =
 	displayCheckAllSites();
 });
 
-
-
 //display the status of the "check all sites when updating the list" option
 async function displayCheckAllSites(){
 	var check_all = await background.getCheckAllSites();
     document.getElementById("check_all_sites_tickbox").src = check_all ? "../icons/yes.svg" : "../icons/no.svg";
 }
-
-
-
 //initialize the "check all sites when updating the list" option
 displayCheckAllSites();
+
+
 
 //toggle the navigation bar option
 document.getElementById("navigation_bar_tickbox").addEventListener("click", async (e) => {
@@ -23,14 +20,11 @@ document.getElementById("navigation_bar_tickbox").addEventListener("click", asyn
 	displayNavigationBar();
 });
 
-
-
 //display the status of the navigation bar option
 async function displayNavigationBar(){
 	var nav_bar = await background.getNavigationBar();
     document.getElementById("navigation_bar_tickbox").src = nav_bar ? "../icons/yes.svg" :"../icons/no.svg";
 }
-
 //initialize the navigation bar option
 displayNavigationBar();
 
@@ -47,14 +41,11 @@ document.getElementById("auto_update_interval").addEventListener("change", async
     }, 500);
 });
 
-
-
 //display the auto update interval
 async function displayAutoUpdateInterval(){
 	var auto_update_interval = await background.getAutoUpdateInterval();
     document.getElementById("auto_update_interval").value = auto_update_interval;
 }
-
 //initialize the auto update interval
 displayAutoUpdateInterval();
 
@@ -70,20 +61,17 @@ document.getElementById("search_limit_number").addEventListener("change", async 
     }, 500);
 });
 
-
-
-//display the auto update interval
+//display the search results limit
 async function displaySearchLimit(){
 	var search_limit_number = await background.getSearchLimit();
     document.getElementById("search_limit_number").value = search_limit_number;
 }
-
-//initialize the auto update interval
+//initialize the search results limit
 displaySearchLimit();
 
 
 
-//export the mangas list
+//export the mangas list as a local file
 document.getElementById("export").addEventListener("click", async (e) => {
 
 	var export_text = document.getElementById("export");
@@ -100,6 +88,7 @@ document.getElementById("export").addEventListener("click", async (e) => {
 
 
 
+//import the mangas list from a local file
 document.getElementById("import_as_file").addEventListener("click", async (e) => {
 	browser.runtime.openOptionsPage();
 });

@@ -375,12 +375,12 @@ LIST SECTION
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: calc(783px - 3 * 10px - 50px - 80px - 28px - 5px);
-	width: calc(783px - 3 * 10px - 50px - 80px - 28px - 5px);
+	max-width: calc(783px - 3 * 10px - 50px - 100px - 28px - 5px);
+	width: calc(783px - 3 * 10px - 50px - 100px - 28px - 5px);
 }
 
 .chapters_select {
-	width: 80px;
+	width: 100px;
 }
 
 .websites_select {

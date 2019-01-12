@@ -21,7 +21,6 @@ document.getElementById("console_completed").addEventListener("click", async (e)
 	//initializing if it's not
 	e.target.status ? "" : e.target.status = "showing";
 
-
 	e.target.status == "hiding" ? e.target.status = "showing" :	e.target.status = "hiding";
 	let messages = document.getElementsByClassName("console_line_container");
 	if (messages.length > 0) {

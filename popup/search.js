@@ -2,7 +2,9 @@ function searchWebsitesFor () {
     if (document.getElementById("search_field").value == "") hideModal();
     else {
         let search = document.getElementById("search_field").value;
+        //create modal title
         let title = "looking for ["+search+"] :";
+        //create modal body
         let results = [];
         for (let website_name in background.websites_list) {
             if (background.websites_list.hasOwnProperty(website_name)) {
@@ -49,9 +51,12 @@ function searchWebsitesFor () {
                 results.push(list_line);
             }
         }
+        //no modal agree
         revealModal(title, results);
-        }
+    }
 }
+
+
 
 //search the websites when user types something
 document.getElementById("search_field").addEventListener("change", async (e) => {

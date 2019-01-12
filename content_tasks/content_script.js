@@ -97,7 +97,6 @@ function createNavigation(message) {
 		}
 		document.body.appendChild(nav_bar);
 	
-
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
 		var config = { attributes: false, childList: true, subtree: false };
 		var observer = new MutationObserver(readMangaChapter);

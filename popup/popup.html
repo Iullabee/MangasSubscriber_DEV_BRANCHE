@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-
+	<!------- MENU START ------->
 		<div id="menu">
 			<div class="inline extension_name">MangasSubscriber</div>
 			<div id="version" class="inline extension_version"></div>
@@ -17,6 +17,8 @@
 			<div id="help_toggle" class="right tab" title="show/hide help"><img id="help_icon" class="icons large_icons" src="../icons/help.svg"></img></div>
 			<div id="search_toggle" class="right tab" title="show/hide search"><img id="search_icon" class="icons large_icons" src="../icons/search.svg"></img></div>
 		</div>
+	<!------- MENU END ------->
+
 	<!------- OPTIONS PANEL START ------->
 		<div id="options" class="panel">
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
@@ -64,7 +66,6 @@
 						<li><img class="inline" src="../help/images/help_name&version.png"> version of the extension. close any opened panel.</li>
 					</ul>
 				</div>
-				
 				<div class="section">
 					<h3>The second part filters the list and apply actions to all visible mangas</h3>
 					<ul>
@@ -75,7 +76,6 @@
 						<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background"><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span>, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
 					</ul>
 				</div>
-				
 				<div class="section">
 					<h3>The third (and last) part is the list</h3>
 					<ul>
@@ -125,8 +125,7 @@
 		</div>
 	<!------- CONSOLE PANEL END! ------->
 
-
-
+	<!------- LIST TOP START ------->
 		<div class="list_top">
 			<div class="inline field_container">
 				<input type="search" placeholder="filter list..." id="filter_list" title="type to filter the list" autofocus><!--
@@ -143,6 +142,9 @@
 			<img id="list_update_toggle_icon" class="inline icons" src="../icons/update_true.svg" title="toggle updates on/off"></img>
 			<img id="list_delete_icon" class="inline icons" src="../icons/trash.svg" title="delete from your list"></img></div>
 		</div>
+	<!------- LIST TOP END ------->
+	
+	<!------- LIST BODY START ------->
 		<div id="modal_background" class="modal_background">
 			<div id="modal_window">
 				<div id="modal_title"></div>
@@ -153,14 +155,15 @@
 			</div>
 		</div>
 		<div id="list_container"><div id="list"></div></div>
-		
-
+	<!------- LIST BODY END ------->
+	
+	<!------- SCRIPTS IMPORT START ------->
 		<script src="popup.js"></script>
 		<script src="list.js"></script>
 		<script src="options.js"></script>
 		<script src="console.js"></script>
 		<script src="modal.js"></script>
 		<script src="search.js"></script>
+	<!------- SCRIPTS IMPORT END ------->
 	</body>
-
 </html>
