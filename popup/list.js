@@ -22,8 +22,9 @@ async function createMangasList() {
         for (let chapter in manga.chapters_list){
             manga.chapters_list[chapter]["status"] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
         }
-        unread_chapters.sort(background.sortAlphaNum);
-        read_chapters.sort(background.sortAlphaNum).reverse();
+		await background.getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
+        unread_chapters.sort(background.customSort);
+        read_chapters.sort(background.customSort).reverse();
         
         //construct row element with manga & website name properties,   
         let dom_manga = document.createElement("div");

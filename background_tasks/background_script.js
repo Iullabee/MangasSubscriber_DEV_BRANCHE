@@ -386,6 +386,16 @@ function sortAlphaNum(a, b) {
     }
 }
 
+function sortNum (a, b) {
+	a == "" ? a = Number.MIN_SAFE_INTEGER : false;
+	b == "" ? b = Number.MIN_SAFE_INTEGER : false;
+	return parseFloat(a) === parseFloat(b) ? 0 : parseFloat(a) > parseFloat(b) ? 1 : -1;
+}
+
+function customSort(a, b) {
+	return mangassubscriber_prefs["unified_chapter_numbers"] ? sortNum(a, b) : sortAlphaNum(a, b);
+}
+
 async function getSource(source_url){
 	var response = "";
 	var data = "";
@@ -412,9 +422,10 @@ async function followManga(url){
 	var chapters_list = await website.getAllChapters(manga_root_url);
 	var current_chapter = await website.getCurrentChapter(url);
 	let mangas_list = await getMangasList();
+	await getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
 	
 	for (let chapter_number in chapters_list){
-		chapters_list[chapter_number]["status"] = sortAlphaNum(chapter_number, current_chapter) <= 0 ? "read" : "unread";
+		chapters_list[chapter_number]["status"] = customSort(chapter_number, current_chapter) <= 0 ? "read" : "unread";
 	}
 	let registered_websites = {};
 	registered_websites[website.name] = manga_root_url;
@@ -502,6 +513,7 @@ async function readMangaChapter(message, sender) {
 		var current_chapter = await getCurrentChapter(url);
 
 		let mangas_list = await getMangasList();
+		await getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
 
 		if (mangas_list[manga_name]) {
 			if (current_chapter) {
@@ -514,7 +526,7 @@ async function readMangaChapter(message, sender) {
 				}
 				if (sender){
 					//send navigation info to content_script
-					let chapters_numbers = Object.keys(mangas_list[manga_name].chapters_list).sort(sortAlphaNum);
+					let chapters_numbers = Object.keys(mangas_list[manga_name].chapters_list).sort(customSort);
 					let index = chapters_numbers.indexOf(current_chapter);
 					if (index >= 0) {
 						//first chapter (if current chapter isn't the first)
@@ -862,8 +874,8 @@ async function install(){
 	let list = await getMangasList();
 	let to_log = null;
 
-	if (Object.keys(prefs).length == 0)	prefs = {"DB_version":"2.0.0", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5};
-	if (Object.keys(list).length == 0) list = {};
+	if (!prefs || Object.keys(prefs).length == 0)	prefs = {"DB_version":"2.0.0", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5};
+	if (!list || Object.keys(list).length == 0) list = {};
 
 	to_log = {"MangasSubscriberPrefs": prefs, "mangas_list": list};
 	
