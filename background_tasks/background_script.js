@@ -874,8 +874,8 @@ async function install(){
 	let list = await getMangasList();
 	let to_log = null;
 
-	if (!prefs || Object.keys(prefs).length == 0)	prefs = {"DB_version":"2.0.0", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5};
-	if (!list || Object.keys(list).length == 0) list = {};
+	if (!prefs || Object.keys(prefs).length == 0) {prefs = {"DB_version":"2.0.0", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5}; mangassubscriber_prefs = prefs;}
+	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
 	to_log = {"MangasSubscriberPrefs": prefs, "mangas_list": list};
 	
