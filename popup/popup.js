@@ -71,6 +71,8 @@ document.getElementById("menu").addEventListener("click", async (e) => {
         if (!visible) {
             document.getElementById(tabs[e.target.parentElement.id]).classList.add("visible_panel");
             refresh_list = false; // no need to refresh the list if we're showing a panel on top
+            //if search panel, focus search field
+            tabs[e.target.parentElement.id] == "search" ? document.getElementById("search_field").focus() : false;
         }
     }
     else {

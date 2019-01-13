@@ -597,6 +597,7 @@ function filterList() {
                 : (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"));
         }
     }
+    document.getElementById("filter_list").focus();
 }
 //filter the list when user types something
 document.getElementById("filter_list").addEventListener("keyup", async (e) => {
