@@ -593,44 +593,9 @@ async function exportMangasListOnline(){
 //import mangas list from json
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	if (back_up){
-		if (! back_up["MangasSubscriberPrefs"]["search_limit"]) {
-		back_up["MangasSubscriberPrefs"]["search_limit"] = 5;
-		}
-		if (! back_up["MangasSubscriberPrefs"]["unified_chapter_numbers"]) {
-			back_up["MangasSubscriberPrefs"]["unified_chapter_numbers"] = true;
-		}
-		mangas_list = back_up["mangas_list"];
-		for (let i in mangas_list) {
-			if (mangas_list.hasOwnProperty(i)) {
-				if (! mangas_list[i]["tags"]) {
-					mangas_list[i]["tags"] = {};
-				}
-				let url = "";
-				for (let a in mangas_list[i]["chapters_list"]) {
-					if (mangas_list[i]["chapters_list"].hasOwnProperty(a)) {
-						url = mangas_list[i]["chapters_list"][a]["url"];
-						if (url == "") delete mangas_list[i]["chapters_list"][a];
-						else {
-							let new_chapter_number = await getWebsite(url).getCurrentChapter(url); 
-							if (new_chapter_number != a) {
-								mangas_list[i]["chapters_list"][new_chapter_number] = mangas_list[i]["chapters_list"][a];
-								delete mangas_list[i]["chapters_list"][a];
-							}
-						}
-					}
-				}
-				if (! mangas_list[i]["registered_websites"]) {
-					mangas_list[i]["registered_websites"] = {};
-					mangas_list[i]["registered_websites"][mangas_list[i]["website_name"]] = websites_list[mangas_list[i]["website_name"]].getMangaRootURL(url);
-				}
-			}
-		}
-		mangassubscriber_prefs = back_up["MangasSubscriberPrefs"];
+	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.0"){
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
-		await browser.storage.local.set({"mangas_list" : mangas_list});
-		await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
 		//update badge
 		setBadgeNumber();
 	}
