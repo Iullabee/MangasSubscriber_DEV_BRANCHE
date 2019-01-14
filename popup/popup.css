@@ -53,12 +53,10 @@ body {
 	line-height: 27px;
 	vertical-align: middle;
 }
-
 .field_container input {
 	height: 27px;
 	float : left;
 }
-
 .field_container .input_button {
 	position: relative;
 	width: 27px;
@@ -66,7 +64,6 @@ body {
 	border: 1px solid black;
 	float : left;
 }
-
 .input_button > img {
 	position: absolute;
 	top: 50%;
@@ -103,11 +100,11 @@ MENU SECTION
     padding: 10px 0px 0px 5px;
 }
 
-.tab{
+.tab {
     padding: 5px;
 }
 
-.tab:hover{
+.tab:hover {
   background-color: #EEEEEE;
 }
 
@@ -153,12 +150,11 @@ CONSOLE PANEL
 	max-height: 516px;
 	overflow-y: scroll;
 }
-.console_from {
-	width: 150px;
-}
 
-.console_status {
-	width: 115px;
+.console_line {
+	border-top: 1px solid gray;
+	padding-top: 2px;
+	margin-top: 2px;
 }
 .console_name_text {
 	display: inline-block;
@@ -170,10 +166,11 @@ CONSOLE PANEL
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.console_line {
-	border-top: 1px solid gray;
-	padding-top: 2px;
-	margin-top: 2px;
+.console_from {
+	width: 150px;
+}
+.console_status {
+	width: 115px;
 }
 
 .console_details {
@@ -182,6 +179,7 @@ CONSOLE PANEL
 	vertical-align: middle;
 	border-left: 1px solid red;
 }
+
 .button {
 	padding: 4px;
 	font-size: 1.25em;
@@ -218,7 +216,7 @@ OPTIONS PANEL
     min-height: 30px;
 }
 
-#options > div:hover{
+#options > div:hover {
 	background-color: #e5e5e5;
 }
 
@@ -256,6 +254,13 @@ HELP PANEL
 .small_image {
 	width: 50%;
 }
+.zoom img {
+    transition: width 1s, height 1s;
+}
+.zoom img:hover {
+    width: 75%;
+    height: 75%;
+}
 
 .separator {
 	border-top: 5px ridge silver;
@@ -264,15 +269,6 @@ HELP PANEL
 
 ul {
     padding-left: 30px;
-}
-
-.zoom img {
-    transition: width 1s, height 1s;
-}
-
-.zoom img:hover {
-    width: 75%;
-    height: 75%;
 }
 
 .tooltip {
@@ -290,13 +286,12 @@ SEARCH PANEL
 #search {
 	overflow-y: scroll;
 }
-
 #search .field_container {
 	width: 100%;
 	z-index: 110;
 }
 
-#search_field{
+#search_field {
 	width: calc(100% - 27px);
 }
 /****************************************
@@ -334,14 +329,13 @@ LIST SECTION
 	border: 2px solid black;
 }
 
-#list_container{
+#list_container {
     margin-top: 134px;
     max-height: 494px;
     height: 494px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
-
 #list {
     width: 783px;
     max-width: 783px;
@@ -369,7 +363,7 @@ LIST SECTION
 	vertical-align: middle;
 }
 
-.name_text{
+.name_text {
 	display: inline-block;
 	position: relative;
 	white-space: nowrap;
@@ -439,7 +433,7 @@ MODAL
 	max-width: 500px;
 }
 
-#modal_title{
+#modal_title {
 	width: 100%;
 	font-size: 1.75em;
 	text-align: center;
@@ -467,6 +461,7 @@ MODAL
 #modal_agree:hover {
 	background-color: darkgray;
 }
+
 #modal_cancel {
 	float: right;
 	padding: 5px;
@@ -479,6 +474,7 @@ MODAL
 #modal_cancel:hover {
 	background-color: darkgray;
 }
+
 #modal_dismiss {
 	position: relative;
 	left: 50%;
@@ -493,12 +489,14 @@ MODAL
 #modal_dismiss:hover {
 	background-color: darkgray;
 }
+
 .show_modal {
 	opacity: 1;
 	visibility: visible;
 	transform: scale(1.0);
 	transition: visibility 0s linear 0s, opacity 0.5s, transform 0.5s;
 }
+
 .modal_list_line {
 	font-size: 1.25em;
 	width: 447px;
@@ -507,16 +505,14 @@ MODAL
 	padding: 6px 0px;
 	border-bottom: 4px ridge lightgray;
 }
-
 .modal_list_line:hover {
 	background-color: #e5e5e5;
 }
 
 
 .delete_modal_list_line {
-	
 }
-.delete_modal_list_line .name_text{
+.delete_modal_list_line .name_text {
 	padding-left: 0px;
 	width: 419px;
 	max-width: 419px;
@@ -524,7 +520,7 @@ MODAL
 
 .website_modal_list_line {
 }
-.website_modal_list_line .name_text{
+.website_modal_list_line .name_text {
 	padding-left: 10px;
 	width: 391px;
 	max-width: 391px;
@@ -532,7 +528,7 @@ MODAL
 
 .search_modal_list_line {
 }
-.search_modal_list_line .name_text{
+.search_modal_list_line .name_text {
 	padding-left: 10px;
 	width: 100%;
 	max-width: 100%;
@@ -540,12 +536,13 @@ MODAL
 
 .tags_modal_list_line {
 }
-.tags_modal_list_line .name_text{
+.tags_modal_list_line .name_text {
 	font-size: 1.25em;
 	padding-left: 10px;
 	width: 391px;
 	max-width: 391px;
 }
+
 .result_line {
 	border-bottom: 1px dashed lightgray;
 }

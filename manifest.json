@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.0.0",
+	"version": "2.0.0hotfix5",
 
 	"icons": {
 		"48": "icons/logo.svg"

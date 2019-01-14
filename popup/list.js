@@ -1,6 +1,8 @@
 
 async function createMangasList() {
     var mangas = await background.getMangasList();
+    //saving scroll position to recall later
+    document.getElementById("list_container").scrollmemory = document.getElementById("list_container").scrollTop;
    
     //sorting the mangas alphabetically
     mangas = Object.keys(mangas).sort().reduce((r, k) => (r[k] = mangas[k], r), {});
@@ -208,7 +210,7 @@ async function createMangasList() {
                 chapters_list.classList.remove("unread_chapter");
                 chapters_list.classList.add("read_chapter");
             }
-            refreshList();
+            createMangasList();
         });
         dom_read_all_button_td.appendChild(dom_read_all_button);
         dom_manga.appendChild(dom_read_all_button_td);
@@ -224,7 +226,7 @@ async function createMangasList() {
         dom_update_button.addEventListener("click", async function(e){	
             let my_manga = e.target.parentElement.parentElement;
             await background.updateMangasList([my_manga.manga_name], true);
-            refreshList();
+            createMangasList();
         });
         dom_update_button_td.appendChild(dom_update_button);
         dom_manga.appendChild(dom_update_button_td);
@@ -565,13 +567,12 @@ async function createMangasList() {
         dom_mangas_list.appendChild(read_mangas[dom_manga]);
     }
 
-    filterList();
-
     //get back to scroll position
     if (document.getElementById("list_container").scrollmemory) {
-        window.scrollTo(0, document.getElementById("list_container").scrollmemory);
+        document.getElementById("list_container").scrollTo(0, document.getElementById("list_container").scrollmemory);
         document.getElementById("list_container").scrollmemory = 0;
     }
+    filterList();
 }
 
 createMangasList();
@@ -706,7 +707,7 @@ document.getElementById("list_update_icon").addEventListener("click", async (e) 
         }
     }
     await background.updateMangasList(update_list, false);
-    refreshList();
+    createMangasList();
 });
 
 
@@ -730,7 +731,7 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
         }
     }
     Promise.all(promised_results).then((result) => {
-        refreshList();
+        createMangasList();
     });
 });
 
@@ -746,7 +747,7 @@ document.getElementById("list_update_toggle_icon").addEventListener("click", asy
             await background.setMangaUpdate(my_manga.manga_name, !my_manga.update_state);
         }
     }
-    refreshList();
+    createMangasList();
 });
 
 
@@ -811,13 +812,7 @@ document.getElementById("list_delete_icon").addEventListener("click", async (e) 
 
 
 
-//refresh list
-function refreshList() {
-    document.getElementById("list_container").scrollmemory = window.scrollY;
-    createMangasList();
-}
-
 //manually refresh the list
 document.getElementById("refresh_list").addEventListener("click", async (e) => {
-    refreshList();
+    createMangasList();
 });
