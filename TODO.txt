@@ -6,13 +6,13 @@ GOALS :
 
 - actualize help panel
 
-- order tags alphabetically
-
 
 
 §§FUNCTIONALITIES
 
 - add button to navigation bar (or list options ? ) to mark chapter as unread
+
+- add a follow/ed <a> to the search results
 
 
 

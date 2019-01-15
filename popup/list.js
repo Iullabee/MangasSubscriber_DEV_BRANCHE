@@ -410,7 +410,7 @@ async function createMangasList() {
             revealModal(title, results, onAgree);
         });
 
-        //option to eassign tags to the manga
+        //option to assign tags to the manga
         let dom_choose_tags_cell = document.createElement("div");
         dom_choose_tags_cell.classList.add("list_cell", "right");
         dom_choose_tags_cell.title = "add or remove tags for this manga";
@@ -433,7 +433,8 @@ async function createMangasList() {
             dom_choose_tags.appendChild(dom_option);
         } else {
             //otherwise, create an option for each tag
-            for (let tag_name in background.mangas_list[name].tags){
+           let ordered_tags = Object.keys(background.mangas_list[name].tags).sort(background.sortAlphaNum).reduce((r, k) => (r[k] = background.mangas_list[name].tags[k], r), {});
+            for (let tag_name in ordered_tags){
                 let dom_option = document.createElement("option");
                 let dom_option_text = document.createTextNode(tag_name);
                 dom_option.appendChild(dom_option_text);
@@ -464,7 +465,8 @@ async function createMangasList() {
                     }
                 }
             }
-            for (let tag_name in every_tag) {
+            let ordered_tags = Object.keys(every_tag).sort(background.sortAlphaNum).reduce((r, k) => (r[k] = every_tag[k], r), {});
+            for (let tag_name in ordered_tags) {
                 if (every_tag.hasOwnProperty(tag_name)) {
                     let tag = document.createElement("div");
                     tag.classList.add("modal_list_line", "website_modal_list_line");
@@ -497,37 +499,39 @@ async function createMangasList() {
             create_tag.addEventListener("change", (event)=>{
                 event.stopPropagation();
                 let tag_name = event.target.value;
-                let already_exist = false;
-                let list = document.getElementById("modal_content");
-                
-                for (let i in list.children) {
-                    if (list.children.hasOwnProperty(i) && list.children[i].tag_name == tag_name){
-                        already_exist = true;
+                if (tag_name != "") {
+                    let already_exist = false;
+                    let list = document.getElementById("modal_content");
+                    
+                    for (let i in list.children) {
+                        if (list.children.hasOwnProperty(i) && list.children[i].tag_name == tag_name){
+                            already_exist = true;
+                        }
                     }
-                }
-                if (!already_exist) {
-                    let tag = document.createElement("div");
-                    tag.classList.add("modal_list_line", "tags_modal_list_line");
-                    tag.tag_name = tag_name;
-                    tag.registered = true;
-                    
-                    tag.addEventListener("click", (e)=>{
-                        e.stopPropagation();
-                        tag.registered = ! tag.registered;
-                        tag.getElementsByTagName("img")[0].src = "../icons/" + (tag.registered?"yes":"no") + ".svg";
-                    });
-
-                    let name = document.createElement("span");
-                    name.classList.add("name_text");
-                    name.innerText = tag_name;
-                    tag.appendChild(name);
-
-                    let registered = document.createElement("img");
-                    registered.classList.add("icons");
-                    registered.src = tag.registered ? "../icons/yes.svg" : "../icons/no.svg";
-                    tag.appendChild(registered);
-                    
-                    list.insertBefore(tag, event.target);
+                    if (!already_exist) {
+                        let tag = document.createElement("div");
+                        tag.classList.add("modal_list_line", "tags_modal_list_line");
+                        tag.tag_name = tag_name;
+                        tag.registered = true;
+                        
+                        tag.addEventListener("click", (e)=>{
+                            e.stopPropagation();
+                            tag.registered = ! tag.registered;
+                            tag.getElementsByTagName("img")[0].src = "../icons/" + (tag.registered?"yes":"no") + ".svg";
+                        });
+    
+                        let name = document.createElement("span");
+                        name.classList.add("name_text");
+                        name.innerText = tag_name;
+                        tag.appendChild(name);
+    
+                        let registered = document.createElement("img");
+                        registered.classList.add("icons");
+                        registered.src = tag.registered ? "../icons/yes.svg" : "../icons/no.svg";
+                        tag.appendChild(registered);
+                        
+                        list.insertBefore(tag, event.target);
+                    }
                 }
             });
             results.push(create_tag);
@@ -655,7 +659,7 @@ initializeReadFilter();
 document.getElementById("tags_filter").addEventListener("change", async (e) => {    
     filterList();
 });
-//initialize read_filter
+//initialize tags_filter
 function initializeTagsFilter() {
     let tags_filter = document.getElementById("tags_filter");
     let tags = {};
@@ -667,8 +671,9 @@ function initializeTagsFilter() {
             }
         }
     }
-    for (let tag in tags) {
-        if (tags.hasOwnProperty(tag)) {
+    let ordered_tags = Object.keys(tags).sort(background.sortAlphaNum).reduce((r, k) => (r[k] = tags[k], r), {});
+    for (let tag in ordered_tags) {
+        if (ordered_tags.hasOwnProperty(tag)) {
             let dom_option = document.createElement("option");
             let dom_option_text = document.createTextNode(tag);
             dom_option.appendChild(dom_option_text);
