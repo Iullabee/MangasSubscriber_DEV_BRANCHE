@@ -371,7 +371,6 @@ var websites_list = {
 function cleanMangaName (name) {
 	return name.replace(/[\W_]+/g , " ");
 }
-
 function sortAlphaNum(a, b) {
     var reA = /[^a-zA-Z]/g;
     var reN = /[^0-9.]/g;
@@ -394,6 +393,17 @@ function sortNum (a, b) {
 
 function customSort(a, b) {
 	return mangassubscriber_prefs["unified_chapter_numbers"] ? sortNum(a, b) : sortAlphaNum(a, b);
+}
+
+function cloneObject(obj) {
+    var clone = {};
+    for(var i in obj) {
+        if(obj[i] != null &&  typeof(obj[i])=="object")
+            clone[i] = cloneObject(obj[i]);
+        else
+            clone[i] = obj[i];
+    }
+    return clone;
 }
 
 async function getSource(source_url){
@@ -605,7 +615,9 @@ async function exportMangasListOnline(){
 //import mangas list from json
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.0"){
+	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.0"){await getMangasList();
+		mangas_list = cloneObject(back_up["mangas_list"]);
+		mangassubscriber_prefs = cloneObject(back_up["MangasSubscriberPrefs"]);
 		await browser.storage.local.clear();
 		await browser.storage.local.set(back_up);
 		//update badge
@@ -625,7 +637,7 @@ async function registerWebsites(manga_name, websites){
 	}
 
 	let mangas_list = await getMangasList();
-	mangas_list[manga_name]["registered_websites"] = Object.assign({}, websites); //websites is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
+	mangas_list[manga_name]["registered_websites"] = cloneObject(websites); //websites is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
 }
@@ -634,7 +646,7 @@ async function registerWebsites(manga_name, websites){
 async function registerTags(manga_name, tags){
 	let mangas_list = await getMangasList();
 
-	mangas_list[manga_name]["tags"] = Object.assign({}, tags); //tags is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed, Object.assign creates a copy to avoid that.
+	mangas_list[manga_name]["tags"] = cloneObject(tags); //tags is a reference to an object created in the popup, it becomes DeadObject when the popup is destroyed
 	browser.storage.local.set({"mangas_list" : mangas_list});
 	return;
 }

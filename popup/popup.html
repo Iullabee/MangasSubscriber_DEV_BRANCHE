@@ -128,7 +128,7 @@
 		</div>
 	<!------- SEARCH PANEL END! ------->
 
-	<!------- LIST TOP START ------->
+	<!------- LIST START ------->
 		<div class="list_top">
 			<div class="inline field_container">
 				<input type="search" placeholder="filter list..." id="filter_list" title="type to filter the list" autofocus><!--
@@ -145,9 +145,10 @@
 			<img id="list_update_toggle_icon" class="inline icons" src="../icons/update_true.svg" title="toggle updates on/off"></img>
 			<img id="list_delete_icon" class="inline icons" src="../icons/trash.svg" title="delete from your list"></img></div>
 		</div>
-	<!------- LIST TOP END ------->
+		<div id="list_container"><div id="list"></div></div>
+	<!------- LIST END ------->
 	
-	<!------- LIST BODY START ------->
+	<!------- MODAL WINDOW START ------->
 		<div id="modal_background" class="modal_background">
 			<div id="modal_window">
 				<div id="modal_title"></div>
@@ -157,8 +158,7 @@
 				<div id="modal_dismiss" class="inline">dismiss</div>
 			</div>
 		</div>
-		<div id="list_container"><div id="list"></div></div>
-	<!------- LIST BODY END ------->
+	<!------- MODAL WINDOW END ------->
 	
 	<!------- SCRIPTS IMPORT START ------->
 		<script src="popup.js"></script>

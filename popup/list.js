@@ -2,7 +2,7 @@
 async function createMangasList() {
     var mangas = await background.getMangasList();
     //saving scroll position to recall later
-    document.getElementById("list_container").scrollmemory = document.getElementById("list_container").scrollTop;
+    let scrollmemory = document.getElementById("list_container").scrollTop;
    
     //sorting the mangas alphabetically
     mangas = Object.keys(mangas).sort().reduce((r, k) => (r[k] = mangas[k], r), {});
@@ -572,10 +572,8 @@ async function createMangasList() {
     }
 
     //get back to scroll position
-    if (document.getElementById("list_container").scrollmemory) {
-        document.getElementById("list_container").scrollTo(0, document.getElementById("list_container").scrollmemory);
-        document.getElementById("list_container").scrollmemory = 0;
-    }
+    document.getElementById("list_container").scrollTo(0, scrollmemory);
+
     filterList();
 }
 
