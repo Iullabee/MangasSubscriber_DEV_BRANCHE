@@ -47,14 +47,14 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll(".detail_list a.color_0077");
+					let list = doc.querySelectorAll(".detail-main-list li a");
 					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i = 0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(list[i].href);
+								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since mangahere uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
 								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "https")};
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
 							}
 						}
 					}
@@ -69,7 +69,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name	
-						let source_url = "https://mangahere.cc/search.php?name="+manga_name.replace(/ /g, "+");
+						let source_url = "https://www.mangahere.cc/search?title="+manga_name.replace(/ /g, "+");
 						try {
 							//get search page
 							source = await getSource(source_url);
@@ -78,11 +78,11 @@ var websites_list = {
 						}
 						//extract mangas found
 						let doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("a.manga_info");
+						let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							if (list.hasOwnProperty(i))
-								results[list[i].innerText] = list[i].href.replace("moz-extension", "https");
+								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
