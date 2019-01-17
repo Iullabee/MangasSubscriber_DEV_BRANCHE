@@ -22,7 +22,7 @@
     float:right;
 }
 
-.button {
+#mangassubscriber_nav_bar .button {
 	padding: 4px;
 	cursor: pointer;
 	
@@ -35,11 +35,11 @@
     color: #EEEEEE;
 }
 
-a {
+#mangassubscriber_nav_bar .button a {
     text-decoration: none;
     color: #EEEEEE;
 }
 
-a:hover {
+#mangassubscriber_nav_bar .button a:hover {
     color: #FAB400;
 }

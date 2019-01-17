@@ -29,7 +29,7 @@ function readMangaChapter() {
 	} else {
 		switch (website) {
 			case "mangahere":
-				is_placeholder = document.querySelectorAll("#viewer.read_img")[0] ? false : true;
+				is_placeholder = document.querySelectorAll("img.reader-main-img")[0] ? false : true;
 				break;
 			case "mangafox":
 				is_placeholder = document.querySelectorAll("img.reader-main-img")[0] ? false : true;
