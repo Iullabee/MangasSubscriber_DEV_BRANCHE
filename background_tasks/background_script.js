@@ -517,8 +517,8 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 browser.runtime.onMessage.addListener(readMangaChapter);
 
 async function readMangaChapter(message, sender) {
-	if  (message.target == "background" && message.url){
-		var url = message.url;
+	if  (message.target == "background" && message.read){
+		var url = message.read;
 		var manga_name = getMangaName(url);
 		var current_chapter = await getCurrentChapter(url);
 
@@ -551,6 +551,36 @@ async function readMangaChapter(message, sender) {
 						if (await getNavigationBar())
 							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
 					}
+				}
+			}
+		}
+		//update badge
+		setBadgeNumber();
+	}
+}
+
+
+
+
+//listen to content script, and set manga chapter as "read"
+browser.runtime.onMessage.addListener(unreadMangaChapter);
+
+async function unreadMangaChapter(message, sender) {
+	if  (message.target == "background" && message.unread){
+		var url = message.unread;
+		var manga_name = getMangaName(url);
+		var current_chapter = await getCurrentChapter(url);
+
+		let mangas_list = await getMangasList();
+
+		if (mangas_list[manga_name]) {
+			if (current_chapter) {
+				if (mangas_list[manga_name].chapters_list[current_chapter]) {
+					mangas_list[manga_name].chapters_list[current_chapter]["status"] = "unread";
+					browser.storage.local.set({"mangas_list" : mangas_list});
+				} else {
+					mangas_list[manga_name].chapters_list[current_chapter] = {"status" : "unread", "url" : url};
+					browser.storage.local.set({"mangas_list" : mangas_list});
 				}
 			}
 		}

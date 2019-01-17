@@ -44,7 +44,7 @@ function readMangaChapter() {
 	}
 	
 	if (!is_placeholder) {
-		browser.runtime.sendMessage({"target":"background","url": url});
+		browser.runtime.sendMessage({"target":"background","read": url});
 	}
 }
 
@@ -60,41 +60,53 @@ function createNavigation(message) {
 
 		if (navigation.first_chapter != "") {
 			let first_button = document.createElement("div");
+			first_button.classList.add("left_nav_button", "button");
 			let first_button_link = document.createElement("a");
 			first_button_link.textContent = "first chapter";
 			first_button.appendChild(first_button_link);
 			first_button_link.href = navigation.first_chapter;
-			first_button.setAttribute("class", "left_nav_button button");
 			nav_bar.appendChild(first_button);
 		}
 		if (navigation.previous_chapter != "") {
 			let previous_button = document.createElement("div");
+			previous_button.classList.add("left_nav_button", "button");
 			let previous_button_link = document.createElement("a");
 			previous_button_link.textContent = "previous chapter";
 			previous_button.appendChild(previous_button_link);
 			previous_button_link.href = navigation.previous_chapter;
-			previous_button.setAttribute("class", "left_nav_button button");
 			nav_bar.appendChild(previous_button);
 		}
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
 		if (navigation.last_chapter != "") {
 			let last_button = document.createElement("div");
+			last_button.classList.add("right_nav_button", "button");
 			let last_button_link = document.createElement("a");
 			last_button_link.textContent = "last chapter";
 			last_button_link.href = navigation.last_chapter;
 			last_button.appendChild(last_button_link);
-			last_button.setAttribute("class", "right_nav_button button");
 			nav_bar.appendChild(last_button);
 		}
 		if (navigation.next_chapter != "") {
 			let next_button = document.createElement("div");
+			next_button.classList.add("right_nav_button", "button");
 			let next_button_link = document.createElement("a");
 			next_button_link.textContent = "next chapter";
 			next_button.appendChild(next_button_link);
 			next_button_link.href = navigation.next_chapter;
-			next_button.setAttribute("class", "right_nav_button button");
 			nav_bar.appendChild(next_button);
 		}
+
+		
+		let unread_button = document.createElement("div");
+		unread_button.classList.add("centered", "button");
+		unread_button.addEventListener("click", () => {
+			browser.runtime.sendMessage({"target":"background","unread": window.location.href});
+		});
+		let unread_button_link = document.createElement("a");
+		unread_button_link.textContent = "mark as not read";
+		unread_button.appendChild(unread_button_link);
+		nav_bar.appendChild(unread_button);
+		
 		document.body.appendChild(nav_bar);
 	
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
