@@ -528,6 +528,9 @@ MODAL
 
 .search_modal_list_line {
 }
+.search_modal_list_line:hover {
+	background-color: white;
+}
 .search_modal_list_line .name_text {
 	padding-left: 10px;
 	width: 100%;
@@ -545,6 +548,10 @@ MODAL
 
 .result_line {
 	border-bottom: 1px dashed lightgray;
+	vertical-align: middle;
+}
+.result_line:hover {
+	background-color: #e5e5e5;
 }
 /****************************************
 MODAL END
@@ -567,4 +574,9 @@ LIST END
 .large_icons {
 	width: 42px;
 	height: 42px;
+}
+
+.inline_icons {
+	width: 1.3em;
+	height: 1.3em;
 }

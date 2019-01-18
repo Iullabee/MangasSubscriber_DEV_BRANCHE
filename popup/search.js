@@ -28,20 +28,57 @@ function searchWebsitesFor () {
                 links_list.classList.add("links_list");
                 
                 links_list.innerText = "searching, please wait...";
-                background.websites_list[website_name].searchFor(search).then((links) => {
+                background.websites_list[website_name].searchFor(search).then(async (links) => {
                     links_list.innerText = "";
                     for (let name in links) {
                         if (links.hasOwnProperty(name)) {
+                            let manga_name = background.getMangaName(links[name]);
+
                             let container = document.createElement("div");
                             container.classList.add("result_line");
-                            let name_span = document.createElement("span");
-                            name_span.innerText = background.getMangaName(links[name]) + " ";
                             let link = document.createElement("a");
                             link.href = links[name];
                             link.target = "_blank";
-                            link.innerText = "(link)";
-                            name_span.appendChild(link);
-                            container.appendChild(name_span);
+                            link.innerText = manga_name;
+                            container.appendChild(link);
+
+                            let follow = document.createElement("img");
+                            follow.classList.add("icons", "inline_icons", "right");
+                            follow.name = "follow_button";
+                            if (await background.isMangaFollowed(manga_name)){
+                                follow.title = "already followed";
+                                follow.src = "../icons/followed.svg";
+                            } else {
+                                follow.title = "follow this manga";
+                                follow.src = "../icons/follow.svg";
+                            }
+                            follow.addEventListener("click", async (event) => {
+                                switch (event.target.title) {
+                                    case "follow this manga" :
+                                        event.target.title = "please wait";
+                                        event.target.src = "../icons/dots.svg";
+                                        var fail = await background.followManga(links[name]);
+                                        if (!fail){
+                                            event.target.title = "now following";
+                                            event.target.src = "../icons/followed.svg";
+                                            //mark manga with same name from other websites as followed
+                                            let follow_buttons = document.getElementById("modal_content").querySelectorAll("[name=follow_button]");
+                                            for (let i=0; i<follow_buttons.length; i++) {
+                                                if (follow_buttons[i].parentElement.firstChild.innerText == event.target.parentElement.firstChild.innerText) {
+                                                    follow_buttons[i].title = "already followed";
+                                                    follow_buttons[i].src = "../icons/followed.svg";
+                                                }
+                                            }
+                                        } else {
+                                            event.target.title = "error, try again";
+                                            event.target.src = "../icons/follow.svg";
+                                            event.target.style.border = "2px solid red";
+                                            setTimeout(() => {event.target.title = "follow this manga"; event.target.style.border = "";},3000);
+                                        }
+                                        break;
+                                }
+                            });
+                            container.appendChild(follow);
                             links_list.appendChild(container);
                         }
                     }

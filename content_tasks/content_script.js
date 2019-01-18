@@ -96,7 +96,6 @@ function createNavigation(message) {
 			nav_bar.appendChild(next_button);
 		}
 
-		
 		let unread_button = document.createElement("div");
 		unread_button.classList.add("centered", "button");
 		unread_button.addEventListener("click", () => {
