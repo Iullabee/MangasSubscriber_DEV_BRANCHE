@@ -10,8 +10,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- add a follow/ed <a> to the search results
-
 
 
 §§OPTIMIZATIONS
