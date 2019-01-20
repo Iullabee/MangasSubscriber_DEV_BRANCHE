@@ -197,19 +197,12 @@ async function createMangasList() {
             for (let index in chapters_list.options) {
                 if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
                     let manga_url = await background.reconstructChapterURL(my_manga.manga_name, chapters_list.options[index].value); 
-                    await background.readMangaChapter({"target" : "background", "url" : manga_url});
+                    await background.readMangaChapter({"target" : "background", "read" : manga_url});
                     chapters_list[index].classList.remove("unread_chapter");
                     chapters_list[index].classList.add("read_chapter");
                 } else break;
             }
-            let unread_number = my_manga.getElementsByClassName("red_text")[0];
-            if (unread_number) {
-                unread_number.textContent = " (0)";
-                unread_number.classList.remove("red_text");
-                unread_number.classList.add("green_text");
-                chapters_list.classList.remove("unread_chapter");
-                chapters_list.classList.add("read_chapter");
-            }
+            
             createMangasList();
         });
         dom_read_all_button_td.appendChild(dom_read_all_button);
@@ -728,7 +721,7 @@ document.getElementById("list_read_all_icon").addEventListener("click", async (e
             for (let index in chapters_list.options) {
                 if (chapters_list.options.hasOwnProperty(index) && chapters_list.options[index].classList.contains("unread_chapter")){
                     let manga_url = await background.reconstructChapterURL(my_manga.manga_name, chapters_list.options[index].value); 
-                    promised_results.push(background.readMangaChapter({"target" : "background", "url" : manga_url}));
+                    promised_results.push(background.readMangaChapter({"target" : "background", "read" : manga_url}));
                 } else break;
             }
         }
