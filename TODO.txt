@@ -4,8 +4,6 @@ GOALS :
 
 §§REFACTORING UI
 
-- actualize help panel
-
 
 
 §§FUNCTIONALITIES
@@ -23,7 +21,7 @@ GOALS :
 -- either put in a numerical limit (ex : 200) or pick mangas based on their first letter ( a - b - c - etc)
 
 - look into caching the popup
--- maybe create the html (at list the list part) in the background and serve it to the popup
+-- maybe create the html (at least the list part) in the background and serve it to the popup
 
 
 

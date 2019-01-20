@@ -36,14 +36,18 @@ function searchWebsitesFor () {
 
                             let container = document.createElement("div");
                             container.classList.add("result_line");
+                            let link_container = document.createElement("div");
+                            link_container.classList.add("inline");
                             let link = document.createElement("a");
                             link.href = links[name];
                             link.target = "_blank";
                             link.innerText = manga_name;
-                            container.appendChild(link);
+                            link.title = manga_name;
+                            link_container.appendChild(link);
+                            container.appendChild(link_container);
 
                             let follow = document.createElement("img");
-                            follow.classList.add("icons", "inline_icons", "right");
+                            follow.classList.add("icons", "inline_icons", "cell");
                             follow.name = "follow_button";
                             if (await background.isMangaFollowed(manga_name)){
                                 follow.title = "already followed";
@@ -64,7 +68,7 @@ function searchWebsitesFor () {
                                             //mark manga with same name from other websites as followed
                                             let follow_buttons = document.getElementById("modal_content").querySelectorAll("[name=follow_button]");
                                             for (let i=0; i<follow_buttons.length; i++) {
-                                                if (follow_buttons[i].parentElement.firstChild.innerText == event.target.parentElement.firstChild.innerText) {
+                                                if (follow_buttons[i].parentElement.firstChild.firstChild.innerText == event.target.parentElement.firstChild.firstChild.innerText) {
                                                     follow_buttons[i].title = "already followed";
                                                     follow_buttons[i].src = "../icons/followed.svg";
                                                 }

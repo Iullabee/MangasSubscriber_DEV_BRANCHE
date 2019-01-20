@@ -547,11 +547,15 @@ MODAL
 }
 
 .result_line {
+	padding: 3px;
 	border-bottom: 1px dashed lightgray;
-	vertical-align: middle;
 }
 .result_line:hover {
 	background-color: #e5e5e5;
+}
+.result_line div {
+	min-width: 418px;
+	max-width: 418px;
 }
 /****************************************
 MODAL END
