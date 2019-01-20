@@ -245,6 +245,15 @@ async function createMangasList() {
                 dom_option.selected = "selected";
                 dom_register_website.appendChild(dom_option);
         }
+        if (dom_register_website.options.length == 1) {
+            //add add warning if it is not followed on any website
+            let dom_option = document.createElement("option");
+            let dom_option_text = document.createTextNode("warning : not followed on any site");
+            dom_option.appendChild(dom_option_text);
+            dom_option.setAttribute("disabled", "disabled");
+            dom_option.selected = "selected";
+            dom_register_website.appendChild(dom_option);
+        }
         dom_register_website_cell.appendChild(dom_register_website);
         dom_manga.appendChild(dom_register_website_cell);
 

@@ -21,9 +21,9 @@
 
 	<!------- OPTIONS PANEL START ------->
 		<div id="options" class="panel">
-			<div id="unified_chapter_numbers" title="IMPORTANT : using unified chapters numbers means volume numbers wont be taken into account, and chapter numbers from every sites will be formatted the same. this insures there is no duplicate chapter when following a manga on several sites. 
-	the downside is that some websites that use volume numbers have uploaded old mangas while reinitializing chapters numbers at each new volume. for those particular cases, the new volumes wont be detected when using unified chapter numbers. 
-	NOT using unified chapter numbers on the other hand means that volume numbers are recorded, and that will create duplicate of chapters when following a manga on a site that use volume numbers and a site that doesn't at the same time. but in this case, no chapter will be missed."><div class="inline onehalf">use unified chapters numbers /!\ : </div><img class="inline icons" id="unified_chapter_numbers_tickbox" src="../icons/no.svg"></img></div>
+			<div id="unified_chapter_numbers" title="IMPORTANT : using unified chapters numbers means volume numbers wont be taken into account, and chapter numbers from every sites will be formatted the same. This insures there is no duplicate chapter when following a manga on several sites. 
+	The downside is that some websites that use volume numbers have uploaded old mangas while reinitializing chapters numbers at each new volume. For those particular cases, the new volumes wont be detected when using unified chapter numbers. 
+	NOT using unified chapter numbers on the other hand means that volume numbers are recorded, and that will create duplicate of chapters when following a manga on a site that use volume numbers and a site that doesn't at the same time. But in this case, no chapter will be missed."><div class="inline onehalf">use unified chapter numbers /!\ : </div><img class="inline icons" id="unified_chapter_numbers_tickbox" src="../icons/no.svg"></img></div>
 			<div id="check_all_sites"><div class="inline onehalf">check all sites when updating the list : </div><img class="inline icons" id="check_all_sites_tickbox" src="../icons/no.svg"></img></div>
 			<div id="navigation_bar"><div class="inline onehalf">navigation bar while browsing mangas : </div><img class="inline icons" id="navigation_bar_tickbox" src="../icons/yes.svg"></img></div>
 			<div id="auto_update" title="0 to disable it"><div class="inline onehalf">automatically update the list every : </div><input type="number" id="auto_update_interval" min="0" max="168" value="0" title="0-168 hours (= 7 days)"> hours</div>
@@ -66,6 +66,7 @@
 						<li><img class="inline" src="../help/images/help_options_icon.png"> open/close the options panel.</li>
 						<li><img class="inline" src="../help/images/help_console_icon.png"> open/close the console panel.</li>
 						<li><img class="inline" src="../help/images/help_help_icon.png"> open/close the help panel (this one).</li>
+						<li><img class="inline" src="../help/images/help_search_icon.png"> open/close the search panel.</li>
 						<li><img class="inline" src="../help/images/help_name&version.png"> version of the extension. close any opened panel.</li>
 					</ul>
 				</div>
@@ -75,15 +76,16 @@
 						<li><img class="inline" src="../help/images/help_filter.png"> hide all mangas in the list whose title doesn't contain what is typed inside.</li>
 						<li><img class="inline icons" src="../icons/unread.svg"> toggle the display of fully read mangas.</li>
 						<li><img class="inline icons" src="../icons/already_read.svg"> toggle the display of mangas with unread chapters.</li>
+						<li><img class="inline" src="../help/images/help_tag_filter.png"> toggle the display of mangas with the corresponding tag.</li>
 						<li><img class="inline icons" src="../icons/refresh.svg"> refresh the list.</li>
-						<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background"><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span>, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
+						<li>The subsequent buttons apply to all visible ( = not filtered) mangas : <img class="inline icons" src="../icons/read.svg"> open selected chapter in a new tab, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background."><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span>, <img class="inline icons" src="../icons/trash.svg"> remove from the list</li>
 					</ul>
 				</div>
 				<div class="section">
 					<h3>The third (and last) part is the list</h3>
 					<ul>
 						<li>Each line represents a manga (name, number of unread chapters, and <span class="tooltip" title="ordered with unread stuff (ascending order on red background) at the top, followed by stuff already read (descending order on green background)"><b>the list of chapters</b></span>, followed by the <span title="open the selected chapter in a new tab"><img class="inline icons" src="../icons/read.svg"> open selected chapter at the end).</li>
-						<li>Hovering over a manga will extend it to show additional options applying to that manga only : <img class="inline icons" src="../icons/trash.svg"> remove from the list, <span  class="tooltip" title="It's the website on which the manga will be updated when 'check all sites' is disabled. By default, it's the one you registered the manga on."><img class="inline" src="../help/images/help_websiteselect.png"> select the primary website</span>, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background. It will ignore the 'don't update with the rest of the list' option."><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span></li>
+						<li>Hovering over a manga will extend it to show additional options applying to that manga only : <img class="inline icons" src="../icons/trash.svg"> remove from the list, <span  class="tooltip" title="The tags registered for that mangas. you can add, remove or create new tags as you want."><img class="inline" src="../help/images/help_tag_list.png"> select the tags</span>, <span  class="tooltip" title="Choose all the websites on which to update that manga. Also pick a primary website, on which to read by default (also the one used to update when 'check all sites' is disabled). By default, it's the one you registered the manga on."><img class="inline" src="../help/images/help_websiteselect.png"> select the websites</span>, <span class="tooltip" title="Please be patient though, as depending on the number of mangas you're trying to update at once, it can take quite a while and make your browser quite unresponsive. Even if the popup is closed, the upate will continue in the background. It will ignore the 'don't update with the rest of the list' option."><img class="inline icons" src="../icons/update.svg"> update</span>, <img class="inline icons" src="../icons/read_all.svg">mark all chapters as 'read', <span class="tooltip" title="If turned off, the mangas won't be updated with the rest of the list when you do a grouped update."><img class="inline icons" src="../icons/update_true.svg">/<img class="inline icons" src="../icons/update_false.svg"> toggle update on/off</span></li>
 					</ul>
 				</div>
 			</div>
@@ -93,11 +95,14 @@
 					<h3>The Options</h3>
 					<div class="zoom"><img class="small_image" src="../help/images/help_options.png"></img></div>
 					<ul>
-						<li><span class="tooltip" title="By default it is off. Be careful here, as using it for general use will significantly increase update times. Recommended use is to turn it on, manually update the mangas that have a leap in chapters, and then turn it off.""><b>check all sites :</b></span> lets you choose whether to check only a manga's preferred website when looking for new chapters, or all available websites.</li> 
-						<li><span class="tooltip" title="It only directs to chapters the extension is aware of (ie : chapters that have been found during an update or while reading). Some buttons may not appear when not applicable (for instance, previous when the previous chapter is also the first)."><b>navigation bar :</b></span> will let you navigate between chapters (first, previous, next and last) when reading a subscribed manga.</li>
-						<li><span class="tooltip" title="0~24 hours, 0 to turn it off."><b>automatically update :</b></span> will update the list every X hours.</li>
+						<li><span class="tooltip" title="IMPORTANT : using unified chapters numbers means volume numbers wont be taken into account, and chapter numbers from every sites will be formatted the same. This insures there is no duplicate chapter when following a manga on several sites. 
+	The downside is that some websites that use volume numbers have uploaded old mangas while reinitializing chapters numbers at each new volume. For those particular cases, the new volumes wont be detected when using unified chapter numbers. 
+	NOT using unified chapter numbers on the other hand means that volume numbers are recorded, and that will create duplicate of chapters when following a manga on a site that use volume numbers and a site that doesn't at the same time. But in this case, no chapter will be missed."><b>unified chapter numbers :</b></span> lets you choose whether or not chapters numbers are all formated the same (and volume numbers discarded) regardless of the registered websites numerotation system.</li> 
+						<li><span class="tooltip" title="By default it is off. Be careful here, as using it for general use will significantly increase update times. Recommended use is to turn it on, manually update the mangas that have a leap in chapters, and then turn it off."><b>check all sites :</b></span> lets you choose whether to check only a manga's primary website when looking for new chapters, or all registered websites.</li> 
+						<li><span class="tooltip" title="It only directs to chapters the extension is aware of (ie : chapters that have been found during an update or while reading). Some buttons may not appear when not applicable (for instance, previous when the previous chapter is also the first)."><b>navigation bar :</b></span> will let you navigate between chapters (first, previous, next and last) when reading a subscribed manga. will also unlock a button while reading to mark a chapter as "not read" (if the website can't load images or something).</li>
+						<li><span class="tooltip" title="0~168 hours (= 7 days), 0 to turn it off."><b>automatically update :</b></span> will update the list every X hours.</li>
+						<li><span class="tooltip" title="0 to turn off the limit. It affects both the search panel and results show when adding a website which uses a different name to a manga (for instance 'good luck demon king' and 'good luck maou-sama')."><b>limit searches :</b></span> will only show the first X results when searching on mangas websites.</li>
 						<li><b>export list to file :</b> will export your list to a local json file.</li>
-						<li><span class="tooltip" title="The local data will be overwritten."><b>import mangas list from text :</b></span> will import data copy/pasted in the field.</li>
 						<li><span class="tooltip" title="The local data will be overwritten."><b>import mangas list from file :</b></span> will open a webpage to import data saved in a file.</li> 
 						<li><span class="tooltip" title="The data previously exported to pastebin will be overwritten."><b>export list to pastebin :</b></span> will anonymously export your list to pastebin.</li>
 						<li><span class="tooltip" title="The local data will be overwritten."><b>import list from pastebin :</b></span> will import data previously exported to pastebin.</li>
@@ -113,6 +118,28 @@
 						<li><b>updating :</b> shows/hides the mangas you have started updating, and on which website.</li>
 						<li><b>completed :</b> shows/hides the mangas that have successfully been updated.</li>
 						<li><b>errors :</b> copies (ctrl+c) the errors for easy reporting.</li>
+					</ul>
+				</div>	
+			</div>
+			<div class="separator">
+				<h2><b>The Search Panel</b> lets you search for random stuff across all available websites :</h2>
+				<div class="section">
+					<h3>The Search</h3>
+					<div class="zoom"><img class="small_image" src="../help/images/help_search.png"></div>
+					<ul>
+						<li>type something in the search field, and validate by pressing [enter].</li>
+						<li>click the [x] button on the right to clear the search field.</li>
+					</ul>
+				</div>
+				<div class="section">
+					<h3>The Results</h3>
+					<div class="zoom"><img class="small_image" src="../help/images/help_search_results.png"></div>
+					<ul>
+						<li>the results (whatever the available websites have found in relation to what you typed) will be shown in a popup.</li>
+						<li>click a website name to hide/show its results.</li>
+						<li>click a manga name to open it in a new tab.</li>
+						<li>click a follow button on the right to follow it directly from the search.</li>
+						<li>click [dismiss] or anywhere outside the popup to close it.</li>
 					</ul>
 				</div>	
 			</div>
