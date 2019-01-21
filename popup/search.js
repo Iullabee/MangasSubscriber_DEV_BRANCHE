@@ -32,7 +32,7 @@ function searchWebsitesFor () {
                     links_list.innerText = "";
                     for (let name in links) {
                         if (links.hasOwnProperty(name)) {
-                            let manga_name = background.getMangaName(links[name]);
+                            let manga_name = name;
 
                             let container = document.createElement("div");
                             container.classList.add("result_line");

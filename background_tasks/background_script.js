@@ -82,7 +82,7 @@ var websites_list = {
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							if (list.hasOwnProperty(i))
-								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -177,7 +177,7 @@ var websites_list = {
 						for (let i in list) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							if (list.hasOwnProperty(i))
-								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -267,7 +267,7 @@ var websites_list = {
 						for (let i in list) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							if (list.hasOwnProperty(i))
-								results[list[i].title] = "https://" + this.url + list[i].href.split("manga/")[1];
+								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -357,7 +357,7 @@ var websites_list = {
 						for (let i in list) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							if (list.hasOwnProperty(i))
-								results[list[i].title] = list[i].href.replace("moz-extension", "http");
+								results[cleanMangaName(list[i].title)] = list[i].href.replace("moz-extension", "http");
 						}
 						
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -369,7 +369,7 @@ var websites_list = {
 };
 
 function cleanMangaName (name) {
-	return name.replace(/[\W_]+/g , " ");
+	return name.replace(/[\W_]+/g , " ").toLowerCase();
 }
 function sortAlphaNum(a, b) {
     var reA = /[^a-zA-Z]/g;
