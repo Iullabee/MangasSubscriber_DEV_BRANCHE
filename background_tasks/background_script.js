@@ -50,7 +50,7 @@ var websites_list = {
 					let list = doc.querySelectorAll(".detail-main-list li a");
 					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let i = 0; i<list.length; i++){
+						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since mangahere uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
 								if (chapter_number)
@@ -81,8 +81,7 @@ var websites_list = {
 						let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							if (list.hasOwnProperty(i))
-								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
+							results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -144,7 +143,7 @@ var websites_list = {
 					let list = doc.querySelectorAll("#chapterlist li a");
 					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let i = 0; i<list.length; i++){
+						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since fanfox uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
 								if (chapter_number)
@@ -174,10 +173,9 @@ var websites_list = {
 						//extract mangas found
 						let doc = parser.parseFromString(source, "text/html");
 						let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
-						for (let i in list) {
+						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							if (list.hasOwnProperty(i))
-								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
+							results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -234,7 +232,7 @@ var websites_list = {
 					let list = doc.querySelectorAll(".chapter_list a");
 					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let i = 0; i<list.length; i++){
+						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number)
@@ -264,10 +262,9 @@ var websites_list = {
 						//extract mangas found
 						let doc = parser.parseFromString(source, "text/html");
 						let list = doc.querySelectorAll("ul.manga_pic_list li a.manga_cover");
-						for (let i in list) {
+						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							if (list.hasOwnProperty(i))
-								results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
+							results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -329,7 +326,7 @@ var websites_list = {
 					let list = doc.querySelectorAll(".chp_lst a");
 					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let i = 0; i<list.length; i++){
+						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number)
@@ -354,10 +351,9 @@ var websites_list = {
 						let doc = parser.parseFromString(await response.text(), "text/html");
 						
 						let list = doc.querySelectorAll(".style-list .box .title h2 a");
-						for (let i in list) {
+						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							if (list.hasOwnProperty(i))
-								results[cleanMangaName(list[i].title)] = list[i].href.replace("moz-extension", "http");
+							results[cleanMangaName(list[i].title)] = list[i].href.replace("moz-extension", "http");
 						}
 						
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
