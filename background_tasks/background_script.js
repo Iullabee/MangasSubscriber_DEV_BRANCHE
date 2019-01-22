@@ -361,6 +361,108 @@ var websites_list = {
 					}
 					return results;
 				}
+	},
+	"webtoons":{name:"webtoons",
+				url:"webtoons.com/",
+				getMangaName: function (url){
+					return cleanMangaName(url.split(this.url)[1].split("/")[2]);
+				},
+				getMangaRootURL: function (url) {
+					//return "https://" + this.url + url.split(this.url)[1].split("/list?")[0] + "/";
+					let url_tail = url.split(this.url)[1].split("/");
+
+					let splitter = url.split("/list?")[1] ? "/list?" : "/viewer?"; // /list? if we're in manga root, /viewer? if we're reading a chapter
+					return "https://" + this.url + url_tail[0] + "/" + url_tail[1] + "/" + url_tail[2] + "/list?" + url.split(splitter)[1].split("episode_no")[0];
+				},
+				getCurrentChapter: async function (url){
+					//get rid of website and manga name,
+					var url_tail = url.split("&episode_no=")[1];
+					
+					return url_tail;
+				},
+				getAllChapters: async function (manga_url){
+					var chapters_list = {};
+					var source = "truc";
+					var parser = new DOMParser();
+
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
+
+					//extract the chapter list
+					var doc = parser.parseFromString(source, "text/html");
+					let list = doc.querySelectorAll(".detail_lst ul li a");
+					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
+					else {
+						for (let i=0; i<list.length; i++){
+							if(list[i].href){
+								let chapter_number = await this.getCurrentChapter(list[i].href);
+								if (chapter_number)
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href};
+							}
+						}
+					}
+					let paginate = doc.getElementsByClassName("paginate")[0];
+					for (let i=0; i<paginate.children.length; i++) {
+						if (paginate.children[i].href.substr(-1) == "#" && paginate.children[i+1]) {
+							let chapters = await this.getAllChapters("https://" + this.url + paginate.children[i+1].href.split("moz-extension://")[1].substring(paginate.children[i+1].href.split("moz-extension://")[1].indexOf("/") + 1));
+							for (let number in chapters){
+								if(chapters.hasOwnProperty(number)){
+									chapters_list[number] = chapters[number];
+								}
+							}
+						}
+					}
+					return chapters_list;
+				},
+				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					let results = {};
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						let response1 = await getSource("https://www.webtoons.com/search?keyword=" + manga_name + "&searchType=WEBTOON");
+						let doc1 = parser.parseFromString(response1, "text/html");
+						
+						let list1 = doc1.querySelectorAll(".card_lst li a");
+						for (let i=0; i<list1.length; i++) {
+							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+
+							let root_page = await getSource("https://" + this.url + "episodeList" + list1[i].href.split("episodeList")[1]);
+							let root_doc = parser.parseFromString(root_page, "text/html");
+							let root_url = root_doc.querySelectorAll("meta[property='og:url']")[0].content;
+							
+							results[cleanMangaName(list1[i].getElementsByClassName("subj")[0].innerText)] = root_url; 
+
+							
+						}
+
+						//if nothing found in webtoons published, look in discovery/challenge category
+						if (Object.keys(results).length == 0) {
+							let response2 = await getSource("https://www.webtoons.com/search?keyword=" + manga_name + "&searchType=CHALLENGE");
+							let doc2 = parser.parseFromString(response2, "text/html");
+							
+							let list2 = doc2.querySelectorAll(".challenge_lst ul li a");
+							for (let i=0; i<list2.length; i++) {
+								if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+								let root_page = await getSource("https://" + this.url + "challenge/episodeList" + list2[i].href.split("episodeList")[1]);
+								let root_doc = parser.parseFromString(root_page, "text/html");
+								let root_url = root_doc.querySelectorAll("meta[property='og:url']")[0].content;
+							
+							results[cleanMangaName(list2[i].getElementsByClassName("subj")[0].innerText)] = root_url; 
+							}
+						}
+						
+						
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+					}
+					return results;
+				}
 	}
 };
 
@@ -382,8 +484,10 @@ function sortAlphaNum(a, b) {
 }
 
 function sortNum (a, b) {
-	a == "" ? a = Number.MIN_SAFE_INTEGER : false;
-	b == "" ? b = Number.MIN_SAFE_INTEGER : false;
+	a ? a == "" ? a = Number.MIN_SAFE_INTEGER : false
+		: a = Number.MIN_SAFE_INTEGER;
+	b ? b == "" ? b = Number.MIN_SAFE_INTEGER : false
+		: b = Number.MIN_SAFE_INTEGER;
 	return parseFloat(a) === parseFloat(b) ? 0 : parseFloat(a) > parseFloat(b) ? 1 : -1;
 }
 
