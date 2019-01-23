@@ -436,14 +436,8 @@ var websites_list = {
 						let list1 = doc1.querySelectorAll(".card_lst li a");
 						for (let i=0; i<list1.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-
-							let root_page = await getSource("https://" + this.url + "episodeList" + list1[i].href.split("episodeList")[1]);
-							let root_doc = parser.parseFromString(root_page, "text/html");
-							let root_url = root_doc.querySelectorAll("meta[property='og:url']")[0].content;
-							
-							results[cleanMangaName(list1[i].getElementsByClassName("subj")[0].innerText)] = root_url; 
-
-							
+							let name = cleanMangaName(list1[i].getElementsByClassName("subj")[0].innerText);
+							results[name] = "https://" + this.url + "dummy_language/dummy_genre/" + name + "/list?title_no" + list1[i].href.split("episodeList?titleNo")[1];
 						}
 
 						//if nothing found in webtoons published, look in discovery/challenge category
@@ -454,14 +448,10 @@ var websites_list = {
 							let list2 = doc2.querySelectorAll(".challenge_lst ul li a");
 							for (let i=0; i<list2.length; i++) {
 								if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-								let root_page = await getSource("https://" + this.url + "challenge/episodeList" + list2[i].href.split("episodeList")[1]);
-								let root_doc = parser.parseFromString(root_page, "text/html");
-								let root_url = root_doc.querySelectorAll("meta[property='og:url']")[0].content;
-							
-							results[cleanMangaName(list2[i].getElementsByClassName("subj")[0].innerText)] = root_url; 
+								let name = cleanMangaName(list2[i].getElementsByClassName("subj")[0].innerText);
+								results[name] = "https://" + this.url + "dummy_language/challenge/" + name + "/list?title_no" + list2[i].href.split("episodeList?titleNo")[1];
 							}
 						}
-						
 						
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
 						index--;
