@@ -38,7 +38,8 @@
 						"*://m.fanfox.net//manga/*",
 						"*://www.mangatown.com/manga/*",
 						"*://m.mangatown.com/manga/*",
-						"*://www.readmng.com/*"],
+						"*://www.readmng.com/*",
+						"*://www.webtoons.com/*/*/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
