@@ -23,9 +23,6 @@ GOALS :
 - look into caching the popup
 -- maybe create the html (at least the list part) in the background and serve it to the popup
 
-- optimize webtoons.com getAllChapters
--- stop the recursive calls when one of them returns chapters we already have
-
 
 
 §§WEBSITES LIST

@@ -384,6 +384,8 @@ var websites_list = {
 					var chapters_list = {};
 					var source = "truc";
 					var parser = new DOMParser();
+					let manga_name = this.getMangaName(manga_url);
+					let already_updated_this = false
 
 					try {
 						//get manga's home page
@@ -392,26 +394,29 @@ var websites_list = {
 						throw error;
 					}
 
-					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
 					let list = doc.querySelectorAll(".detail_lst ul li a");
-					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
+					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
+								if (chapter_number) {
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href};
+									if (mangas_list[manga_name] && mangas_list[manga_name]["chapters_list"][chapter_number]) already_updated_this = true;
+								}
 							}
 						}
 					}
-					let paginate = doc.getElementsByClassName("paginate")[0];
-					for (let i=0; i<paginate.children.length; i++) {
-						if (paginate.children[i].href.substr(-1) == "#" && paginate.children[i+1]) {
-							let chapters = await this.getAllChapters("https://" + this.url + paginate.children[i+1].href.split("moz-extension://")[1].substring(paginate.children[i+1].href.split("moz-extension://")[1].indexOf("/") + 1));
-							for (let number in chapters){
-								if(chapters.hasOwnProperty(number)){
-									chapters_list[number] = chapters[number];
+					if (!already_updated_this) {
+						let paginate = doc.getElementsByClassName("paginate")[0];
+						for (let i=0; i<paginate.children.length; i++) {
+							if (paginate.children[i].href.substr(-1) == "#" && paginate.children[i+1]) {
+								let chapters = await this.getAllChapters("https://" + this.url + paginate.children[i+1].href.split("moz-extension://")[1].substring(paginate.children[i+1].href.split("moz-extension://")[1].indexOf("/") + 1));
+								for (let number in chapters){
+									if(chapters.hasOwnProperty(number)){
+										chapters_list[number] = chapters[number];
+									}
 								}
 							}
 						}
