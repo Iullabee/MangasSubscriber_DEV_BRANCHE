@@ -438,7 +438,6 @@ MODAL
 	font-size: 1.75em;
 	text-align: center;
 	text-decoration: bold;
-	text-decoration: underline red;
 	padding: 18px 12px;
 }
 
@@ -511,6 +510,9 @@ MODAL
 
 
 .delete_modal_list_line {
+}
+.delete_modal_list_line #modal_title {
+	text-decoration: underline red;
 }
 .delete_modal_list_line .name_text {
 	padding-left: 0px;

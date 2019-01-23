@@ -376,7 +376,7 @@ var websites_list = {
 				},
 				getCurrentChapter: async function (url){
 					//get rid of website and manga name,
-					var url_tail = url.split("&episode_no=")[1];
+					var url_tail = url.split("&episode_no=")[1].split("&")[0];
 					
 					return url_tail;
 				},
