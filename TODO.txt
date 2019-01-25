@@ -8,6 +8,8 @@ GOALS :
 
 §§FUNCTIONALITIES
 
+- fix mangakakalot content script
+
 
 
 §§OPTIMIZATIONS
@@ -29,3 +31,4 @@ GOALS :
 
 - support more websites :
 -- separate the websites list object from background page for easier maintainability
+-- add support for manganelo.com (partner of mangakakalot.com, they link chapters to each other)

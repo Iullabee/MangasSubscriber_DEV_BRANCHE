@@ -39,7 +39,8 @@
 						"*://www.mangatown.com/manga/*",
 						"*://m.mangatown.com/manga/*",
 						"*://www.readmng.com/*",
-						"*://www.webtoons.com/*/*/*"],
+						"*://www.webtoons.com/*/*/*",
+						"*://mangakakalot.com/*/*/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}

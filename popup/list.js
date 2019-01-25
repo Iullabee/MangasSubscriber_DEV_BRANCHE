@@ -327,7 +327,7 @@ async function createMangasList() {
 
                                     let label = document.createElement("label");
                                     label.htmlFor = website_name+links[name];
-                                    label.innerText = background.getMangaName(links[name]) + " ";
+                                    label.innerText = await background.getMangaName(links[name]) + " "; //TODO - try optimizing by using background.getmanganame.then( (result) => {label.innerText = result})
                                     let link = document.createElement("a");
                                     link.href = links[name];
                                     link.target = "_blank";
@@ -373,7 +373,7 @@ async function createMangasList() {
 
                         let label = document.createElement("label");
                         label.htmlFor = website_name+background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
-                        label.innerText = background.getMangaName(background.mangas_list[my_manga.manga_name]["registered_websites"][website_name]) + " ";
+                        label.innerText = await background.getMangaName(background.mangas_list[my_manga.manga_name]["registered_websites"][website_name]) + " ";
                         let link = document.createElement("a");
                         link.href = background.mangas_list[my_manga.manga_name]["registered_websites"][website_name];
                         link.target = "_blank";

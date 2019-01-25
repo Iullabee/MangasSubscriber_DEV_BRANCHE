@@ -3,6 +3,7 @@ var background = null;
 (async ()=>{background = await browser.runtime.getBackgroundPage();})();
 
 
+
 //display the version
 document.getElementById("version").textContent = browser.runtime.getManifest().version;
 
@@ -10,9 +11,11 @@ document.getElementById("version").textContent = browser.runtime.getManifest().v
 
 //initialize follow button
 async function initializeFollowButton(){
-	var manga_name = "notAManga";
+	document.getElementById("follow").title = "please wait";
+    document.getElementById("follow_icon").src = "../icons/dots.svg";
+    var manga_name = "notAManga";
 	var url = (await browser.tabs.query({active: true, currentWindow: true}))[0].url;
-	manga_name = background.getMangaName(url);
+	manga_name = await background.getMangaName(url); //TODO - if performance problems, try optimizing by reading the name directly from the page (needs a website object capable of reading the current page at the popup level)
 	if (manga_name == "notAManga"){
         document.getElementById("follow").title = "can't follow this";
 		document.getElementById("follow_icon").src = "../icons/not_followable.svg";
