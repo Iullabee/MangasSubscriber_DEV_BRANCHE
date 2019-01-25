@@ -8,8 +8,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- fix mangakakalot content script
-
 
 
 §§OPTIMIZATIONS

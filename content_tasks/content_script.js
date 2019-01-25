@@ -46,7 +46,9 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector("img._images") ? false : true;
 				break;
 			case "mangakakalot":
-				is_placeholder = document.querySelector("#vungdoc") && ! document.querySelector(".comments p") ? false : true;
+				let elem = document.querySelector("#vungdoc img");
+				let source_url = elem ? elem.src : null;
+				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true;
 				break;
 		}
 	}
