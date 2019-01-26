@@ -316,25 +316,24 @@ async function createMangasList() {
                             let already_checked = false;
                             for (let name in links) {
                                 if (links.hasOwnProperty(name)) {
-                                    let container = document.createElement("div");
-                                    let radioInput = document.createElement("input");
-                                    radioInput.setAttribute("type", "radio");
-                                    radioInput.setAttribute("name", website_name);
-                                    !already_checked ? (radioInput.setAttribute("checked", "checked"), already_checked = true) : false;
-                                    radioInput.setAttribute("id", website_name+links[name]);
-                                    radioInput.link = links[name];
-                                    container.appendChild(radioInput);
-
-                                    let label = document.createElement("label");
-                                    label.htmlFor = website_name+links[name];
-                                    label.innerText = await background.getMangaName(links[name]) + " "; //TODO - try optimizing by using background.getmanganame.then( (result) => {label.innerText = result})
-                                    let link = document.createElement("a");
-                                    link.href = links[name];
-                                    link.target = "_blank";
-                                    link.innerText = "(link)";
-                                    label.appendChild(link);
-                                    container.appendChild(label);
-                                    links_list.appendChild(container);
+                                    let manga_name = await background.getMangaName(links[name]);
+                                    if (manga_name != "notAManga") {
+                                        let container = document.createElement("div");
+                                        let radioInput = document.createElement("input");
+                                        radioInput.setAttribute("type", "radio");
+                                        radioInput.setAttribute("name", website_name);
+                                        !already_checked ? (radioInput.setAttribute("checked", "checked"), already_checked = true) : false;
+                                        radioInput.setAttribute("id", website_name+links[name]);
+                                        radioInput.link = links[name];
+                                        container.appendChild(radioInput);
+    
+                                        let link = document.createElement("a");
+                                        link.href = links[name];
+                                        link.target = "_blank";
+                                        link.innerText = manga_name;
+                                        container.appendChild(link);
+                                        links_list.appendChild(container);
+                                    }
                                 }
                             }
                             website.registered = true;
