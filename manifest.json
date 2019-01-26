@@ -40,7 +40,8 @@
 						"*://m.mangatown.com/manga/*",
 						"*://www.readmng.com/*",
 						"*://www.webtoons.com/*/*/*",
-						"*://mangakakalot.com/*/*/*"],
+						"*://mangakakalot.com/*/*/*",
+						"*://manganelo.com/*/*/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}

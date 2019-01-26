@@ -3,7 +3,8 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"mangatown":"mangatown.com/manga/",
 					"readmangatoday":"readmng.com/",
 					"webtoons":"webtoons.com/",
-					"mangakakalot":"mangakakalot.com/"
+					"mangakakalot":"mangakakalot.com/",
+					"manganelo":"manganelo.com/"
 					};
 
 //fix fanfox annoying urls
@@ -46,10 +47,15 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector("img._images") ? false : true;
 				break;
 			case "mangakakalot":
-				let elem = document.querySelector("#vungdoc img");
+				{let elem = document.querySelector("#vungdoc img");
 				let source_url = elem ? elem.src : null;
 				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true;
-				break;
+				break;}
+			case "manganelo":
+				{let elem = document.querySelector("#vungdoc img");
+				let source_url = elem ? elem.src : null;
+				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true;
+				break;}
 		}
 	}
 	
