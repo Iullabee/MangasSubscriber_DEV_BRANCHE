@@ -35,7 +35,7 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector("img.reader-main-img") ? false : true;
 				break;
 			case "mangafox":
-				is_placeholder = document.querySelector("img.reader-main-img") ? false : true;
+				is_placeholder = document.querySelector("img.reader-main-img") || document.querySelector("img#image") ? false : true;
 				break;
 			case "mangatown":
 				is_placeholder = document.querySelector("#viewer.read_img") ? false : true;
