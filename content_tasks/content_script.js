@@ -41,20 +41,20 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector("#viewer.read_img") || document.querySelector("img#image") ? false : true;
 				break;
 			case "readmangatoday":
-				is_placeholder = document.querySelector("#chapter_img") ? false : true;
+				is_placeholder = document.querySelector("#chapter_img") ? false : true; //no mobile site
 				break;
 			case "webtoons":
-				is_placeholder = document.querySelector("img._images") ? false : true;
+				is_placeholder = document.querySelector("img._images") || document.querySelector("img._checkVisible") ? false : true;
 				break;
 			case "mangakakalot":
 				{let elem = document.querySelector("#vungdoc img");
 				let source_url = elem ? elem.src : null;
-				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true;
+				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
 			case "manganelo":
 				{let elem = document.querySelector("#vungdoc img");
 				let source_url = elem ? elem.src : null;
-				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true;
+				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
 		}
 	}
