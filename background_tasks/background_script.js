@@ -396,10 +396,11 @@ var websites_list = {
 
 					var doc = parser.parseFromString(source, "text/html");
 					let list = doc.querySelectorAll(".detail_lst ul li a");
+					list[0] ? false : list = doc.querySelectorAll("ul#_episodeList li a"); //if no chapters found, we might have been redirected to mobile website (different layout), check if we find something using that layout
 					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
-							if(list[i].href){
+							if(list[i].href && ! list[i].classList.contains("preview_pay_area")){ // ! list[i].classList.contains("preview_pay_area") to exclude chapters preview requiring payment (they screw up chapter number detection if not paid)
 								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number) {
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href};
