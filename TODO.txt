@@ -8,6 +8,8 @@ GOALS :
 
 §§FUNCTIONALITIES
 
+- display patchnotes after an update
+
 
 
 §§OPTIMIZATIONS
@@ -29,5 +31,3 @@ GOALS :
 
 - support more websites :
 -- separate the websites list object from background page for easier maintainability
-
-- rework android compatibility (mobile version of the websites)
