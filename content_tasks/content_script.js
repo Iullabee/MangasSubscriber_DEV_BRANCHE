@@ -78,18 +78,18 @@ function createNavigation(message) {
 			let first_button = document.createElement("div");
 			first_button.classList.add("left_nav_button", "button");
 			let first_button_link = document.createElement("a");
-			first_button_link.textContent = "first chapter";
+			first_button_link.textContent = "<< " + navigation.first_chapter.number;
 			first_button.appendChild(first_button_link);
-			first_button_link.href = navigation.first_chapter;
+			first_button_link.href = navigation.first_chapter.url;
 			nav_bar.appendChild(first_button);
 		}
 		if (navigation.previous_chapter != "") {
 			let previous_button = document.createElement("div");
 			previous_button.classList.add("left_nav_button", "button");
 			let previous_button_link = document.createElement("a");
-			previous_button_link.textContent = "previous chapter";
+			previous_button_link.textContent = "< " + navigation.previous_chapter.number;
 			previous_button.appendChild(previous_button_link);
-			previous_button_link.href = navigation.previous_chapter;
+			previous_button_link.href = navigation.previous_chapter.url;
 			nav_bar.appendChild(previous_button);
 		}
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
@@ -97,8 +97,8 @@ function createNavigation(message) {
 			let last_button = document.createElement("div");
 			last_button.classList.add("right_nav_button", "button");
 			let last_button_link = document.createElement("a");
-			last_button_link.textContent = "last chapter";
-			last_button_link.href = navigation.last_chapter;
+			last_button_link.textContent = navigation.last_chapter.number + " >>";
+			last_button_link.href = navigation.last_chapter.url;
 			last_button.appendChild(last_button_link);
 			nav_bar.appendChild(last_button);
 		}
@@ -106,9 +106,9 @@ function createNavigation(message) {
 			let next_button = document.createElement("div");
 			next_button.classList.add("right_nav_button", "button");
 			let next_button_link = document.createElement("a");
-			next_button_link.textContent = "next chapter";
+			next_button_link.textContent = navigation.next_chapter.number + " >";
 			next_button.appendChild(next_button_link);
-			next_button_link.href = navigation.next_chapter;
+			next_button_link.href = navigation.next_chapter.url;
 			nav_bar.appendChild(next_button);
 		}
 

@@ -808,16 +808,16 @@ async function readMangaChapter(message, sender) {
 					let index = chapters_numbers.indexOf(current_chapter);
 					if (index >= 0) {
 						//first chapter (if current chapter isn't the first)
-						let first_chapter = index > 0 ? mangas_list[manga_name].chapters_list[chapters_numbers[0]].url : "";
+						let first_chapter = index > 0 ? {"number": chapters_numbers[0], "url": mangas_list[manga_name].chapters_list[chapters_numbers[0]].url} : "";
 						//previous chapter (if there is at least one chapter between first and current)
-						let previous_chapter = index > 1 ? mangas_list[manga_name].chapters_list[chapters_numbers[index-1]].url : "";
+						let previous_chapter = index > 1 ? {"number": chapters_numbers[index-1], "url": mangas_list[manga_name].chapters_list[chapters_numbers[index-1]].url} : "";
 						//next chapter (if there is at least one chapter between current and last)
-						let next_chapter = index < (chapters_numbers.length-2) ? mangas_list[manga_name].chapters_list[chapters_numbers[index+1]].url : "";
+						let next_chapter = index < (chapters_numbers.length-2) ? {"number": chapters_numbers[index+1], "url": mangas_list[manga_name].chapters_list[chapters_numbers[index+1]].url} : "";
 						//last chapter (if current chapter isn't the last)
-						let last_chapter = index < (chapters_numbers.length-1) ? mangas_list[manga_name].chapters_list[chapters_numbers[chapters_numbers.length-1]].url : "";
+						let last_chapter = index < (chapters_numbers.length-1) ? {"number": chapters_numbers[chapters_numbers.length-1], "url": mangas_list[manga_name].chapters_list[chapters_numbers[chapters_numbers.length-1]].url} : "";
 						
 						if (await getNavigationBar())
-							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter":first_chapter,"previous_chapter":previous_chapter,"next_chapter":next_chapter,"last_chapter":last_chapter}});
+							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter}});
 					}
 				}
 			}
