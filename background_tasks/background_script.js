@@ -372,7 +372,7 @@ var websites_list = {
 					let url_tail = url.split(this.url)[1].split("/");
 
 					let splitter = url.split("/list?")[1] ? "/list?" : "/viewer?"; // /list? if we're in manga root, /viewer? if we're reading a chapter
-					return "https://" + this.url + url_tail[0] + "/" + url_tail[1] + "/" + url_tail[2] + "/list?" + url.split(splitter)[1].split("episode_no")[0];
+					return "https://" + this.url + url_tail[0] + "/" + url_tail[1] + "/" + url_tail[2] + "/list?" + url.split(splitter)[1].split("&episode_no")[0];
 				},
 				getCurrentChapter: async function (url){
 					//get rid of website and manga name,
