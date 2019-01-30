@@ -888,7 +888,7 @@ async function exportMangasList(){
 //export mangas list online to pastebin
 async function exportMangasListOnline(){
 	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
-	var text_data = JSON.stringify(list, null, 2);
+	var text_data = encodeURIComponent(JSON.stringify(list, null, 0));
 	//dev key 4f96e913faf4b10d77bd99304939270a
 	//user key ff7e23814c18e02ebe244dc3aa70b020
 

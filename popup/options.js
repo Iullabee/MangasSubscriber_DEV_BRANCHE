@@ -142,7 +142,8 @@ document.getElementById("import_online").addEventListener("click", async (e) => 
             if (json.split("Bad API request")[1] || json.split("Paste Removed")[1]) json = "";
 
             if (json != "") {
-                let parsed_json = JSON.parse(json);
+                let decoded_json = decodeURIComponent(json);
+                let parsed_json = JSON.parse(decoded_json);
                 document.getElementById("import_online").textContent = "...";
     
                 var fail = await background.importMangasList(parsed_json);
