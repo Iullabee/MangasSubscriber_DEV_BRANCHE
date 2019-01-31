@@ -124,7 +124,7 @@ function createNavigation(message) {
 		menu_wrapper.appendChild(menu_button);
 		
 		let menu = document.createElement("div");
-		menu.classList.add("button", "hidden");
+		menu.classList.add("button", "mangassubscriber_hidden");
 		menu_wrapper.appendChild(menu);
 
 		if (navigation.unread_chapter != "") {
