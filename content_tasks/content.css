@@ -1,3 +1,12 @@
+.hidden {
+    display: none;
+}
+
+.cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .navigation_bar_spacer {
     padding-top: 42px;
 }
@@ -7,18 +16,19 @@
     top: 0px;
     left: 0px;
     width: 100%;
+    padding: 5px;
     background-color: black;
     z-index: 1000;
     border-bottom: 1px solid gray;
 }
 
 .left_nav_button{
-    margin: 5px 0px 5px 5px;
+    margin-right: 5px;
     float:left;
 }
 
 .right_nav_button{
-    margin: 5px 5px 5px 0px;
+    margin-left: 5px;
     float:right;
 }
 
@@ -46,7 +56,11 @@
 
 .centered {
     position: absolute;
-	top: 50%;
+	top: 5px;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%);
+}
+
+.centered:hover > * {
+    display : block;
 }

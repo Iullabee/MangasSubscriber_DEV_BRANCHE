@@ -815,9 +815,17 @@ async function readMangaChapter(message, sender) {
 						let next_chapter = index < (chapters_numbers.length-2) ? {"number": chapters_numbers[index+1], "url": mangas_list[manga_name].chapters_list[chapters_numbers[index+1]].url} : "";
 						//last chapter (if current chapter isn't the last)
 						let last_chapter = index < (chapters_numbers.length-1) ? {"number": chapters_numbers[chapters_numbers.length-1], "url": mangas_list[manga_name].chapters_list[chapters_numbers[chapters_numbers.length-1]].url} : "";
-						
+						//first unread chapter
+						let unread_chapter = "";
+						for (i=0; i<chapters_numbers.length; i++) {
+							if (mangas_list[manga_name].chapters_list[chapters_numbers[i]].status == "unread") {
+								unread_chapter = {"number": chapters_numbers[i], "url": mangas_list[manga_name].chapters_list[chapters_numbers[i]].url};
+								break;
+							}
+						}
+
 						if (await getNavigationBar())
-							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter}});
+							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter, "unread_chapter": unread_chapter}});
 					}
 				}
 			}

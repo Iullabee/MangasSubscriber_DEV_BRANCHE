@@ -79,8 +79,8 @@ function createNavigation(message) {
 			first_button.classList.add("left_nav_button", "button");
 			let first_button_link = document.createElement("a");
 			first_button_link.textContent = "<< " + navigation.first_chapter.number;
-			first_button.appendChild(first_button_link);
 			first_button_link.href = navigation.first_chapter.url;
+			first_button.appendChild(first_button_link);
 			nav_bar.appendChild(first_button);
 		}
 		if (navigation.previous_chapter != "") {
@@ -88,8 +88,8 @@ function createNavigation(message) {
 			previous_button.classList.add("left_nav_button", "button");
 			let previous_button_link = document.createElement("a");
 			previous_button_link.textContent = "< " + navigation.previous_chapter.number;
-			previous_button.appendChild(previous_button_link);
 			previous_button_link.href = navigation.previous_chapter.url;
+			previous_button.appendChild(previous_button_link);
 			nav_bar.appendChild(previous_button);
 		}
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
@@ -107,21 +107,49 @@ function createNavigation(message) {
 			next_button.classList.add("right_nav_button", "button");
 			let next_button_link = document.createElement("a");
 			next_button_link.textContent = navigation.next_chapter.number + " >";
-			next_button.appendChild(next_button_link);
 			next_button_link.href = navigation.next_chapter.url;
+			next_button.appendChild(next_button_link);
 			nav_bar.appendChild(next_button);
 		}
 
-		let unread_button = document.createElement("div");
-		unread_button.classList.add("centered", "button");
-		unread_button.addEventListener("click", () => {
+		let menu_wrapper = document.createElement("div");
+		menu_wrapper.classList.add("centered");
+		nav_bar.appendChild(menu_wrapper);
+
+		let menu_button = document.createElement("div");
+		menu_button.classList.add("button");
+		let menu_button_link = document.createElement("a");
+		menu_button_link.textContent = "...";
+		menu_button.appendChild(menu_button_link);
+		menu_wrapper.appendChild(menu_button);
+		
+		let menu = document.createElement("div");
+		menu.classList.add("button", "hidden");
+		menu_wrapper.appendChild(menu);
+
+		if (navigation.unread_chapter != "") {
+			let first_unread_button = document.createElement("div");
+			first_unread_button.classList.add("button");
+			
+			let first_unread_button_link = document.createElement("a");
+			first_unread_button_link.textContent = "go to first unread chapter";
+			first_unread_button_link.href = navigation.unread_chapter.url;
+			first_unread_button.appendChild(first_unread_button_link);
+			menu.appendChild(first_unread_button);
+		}
+		
+		let mark_unread_button = document.createElement("div");
+		mark_unread_button.classList.add("button");
+		mark_unread_button.addEventListener("click", () => {
 			browser.runtime.sendMessage({"target":"background","unread": window.location.href});
 		});
-		let unread_button_link = document.createElement("a");
-		unread_button_link.textContent = "mark as not read";
-		unread_button.appendChild(unread_button_link);
-		nav_bar.appendChild(unread_button);
+		let mark_unread_button_link = document.createElement("a");
+		mark_unread_button_link.textContent = "mark chapter as not read";
+		mark_unread_button.appendChild(mark_unread_button_link);
+		menu.appendChild(mark_unread_button);
 		
+
+
 		document.body.appendChild(nav_bar);
 	
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
