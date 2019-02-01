@@ -2,14 +2,8 @@
     display: none;
 }
 
-.row {
-    display: table-row;
+.align {
     vertical-align: middle;
-}
-
-.cell {
-    display: table-cell;
-    padding: 0.25em;
 }
 
 .navigation_bar_spacer {
@@ -73,4 +67,5 @@
 .text_icons {
 	width: 1em;
     height: 1em;
+    padding: 0em 0.25em;
 }
