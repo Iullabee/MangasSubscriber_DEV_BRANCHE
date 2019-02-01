@@ -78,7 +78,15 @@ function createNavigation(message) {
 			let first_button = document.createElement("div");
 			first_button.classList.add("left_nav_button", "button");
 			let first_button_link = document.createElement("a");
-			first_button_link.textContent = "<< " + navigation.first_chapter.number;
+			first_button_link.classList.add("row");
+			let first_button_arrow = document.createElement("img");
+			first_button_arrow.classList.add("text_icons", "cell");
+			first_button_arrow.src = browser.extension.getURL("../icons/arrow_left_double.svg");
+			first_button_link.appendChild(first_button_arrow);
+			let first_button_text_node = document.createElement("span");
+			first_button_text_node.classList.add("cell");
+			first_button_text_node.innerText = navigation.first_chapter.number;
+            first_button_link.appendChild(first_button_text_node);
 			first_button_link.href = navigation.first_chapter.url;
 			first_button.appendChild(first_button_link);
 			nav_bar.appendChild(first_button);
@@ -87,7 +95,15 @@ function createNavigation(message) {
 			let previous_button = document.createElement("div");
 			previous_button.classList.add("left_nav_button", "button");
 			let previous_button_link = document.createElement("a");
-			previous_button_link.textContent = "< " + navigation.previous_chapter.number;
+			previous_button_link.classList.add("row");
+			let previous_button_arrow = document.createElement("img");
+			previous_button_arrow.classList.add("text_icons", "cell");
+			previous_button_arrow.src = browser.extension.getURL("../icons/arrow_left_single.svg");
+			previous_button_link.appendChild(previous_button_arrow);
+			let previous_button_text_node = document.createElement("span");
+			previous_button_text_node.classList.add("cell");
+			previous_button_text_node.innerText = navigation.previous_chapter.number;
+			previous_button_link.appendChild(previous_button_text_node);
 			previous_button_link.href = navigation.previous_chapter.url;
 			previous_button.appendChild(previous_button_link);
 			nav_bar.appendChild(previous_button);
@@ -119,7 +135,7 @@ function createNavigation(message) {
 		let menu_button = document.createElement("div");
 		menu_button.classList.add("button");
 		let menu_button_link = document.createElement("a");
-		menu_button_link.textContent = "...";
+		menu_button_link.textContent = " . . . ";
 		menu_button.appendChild(menu_button_link);
 		menu_wrapper.appendChild(menu_button);
 		

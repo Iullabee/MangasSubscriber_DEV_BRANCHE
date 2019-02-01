@@ -47,7 +47,7 @@ function searchWebsitesFor () {
                             container.appendChild(link_container);
 
                             let follow = document.createElement("img");
-                            follow.classList.add("icons", "inline_icons", "cell");
+                            follow.classList.add("icons", "text_icons", "cell");
                             follow.name = "follow_button";
                             if (await background.isMangaFollowed(manga_name)){
                                 follow.title = "already followed";

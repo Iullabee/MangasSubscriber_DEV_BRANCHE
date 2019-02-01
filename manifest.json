@@ -54,6 +54,10 @@
 		"open_in_tab":true,
 		"browser_style": true
 	},
+
+	"web_accessible_resources": [
+		"icons/*.svg"
+	],
 	
 	"applications": {
 		"gecko": {
