@@ -4,26 +4,26 @@
 }
 
 .table {
-    display: table;
-    background-color: white;
-    position: absolute;
+	display: table;
+	background-color: white;
+	position: absolute;
 	top: 50px;
 	left: 50%;
 	transform: translate(-50%, 0%);
-    border: 1px solid black;
+	border: 1px solid black;
 }
 .row {
-    display: table-row;
+	display: table-row;
 }
 .row:hover {
 	background-color: #e5e5e5;
 }
 .cell {
-    display: table-cell;
-    vertical-align: middle;
-    padding: 0px 15px;
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0px 15px;
 }
 
 .align_center {
-    text-align: center;
+	text-align: center;
 }

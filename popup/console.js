@@ -141,12 +141,12 @@ async function updateConsole(message) {
 				finished_number.value = 0;
 			finished_number.value += 1;
 			finished_number.textContent = "("+finished_number.value+")";
-        }
-        
-        //updating browser action when update is finished
+		}
+		
+		//updating browser action when update is finished
 		if (document.getElementById("console_updating_number").value == 0) {
-            background.setBadgeNumber();
-            await createMangasList();
+			background.setBadgeNumber();
+			await createMangasList();
 		}
 	}
 }

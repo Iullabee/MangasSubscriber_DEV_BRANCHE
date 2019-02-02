@@ -1,6 +1,6 @@
 body {
-    width: 800px;
-    height: 600px;
+	width: 800px;
+	height: 600px;
 	overflow-x: hidden;
 }
 
@@ -21,12 +21,12 @@ body {
 }
 
 .inline {
-    display: inline-block;
-    vertical-align: middle;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .onehalf {
-    width: 50%;
+	width: 50%;
 }
 
 .onethird {
@@ -34,14 +34,14 @@ body {
 }
 
 .table {
-    display: table;
+	display: table;
 }
 .row {
-    display: table-row;
+	display: table-row;
 }
 .cell {
-    display: table-cell;
-    vertical-align: middle;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .left_padding {
@@ -72,7 +72,7 @@ body {
 }
 
 h1 {
-    text-align: center;
+	text-align: center;
 }
 
 h2 {
@@ -83,25 +83,25 @@ h2 {
 MENU SECTION
 ****************************************/
 #menu {
-    position: fixed;
-    top: 0px;
-    padding-bottom: 1px;
-    width: 800px;
-    z-index: 1;
+	position: fixed;
+	top: 0px;
+	padding-bottom: 1px;
+	width: 800px;
+	z-index: 1;
 }
 
 .extension_name {
-    font-size: 2.5em;
-    padding: 5px;
+	font-size: 2.5em;
+	padding: 5px;
 }
 
 .extension_version {
-    font-size: 1em;
-    padding: 10px 0px 0px 5px;
+	font-size: 1em;
+	padding: 10px 0px 0px 5px;
 }
 
 .tab {
-    padding: 5px;
+	padding: 5px;
 }
 
 .tab:hover {
@@ -109,7 +109,7 @@ MENU SECTION
 }
 
 .selected_tab {
-    background-color: #DDDDDD;
+	background-color: #DDDDDD;
 }
 /****************************************
 MENU END
@@ -121,13 +121,13 @@ MENU END
 PANELS SECTION
 ****************************************/
 .panel {
-    position: fixed;
-    top: 52px;
-    width: 800px;
-    height: 0px;
+	position: fixed;
+	top: 52px;
+	width: 800px;
+	height: 0px;
 	overflow: hidden;
-    border: 1px solid black;
-    background: white;
+	border: 1px solid black;
+	background: white;
 	z-index: 5;
 	transition: height 0.5s;
 }
@@ -141,7 +141,7 @@ PANELS SECTION
 CONSOLE PANEL
 ****************************************/
 #console {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 #console_display {
@@ -161,7 +161,7 @@ CONSOLE PANEL
 	padding-left: 10px;
 	padding-right: 10px;
 	position: relative;
-    width: 518px;
+	width: 518px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -204,16 +204,16 @@ CONSOLE END
 OPTIONS PANEL
 ****************************************/
 #options {
-    font-size: 1.5em;
-    padding: 0px 15px;
+	font-size: 1.5em;
+	padding: 0px 15px;
 }
 
 #options > div {
 	vertical-align: middle;
 	width: 100%;
-    border-bottom: 1px solid black;
-    padding: 5px 0px 5px 15px;
-    min-height: 30px;
+	border-bottom: 1px solid black;
+	padding: 5px 0px 5px 15px;
+	min-height: 30px;
 }
 
 #options > div:hover {
@@ -221,7 +221,7 @@ OPTIONS PANEL
 }
 
 #import {
-    min-height: 45px;
+	min-height: 45px;
 }
 .import_options {
 	font-size: 0.75em;
@@ -247,19 +247,19 @@ HELP PANEL
 }
 
 .section {
-    min-height: 50px;
-    overflow: hidden;
+	min-height: 50px;
+	overflow: hidden;
 }
 
 .small_image {
 	width: 50%;
 }
 .zoom img {
-    transition: width 1s, height 1s;
+	transition: width 1s, height 1s;
 }
 .zoom img:hover {
-    width: 75%;
-    height: 75%;
+	width: 75%;
+	height: 75%;
 }
 
 .separator {
@@ -268,7 +268,7 @@ HELP PANEL
 }
 
 ul {
-    padding-left: 30px;
+	padding-left: 30px;
 }
 
 .tooltip {
@@ -307,11 +307,11 @@ PANELS END
 LIST SECTION
 ****************************************/
 .list_top {
-    position: fixed;
-    top: 52px;
-    width: 800px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+	position: fixed;
+	top: 52px;
+	width: 800px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
 	font-size: 1.25em;
 	z-index: 1;
 	border-collapse: separate;
@@ -330,15 +330,15 @@ LIST SECTION
 }
 
 #list_container {
-    margin-top: 134px;
-    max-height: 494px;
-    height: 494px;
+	margin-top: 134px;
+	max-height: 494px;
+	height: 494px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
 #list {
-    width: 783px;
-    max-width: 783px;
+	width: 783px;
+	max-width: 783px;
 	background: white;
 	border-collapse: collapse;
 }

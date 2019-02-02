@@ -86,7 +86,7 @@ function createNavigation(message) {
 			let first_button_text_node = document.createElement("div");
 			first_button_text_node.classList.add("cell");
 			first_button_text_node.innerText = navigation.first_chapter.number;
-            first_button_link.appendChild(first_button_text_node);
+			first_button_link.appendChild(first_button_text_node);
 			first_button_link.href = navigation.first_chapter.url;
 			first_button.appendChild(first_button_link);
 			nav_bar.appendChild(first_button);

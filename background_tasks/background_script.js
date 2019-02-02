@@ -638,17 +638,17 @@ function cleanMangaName (name) {
 	return name.replace(/[\W_]+/g , " ").toLowerCase();
 }
 function sortAlphaNum(a, b) {
-    var reA = /[^a-zA-Z]/g;
-    var reN = /[^0-9.]/g;
-    var aA = a.replace(reA, "");
-    var bA = b.replace(reA, "");
-    if (aA === bA) {
-        var aN = parseFloat(a.replace(reN, ""));
-        var bN = parseFloat(b.replace(reN, ""));
-        return aN === bN ? 0 : aN > bN ? 1 : -1;
-    } else {
-        return aA > bA ? 1 : -1;
-    }
+	var reA = /[^a-zA-Z]/g;
+	var reN = /[^0-9.]/g;
+	var aA = a.replace(reA, "");
+	var bA = b.replace(reA, "");
+	if (aA === bA) {
+		var aN = parseFloat(a.replace(reN, ""));
+		var bN = parseFloat(b.replace(reN, ""));
+		return aN === bN ? 0 : aN > bN ? 1 : -1;
+	} else {
+		return aA > bA ? 1 : -1;
+	}
 }
 
 function sortNum (a, b) {
@@ -664,14 +664,14 @@ function customSort(a, b) {
 }
 
 function cloneObject(obj) {
-    var clone = {};
-    for(var i in obj) {
-        if(obj[i] != null &&  typeof(obj[i])=="object")
-            clone[i] = cloneObject(obj[i]);
-        else
-            clone[i] = obj[i];
-    }
-    return clone;
+	var clone = {};
+	for(var i in obj) {
+		if(obj[i] != null &&  typeof(obj[i])=="object")
+			clone[i] = cloneObject(obj[i]);
+		else
+			clone[i] = obj[i];
+	}
+	return clone;
 }
 
 async function getSource(source_url){

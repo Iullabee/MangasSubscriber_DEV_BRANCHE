@@ -1,5 +1,5 @@
 .mangassubscriber_hidden {
-    display: none;
+	display: none;
 }
 
 .table {
@@ -16,28 +16,28 @@
 }
 
 .navigation_bar_spacer {
-    padding-top: 42px;
+	padding-top: 42px;
 }
 
 #mangassubscriber_nav_bar{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    padding: 5px;
-    background-color: black;
-    z-index: 1000;
-    border-bottom: 1px solid gray;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	padding: 5px;
+	background-color: black;
+	z-index: 1000;
+	border-bottom: 1px solid gray;
 }
 
 .left_nav_button{
-    margin-right: 5px;
-    float:left;
+	margin-right: 5px;
+	float:left;
 }
 
 .right_nav_button{
-    margin-left: 5px;
-    float:right;
+	margin-left: 5px;
+	float:right;
 }
 
 #mangassubscriber_nav_bar .button {
@@ -49,28 +49,28 @@
 	box-sizing: border-box;
 	background: #363636;
 	border: 1px solid gray;
-    border-radius: 7px;
-    color: #EEEEEE;
+	border-radius: 7px;
+	color: #EEEEEE;
 }
 
 #mangassubscriber_nav_bar .button a {
-    text-decoration: none;
-    color: #EEEEEE;
+	text-decoration: none;
+	color: #EEEEEE;
 }
 
 #mangassubscriber_nav_bar .button a:hover {
-    color: #FAB400;
+	color: #FAB400;
 }
 
 .centered {
-    position: absolute;
+	position: absolute;
 	top: 5px;
 	left: 50%;
 	transform: translate(-50%);
 }
 
 .centered:hover > * {
-    display : block;
+	display : block;
 }
 
 .text_icons {
