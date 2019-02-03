@@ -79,6 +79,7 @@ function createNavigation(message) {
 			first_button.classList.add("left_nav_button", "button", "table");
 			let first_button_link = document.createElement("a");
 			first_button_link.classList.add("row");
+			first_button_link.href = navigation.first_chapter.url;
 			let first_button_arrow = document.createElement("img");
 			first_button_arrow.classList.add("text_icons", "cell");
 			first_button_arrow.src = browser.extension.getURL("../icons/arrow_left_double.svg");
@@ -87,7 +88,6 @@ function createNavigation(message) {
 			first_button_text_node.classList.add("cell");
 			first_button_text_node.innerText = navigation.first_chapter.number;
 			first_button_link.appendChild(first_button_text_node);
-			first_button_link.href = navigation.first_chapter.url;
 			first_button.appendChild(first_button_link);
 			nav_bar.appendChild(first_button);
 		}
@@ -96,6 +96,7 @@ function createNavigation(message) {
 			previous_button.classList.add("left_nav_button", "button", "table");
 			let previous_button_link = document.createElement("a");
 			previous_button_link.classList.add("row");
+			previous_button_link.href = navigation.previous_chapter.url;
 			let previous_button_arrow = document.createElement("img");
 			previous_button_arrow.classList.add("text_icons", "cell");
 			previous_button_arrow.src = browser.extension.getURL("../icons/arrow_left_single.svg");
@@ -104,26 +105,41 @@ function createNavigation(message) {
 			previous_button_text_node.classList.add("cell");
 			previous_button_text_node.innerText = navigation.previous_chapter.number;
 			previous_button_link.appendChild(previous_button_text_node);
-			previous_button_link.href = navigation.previous_chapter.url;
 			previous_button.appendChild(previous_button_link);
 			nav_bar.appendChild(previous_button);
 		}
 		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
 		if (navigation.last_chapter != "") {
 			let last_button = document.createElement("div");
-			last_button.classList.add("right_nav_button", "button");
+			last_button.classList.add("right_nav_button", "button", "table");
 			let last_button_link = document.createElement("a");
-			last_button_link.textContent = navigation.last_chapter.number + " >>";
+			last_button_link.classList.add("row");
 			last_button_link.href = navigation.last_chapter.url;
+			let last_button_text_node = document.createElement("div");
+			last_button_text_node.classList.add("cell");
+			last_button_text_node.innerText = navigation.last_chapter.number;
+			last_button_link.appendChild(last_button_text_node);
+			let last_button_arrow = document.createElement("img");
+			last_button_arrow.classList.add("text_icons", "cell");
+			last_button_arrow.src = browser.extension.getURL("../icons/arrow_right_double.svg");
+			last_button_link.appendChild(last_button_arrow);
 			last_button.appendChild(last_button_link);
 			nav_bar.appendChild(last_button);
 		}
 		if (navigation.next_chapter != "") {
 			let next_button = document.createElement("div");
-			next_button.classList.add("right_nav_button", "button");
+			next_button.classList.add("right_nav_button", "button", "table");
 			let next_button_link = document.createElement("a");
-			next_button_link.textContent = navigation.next_chapter.number + " >";
+			next_button_link.classList.add("row");
 			next_button_link.href = navigation.next_chapter.url;
+			let next_button_text_node = document.createElement("div");
+			next_button_text_node.classList.add("cell");
+			next_button_text_node.innerText = navigation.next_chapter.number;
+			next_button_link.appendChild(next_button_text_node);
+			let next_button_arrow = document.createElement("img");
+			next_button_arrow.classList.add("text_icons", "cell");
+			next_button_arrow.src = browser.extension.getURL("../icons/arrow_right_single.svg");
+			next_button_link.appendChild(next_button_arrow);
 			next_button.appendChild(next_button_link);
 			nav_bar.appendChild(next_button);
 		}
