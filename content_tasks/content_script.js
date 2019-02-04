@@ -75,69 +75,73 @@ function createNavigation(message) {
 		nav_bar.setAttribute("id", "mangassubscriber_nav_bar");
 
 		if (navigation.first_chapter != "") {
-			let first_button = document.createElement("div");
-			first_button.classList.add("left_nav_button", "button", "table");
-			let first_button_link = document.createElement("a");
-			first_button_link.classList.add("row");
-			first_button_link.href = navigation.first_chapter.url;
+			let first_button = document.createElement("a");
+			first_button.classList.add("left_nav_button", "mangassubscriber_button", "mangassubscriber_table");
+			first_button.href = navigation.first_chapter.url;
+			let first_button_link = document.createElement("div");
+			first_button_link.classList.add("mangassubscriber_row");
+			//first_button_link.href = navigation.first_chapter.url;
 			let first_button_arrow = document.createElement("img");
-			first_button_arrow.classList.add("text_icons", "cell");
+			first_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			first_button_arrow.src = browser.extension.getURL("../icons/arrow_left_double.svg");
 			first_button_link.appendChild(first_button_arrow);
 			let first_button_text_node = document.createElement("div");
-			first_button_text_node.classList.add("cell");
+			first_button_text_node.classList.add("mangassubscriber_cell");
 			first_button_text_node.innerText = navigation.first_chapter.number;
 			first_button_link.appendChild(first_button_text_node);
 			first_button.appendChild(first_button_link);
 			nav_bar.appendChild(first_button);
 		}
 		if (navigation.previous_chapter != "") {
-			let previous_button = document.createElement("div");
-			previous_button.classList.add("left_nav_button", "button", "table");
-			let previous_button_link = document.createElement("a");
-			previous_button_link.classList.add("row");
-			previous_button_link.href = navigation.previous_chapter.url;
+			let previous_button = document.createElement("a");
+			previous_button.classList.add("left_nav_button", "mangassubscriber_button", "mangassubscriber_table");
+			previous_button.href = navigation.previous_chapter.url;
+			let previous_button_link = document.createElement("div");
+			previous_button_link.classList.add("mangassubscriber_row");
+			//previous_button_link.href = navigation.previous_chapter.url;
 			let previous_button_arrow = document.createElement("img");
-			previous_button_arrow.classList.add("text_icons", "cell");
+			previous_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			previous_button_arrow.src = browser.extension.getURL("../icons/arrow_left_single.svg");
 			previous_button_link.appendChild(previous_button_arrow);
 			let previous_button_text_node = document.createElement("div");
-			previous_button_text_node.classList.add("cell");
+			previous_button_text_node.classList.add("mangassubscriber_cell");
 			previous_button_text_node.innerText = navigation.previous_chapter.number;
 			previous_button_link.appendChild(previous_button_text_node);
 			previous_button.appendChild(previous_button_link);
 			nav_bar.appendChild(previous_button);
 		}
-		//append last_chapter before previous_chapter to avoid them getting inverted due to css : float:right
+		//append last_chapter before next_chapter to avoid them getting inverted due to css : float:right
 		if (navigation.last_chapter != "") {
-			let last_button = document.createElement("div");
-			last_button.classList.add("right_nav_button", "button", "table");
-			let last_button_link = document.createElement("a");
-			last_button_link.classList.add("row");
-			last_button_link.href = navigation.last_chapter.url;
+			let last_button = document.createElement("a");
+			last_button.classList.add("right_nav_button", "mangassubscriber_button", "mangassubscriber_table");
+			last_button.href = navigation.last_chapter.url;
+			let last_button_link = document.createElement("div");
+			last_button_link.classList.add("mangassubscriber_row");
+			//last_button_link.href = navigation.last_chapter.url;
 			let last_button_text_node = document.createElement("div");
-			last_button_text_node.classList.add("cell");
+			last_button_text_node.classList.add("mangassubscriber_cell");
 			last_button_text_node.innerText = navigation.last_chapter.number;
 			last_button_link.appendChild(last_button_text_node);
 			let last_button_arrow = document.createElement("img");
-			last_button_arrow.classList.add("text_icons", "cell");
+			last_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			last_button_arrow.src = browser.extension.getURL("../icons/arrow_right_double.svg");
 			last_button_link.appendChild(last_button_arrow);
 			last_button.appendChild(last_button_link);
 			nav_bar.appendChild(last_button);
 		}
 		if (navigation.next_chapter != "") {
-			let next_button = document.createElement("div");
-			next_button.classList.add("right_nav_button", "button", "table");
-			let next_button_link = document.createElement("a");
-			next_button_link.classList.add("row");
-			next_button_link.href = navigation.next_chapter.url;
+			let next_button = document.createElement("a");
+			next_button.classList.add("right_nav_button", "mangassubscriber_button", "mangassubscriber_table");
+			next_button.href = navigation.next_chapter.url;
+			let next_button_link = document.createElement("div");
+			next_button_link.classList.add("mangassubscriber_row");
+			//next_button_link.href = navigation.next_chapter.url;
 			let next_button_text_node = document.createElement("div");
-			next_button_text_node.classList.add("cell");
+			next_button_text_node.classList.add("mangassubscriber_cell");
 			next_button_text_node.innerText = navigation.next_chapter.number;
 			next_button_link.appendChild(next_button_text_node);
 			let next_button_arrow = document.createElement("img");
-			next_button_arrow.classList.add("text_icons", "cell");
+			next_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			next_button_arrow.src = browser.extension.getURL("../icons/arrow_right_single.svg");
 			next_button_link.appendChild(next_button_arrow);
 			next_button.appendChild(next_button_link);
@@ -149,39 +153,30 @@ function createNavigation(message) {
 		nav_bar.appendChild(menu_wrapper);
 
 		let menu_button = document.createElement("div");
-		menu_button.classList.add("button");
-		let menu_button_link = document.createElement("a");
+		menu_button.classList.add("mangassubscriber_button");
+		let menu_button_link = document.createElement("span");
 		menu_button_link.textContent = " . . . ";
 		menu_button.appendChild(menu_button_link);
 		menu_wrapper.appendChild(menu_button);
-		
-		let menu = document.createElement("div");
-		menu.classList.add("button", "mangassubscriber_hidden");
-		menu_wrapper.appendChild(menu);
 
 		if (navigation.unread_chapter != "") {
-			let first_unread_button = document.createElement("div");
-			first_unread_button.classList.add("button");
-			
-			let first_unread_button_link = document.createElement("a");
-			first_unread_button_link.textContent = "go to first unread chapter";
-			first_unread_button_link.href = navigation.unread_chapter.url;
-			first_unread_button.appendChild(first_unread_button_link);
-			menu.appendChild(first_unread_button);
+			let first_unread_button = document.createElement("a");
+			first_unread_button.classList.add("mangassubscriber_hidden", "mangassubscriber_button");
+			first_unread_button.href = navigation.unread_chapter.url;
+			first_unread_button.innerText = "go to first unread chapter";
+			menu_wrapper.appendChild(first_unread_button);
 		}
 		
 		let mark_unread_button = document.createElement("div");
-		mark_unread_button.classList.add("button");
+		mark_unread_button.classList.add("mangassubscriber_hidden", "mangassubscriber_button");
 		mark_unread_button.addEventListener("click", () => {
 			browser.runtime.sendMessage({"target":"background","unread": window.location.href});
 		});
-		let mark_unread_button_link = document.createElement("a");
+		let mark_unread_button_link = document.createElement("span");
 		mark_unread_button_link.textContent = "mark chapter as not read";
 		mark_unread_button.appendChild(mark_unread_button_link);
-		menu.appendChild(mark_unread_button);
+		menu_wrapper.appendChild(mark_unread_button);
 		
-
-
 		document.body.appendChild(nav_bar);
 	
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
