@@ -10,8 +10,6 @@ GOALS :
 
 - display patchnotes after an update
 
-- create left&right arrows icons to replace the "<" & ">" in the navigation bar
-
 
 
 §§OPTIMIZATIONS
