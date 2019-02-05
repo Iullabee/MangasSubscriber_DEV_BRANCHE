@@ -8,8 +8,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- display patchnotes after an update
-
 
 
 §§OPTIMIZATIONS

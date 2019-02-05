@@ -87,3 +87,36 @@ document.getElementById("menu").addEventListener("click", async (e) => {
 	if (refresh_list) setTimeout(createMangasList, 500); //wait for the sliding animation to finish before refreshing the list to avoid stuttering
 });
 
+
+
+(async function patchnotes() {
+	let parser = new DOMParser();
+	let source = "";
+	
+	let title = "MangasSubscriber has been updated !";
+	let patchnotes = [];
+	if (!background) background = await browser.runtime.getBackgroundPage();
+	let patchnotes_seen = await background.getPatchnotesVersion();
+
+	//get patchnotes
+	try{
+		source = await background.getSource("../help/patchnotes.html");
+	} catch (error){
+		throw error;
+	}
+	
+	//extract mangas found
+	let doc = parser.parseFromString(source, "text/html");
+	let list = doc.querySelectorAll("div.modal_list_line");
+	for (let i=0; i<list.length; i++) {
+		let item_version = list[i].getElementsByClassName("name_text")[0].innerText.split("version ")[1];
+		if (background.sortAlphaNum(item_version, patchnotes_seen)) {
+			patchnotes.push(list[i]);
+		}
+	}
+	if (patchnotes.length > 0) {
+		//no modal agree
+		revealModal(title, patchnotes);
+		background.setPatchnotesVersion(browser.runtime.getManifest().version);
+	}
+})();
