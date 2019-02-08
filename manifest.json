@@ -12,9 +12,17 @@
 		"activeTab",
 		"storage",
 		"unlimitedStorage",
-		"<all_urls>",
 		"downloads",
-		"clipboardWrite"
+		"clipboardWrite",
+		"*://*.mangahere.cc/*",
+		"*://fanfox.net/*",
+		"*://*.fanfox.net/*",
+		"*://*.mangatown.com/*",
+		"*://*.readmng.com/*",
+		"*://*.webtoons.com/*",
+		"*://mangakakalot.com/*",
+		"*://manganelo.com/*",
+		"*://pastebin.com/*"
 	],
 
 	"browser_action": {
