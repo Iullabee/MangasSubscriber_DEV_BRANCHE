@@ -663,6 +663,19 @@ function customSort(a, b) {
 	return mangassubscriber_prefs["unified_chapter_numbers"] ? sortNum(a, b) : sortAlphaNum(a, b);
 }
 
+function sortVersions(a, b) {
+	let tabA = a.split(".");
+	let tabB = b.split(".");
+	let length = tabA.length > tabB.length ? tabA.length : tabB.length;
+	let compare = null;
+
+	for (i=0; i<length; i++) {
+		compare = tabA[i] ? tabB[i] ? tabA[i] > tabB[i] ? 1 : tabA[i] == tabB[i] ? 0 : -1 : 1 : -1;
+		if (compare != 0) break;
+	}
+	return compare;
+}
+
 function cloneObject(obj) {
 	var clone = {};
 	for(var i in obj) {

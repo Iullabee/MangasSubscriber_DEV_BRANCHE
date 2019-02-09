@@ -110,7 +110,7 @@ document.getElementById("menu").addEventListener("click", async (e) => {
 	let list = doc.querySelectorAll("div.modal_list_line");
 	for (let i=0; i<list.length; i++) {
 		let item_version = list[i].getElementsByClassName("name_text")[0].innerText.split("version ")[1];
-		if (background.sortAlphaNum(item_version, patchnotes_seen)) {
+		if (background.sortVersions(item_version, patchnotes_seen) > 0) {
 			patchnotes.push(list[i]);
 		}
 	}
