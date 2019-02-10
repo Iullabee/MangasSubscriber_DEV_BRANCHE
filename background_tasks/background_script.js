@@ -786,7 +786,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 		}
 	}
 	//map a catch() clause to the promises so that promise.all.then triggers even if some promises are rejected
-	Promise.all(update_promises.map(p => p.catch(() => undefined))).then( () => {
+	Promise.all(update_promises.map(p => p.catch(() => undefined))).then(async () => {
 		setBadgeNumber();
 	});
 	return;
@@ -942,6 +942,8 @@ async function importMangasList(parsed_json){
 		await browser.storage.local.set(back_up);
 		//update badge
 		setBadgeNumber();
+		//reset possible autoUpdate
+		setAutoUpdate(await getAutoUpdateInterval());
 	}
 	return ;
 }
@@ -1236,4 +1238,6 @@ install().then(async () => {
 	mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	//update badge
 	setBadgeNumber();
+	//reset possible autoUpdate
+	setAutoUpdate(await getAutoUpdateInterval());
 });
