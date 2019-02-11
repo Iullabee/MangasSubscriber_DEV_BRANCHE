@@ -934,7 +934,7 @@ async function exportMangasListOnline(){
 //import mangas list from json
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.1"){
+	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.2"){
 		await getMangasList();
 		mangas_list = cloneObject(back_up["mangas_list"]);
 		mangassubscriber_prefs = cloneObject(back_up["MangasSubscriberPrefs"]);
@@ -1085,10 +1085,19 @@ async function setAutoUpdate(interval){
 	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	let hours = 3600000;
 	mangassubscriber_prefs["auto_update"] = interval;
-	await browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
 	
 	clearTimeout(isAutoUpdating);
-	if (interval > 0) isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+	if (interval > 0) {
+		let remaining_time = interval*hours;
+		let current_time = new Date().getTime();
+		if (mangassubscriber_prefs["last_update"] > 0) remaining_time = remaining_time - (current_time - mangassubscriber_prefs["last_update"]);
+		else mangassubscriber_prefs["last_update"] = current_time;
+		if (remaining_time < 0) remaining_time = 0;
+		isAutoUpdating = setTimeout(autoUpdate, remaining_time);
+	} else {
+		mangassubscriber_prefs["last_update"] = 0;
+	}
+	browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
 }
 
 //get auto update interval
@@ -1100,12 +1109,15 @@ async function getAutoUpdateInterval(){
 //auto update
 async function autoUpdate(){
 	let hours = 3600000;
-	let interval = await getAutoUpdateInterval();
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	let interval = mangassubscriber_prefs["auto_update"];
 	
 	clearTimeout(isAutoUpdating);
 	if (interval > 0) {
 		updateMangasList();
 		isAutoUpdating = setTimeout(autoUpdate, interval*hours);
+		mangassubscriber_prefs["last_update"] = new Date().getTime();
+		browser.storage.local.set({"MangasSubscriberPrefs":mangassubscriber_prefs});
 	}
 }
 
@@ -1223,7 +1235,7 @@ async function install(){
 	let list = await getMangasList();
 	let to_log = null;
 
-	if (!prefs || Object.keys(prefs).length < 7) {prefs = {"DB_version":"2.0.1", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
+	if (!prefs || Object.keys(prefs).length < 8) {prefs = {"DB_version":"2.0.2", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
 	to_log = {"MangasSubscriberPrefs": prefs, "mangas_list": list};
