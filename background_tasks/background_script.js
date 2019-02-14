@@ -655,32 +655,9 @@ var websites_list = {
 					return "https://" + this.url + "manga/" + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
-					var source = "truc";
-					var parser = new DOMParser();
 					let chapters = [];
 					let chapter_number = url.split("/chapter/")[1];
-					/*try {
-						//get manga's home page
-						source = await getSource(this.getMangaRootURL(url));
-					} catch (error) {
-						throw error;
-					}
-
-					//extract the manga name
-					var doc = parser.parseFromString(source, "text/html");
-					console.log("####################################");
-					console.log("get current chapter");
-					console.log("####################################");
-					console.log(source);
-					chapters = doc.querySelectorAll("td.col-8.col-md-9 a");
 					
-					for (i=0; i<chapters.children.length; i++) {
-						if (chapters.children[i].value == chapter_number) {
-							chapter_number = chapters.children[i].innerText.split("Chapter ")[1].split(":")[0];
-							break;
-						}
-					}
-					return chapter_number;*/
 					chapters = await this.getAllChapters(this.getMangaRootURL(url));
 					let changed = false;
 					for (let i in chapters) {
@@ -706,10 +683,6 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					console.log("####################################");
-					console.log("get all chapters");
-					console.log("####################################");
-					console.log(source);
 					let list = doc.querySelectorAll("td.col-8.col-md-9 a");
 					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
@@ -725,39 +698,46 @@ var websites_list = {
 				},
 				searchFor: async function (manga_name){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					let untrimmed_results = {};
 					let results = {};
-					var source = "truc";
 					let index = manga_name.split(" ").length;
-					var parser = new DOMParser();
 
 					while (Object.keys(results).length == 0 && index > 0) {
-						/* NOT WORKING :: MANGAROCK GENERATES THE SEARCH RESULT WITH AJAX REQUEST AFTER PAGE IS LOADED
-						THE PAGE SOURCE COMES WITHOUT THE RESULTS
-						//get search page results for manga_name
-						source_url = "https://mangarock.com/search?q="+manga_name;
-						try {
-							//get search page
-							source = await getSource(source_url);
-						} catch (error) {
-							throw error;
+						let tab = await browser.tabs.create({url: "https://mangarock.com/search?q="+manga_name});
+						let arrayed = [];
+						for (i=0; i<10; i++) {
+							arrayed = await browser.tabs.executeScript({
+								code:'if (!list) {var list = [];} else {list = [];} list = document.querySelectorAll("a._2dU-m.vlQGQ"); if (!results) {var results = {};} else {results = {};}'+
+								'for (let i=0; i<list.length; i++) {results[list[i].innerText] = "https://mangarock.com/manga/" + list[i].href.split("manga/")[1];}'+
+								'JSON.stringify(results);',
+								runAt: "document_idle"
+							});
+							if (arrayed[0] == undefined || arrayed[0].length < 3) {
+								await (async function sleep(ms = 0) {
+									return new Promise(r => setTimeout(r, ms));
+								})(1000);
+							} else break;
 						}
 						
-						//extract mangas found
-						let doc = parser.parseFromString(source, "text/html");
-						console.log("####################################");
-						console.log("search for");
-						console.log("####################################");
-						console.log(source);
-						let list = doc.wrappedJSObject.querySelectorAll("a._2dU-m.vlQGQ");
-						for (let i=0; i<list.length; i++) {
-							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].innerText)] = "https://" + this.url + "manga/" + list[i].href.split("manga/")[1];
+						let raw_results = JSON.parse(arrayed[0]);
+						for (let res in raw_results) {
+							if (raw_results.hasOwnProperty(res)) {
+								untrimmed_results[cleanMangaName(res)] = raw_results[res];
+							}
 						}
-						*/
+						
+						browser.tabs.remove(tab.id);
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
 						index--;
 					}
+
+					for (i=0; i<Object.keys(untrimmed_results).length; i++) {
+						if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+							results[Object.keys(untrimmed_results)[i]] = untrimmed_results[Object.keys(untrimmed_results)[i]];
+						
+					}
+					
 					return results;
 				}
 	}
