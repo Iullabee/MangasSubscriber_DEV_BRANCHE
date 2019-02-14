@@ -8,8 +8,9 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- create new way of getting a manga's search results for the searchFor() function
--- have mangarock's searchFor() open the search in a webpage, access it when it is loaded, pull the results and close it
+- update patchnotes (add mangarock support)
+
+
 
 §§OPTIMIZATIONS
 
