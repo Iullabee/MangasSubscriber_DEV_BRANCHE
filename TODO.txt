@@ -10,6 +10,8 @@ GOALS :
 
 - update patchnotes (add mangarock support)
 
+- test and tweak mangarock for android
+
 
 
 §§OPTIMIZATIONS
