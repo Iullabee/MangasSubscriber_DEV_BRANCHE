@@ -4,7 +4,8 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"readmangatoday":"readmng.com/",
 					"webtoons":"webtoons.com/",
 					"mangakakalot":"mangakakalot.com/",
-					"manganelo":"manganelo.com/"
+					"manganelo":"manganelo.com/",
+					"mangarock":"mangarock.com/"
 					};
 
 //fix fanfox annoying urls
@@ -56,6 +57,9 @@ function readMangaChapter() {
 				let source_url = elem ? elem.src : null;
 				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
+			case "mangarock":
+				is_placeholder = document.querySelector("canvas._3ybIG") ? false : true; //no mobile site
+				break;
 		}
 	}
 	
@@ -180,7 +184,7 @@ function createNavigation(message) {
 		document.body.appendChild(nav_bar);
 	
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
-		var config = { attributes: false, childList: true, subtree: false };
+		var config = { attributes: false, childList: true, subtree: true };
 		var observer = new MutationObserver(readMangaChapter);
 		observer.observe(document.body, config);
 	}
