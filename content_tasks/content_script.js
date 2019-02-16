@@ -58,7 +58,7 @@ function readMangaChapter() {
 				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
 			case "mangarock":
-				is_placeholder = document.querySelector("canvas._3ybIG") ? false : true; //no mobile site
+				is_placeholder = document.querySelector(".pageMangaReader") ? false : true; //no mobile site
 				break;
 		}
 	}
