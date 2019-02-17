@@ -1,5 +1,9 @@
 GOALS :
 
+- improve help page
+-- add a general description of the addon
+-- add a way to report bug and/or make suggestions
+
 
 
 §§REFACTORING UI
