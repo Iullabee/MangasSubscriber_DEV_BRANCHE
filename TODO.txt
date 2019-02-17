@@ -8,8 +8,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- test and tweak mangarock for android
-
 
 
 §§OPTIMIZATIONS

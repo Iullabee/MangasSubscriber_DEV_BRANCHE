@@ -20,7 +20,8 @@
 }
 
 .navigation_bar_spacer {
-	padding-top: 2rem;
+	position: relative;
+	top: 2.2rem;
 }
 
 #mangassubscriber_nav_bar {

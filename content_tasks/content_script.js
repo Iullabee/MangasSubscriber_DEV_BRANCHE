@@ -73,7 +73,14 @@ browser.runtime.onMessage.addListener(createNavigation);
 
 function createNavigation(message) {
 	if  (!(document.getElementById("mangassubscriber_nav_bar")) && message.target == "content" && message.navigation){
-		document.body.classList.add("navigation_bar_spacer");
+		let container = document.createElement("div");
+		while (document.body.childNodes.length > 0) {
+			container.appendChild(document.body.childNodes[0]);
+		}
+		document.body.classList.forEach((value) => {container.classList.add(value); document.body.classList.remove(value);});
+		container.classList.add("navigation_bar_spacer");
+		document.body.insertBefore(container, document.body.firstChild);
+		
 		var navigation = message.navigation;
 		let nav_bar = document.createElement("div");
 		nav_bar.setAttribute("id", "mangassubscriber_nav_bar");
@@ -181,7 +188,7 @@ function createNavigation(message) {
 		mark_unread_button.appendChild(mark_unread_button_link);
 		menu_wrapper.appendChild(mark_unread_button);
 		
-		document.body.appendChild(nav_bar);
+		document.body.insertBefore(nav_bar, container);
 	
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
 		var config = { attributes: false, childList: true, subtree: true };
