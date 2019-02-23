@@ -1,7 +1,7 @@
 function searchWebsitesFor () {
 	if (document.getElementById("search_field").value == "") hideModal();
 	else {
-		let search = document.getElementById("search_field").value;
+		let search = document.getElementById("search_field").value.toLowerCase();
 		//create modal title
 		let title = "looking for ["+search+"] :";
 		//create modal body

@@ -585,7 +585,7 @@ createMangasList();
 //filter the list
 function filterList() {
 	var list = document.getElementById("list").children;
-	let filter_field = document.getElementById("filter_list").value;
+	let filter_field = document.getElementById("filter_list").value.toLowerCase();
 	let filter_unread = document.getElementById("unread_filter").filter_out;
 	let filter_already_read = document.getElementById("already_read_filter").filter_out;
 	let filter_tags = document.getElementById("tags_filter").value;

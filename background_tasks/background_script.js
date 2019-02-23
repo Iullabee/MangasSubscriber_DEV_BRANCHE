@@ -734,8 +734,7 @@ var websites_list = {
 
 					for (i=0; i<Object.keys(untrimmed_results).length; i++) {
 						if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[Object.keys(untrimmed_results)[i]] = untrimmed_results[Object.keys(untrimmed_results)[i]];
-						
+						results[Object.keys(untrimmed_results)[i]] = untrimmed_results[Object.keys(untrimmed_results)[i]];
 					}
 					
 					return results;
