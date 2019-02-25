@@ -847,13 +847,16 @@ async function followManga(url){
 
 //update the manga list
 async function updateMangasList(mangas_selection, ignore_no_update){
-	if (browser.browserAction.setBadgeText)
-		browser.browserAction.setBadgeText({"text" : "UPD"});
+	if (browser.browserAction.setBadgeText)	browser.browserAction.setBadgeText({"text" : "UPD"});
 	let updated_chapters_list = {};
 	let check_all_sites = await getCheckAllSites();
 	let to_update_list = {};
 	let update_promises = [];
 	let mangas_list = await getMangasList();
+
+	//add cookies to bypass age verification hiding chapters lists
+	await browser.cookies.set({url:"https://fanfox.net", name:"isAdult", value:"1"});
+	await browser.cookies.set({url:"https://www.mangahere.cc", name:"isAdult", value:"1"});
 
 	if (mangas_selection) {
 		for (var i in mangas_selection) {
