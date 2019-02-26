@@ -593,7 +593,8 @@ function filterList() {
 				: (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"));
 		}
 	}
-	document.getElementById("filter_list").focus();
+	//focus the filter field if not on android (to avoid wasting half the screen on the virtual keyboard)
+	browser.runtime.platformOS != "android" ? document.getElementById("filter_list").focus() : false;
 }
 //filter the list when user types something
 document.getElementById("filter_list").addEventListener("keyup", async (e) => {

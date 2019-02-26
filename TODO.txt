@@ -12,8 +12,6 @@ GOALS :
 
 §§FUNCTIONALITIES
 
-- set cookies for fanfox and mangahere for -18 restricted mangas
-
 
 
 §§OPTIMIZATIONS
