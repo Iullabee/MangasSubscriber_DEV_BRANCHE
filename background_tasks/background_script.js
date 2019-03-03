@@ -705,7 +705,7 @@ var websites_list = {
 					while (Object.keys(results).length == 0 && index > 0) {
 						let tab = await browser.tabs.create({url: "https://mangarock.com/search?q="+manga_name});
 						let arrayed = [];
-						for (i=0; i<10; i++) {
+						for (i=0; i<100; i++) {
 							arrayed = await browser.tabs.executeScript({
 								code:'if (!list) {var list = [];} else {list = [];} list = document.querySelectorAll("a._2dU-m.vlQGQ"); if (!results) {var results = {};} else {results = {};}'+
 								'for (let i=0; i<list.length; i++) {results[list[i].innerText] = "https://mangarock.com/manga/" + list[i].href.split("manga/")[1];}'+
@@ -715,7 +715,7 @@ var websites_list = {
 							if (arrayed[0] == undefined || arrayed[0].length < 3) {
 								await (async function sleep(ms = 0) {
 									return new Promise(r => setTimeout(r, ms));
-								})(1000);
+								})(100);
 							} else break;
 						}
 						
@@ -727,7 +727,7 @@ var websites_list = {
 						}
 						
 						browser.tabs.remove(tab.id);
-						if (Object.keys(results).length) break; // if results are found, break and return
+						if (Object.keys(untrimmed_results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
 						index--;
 					}
