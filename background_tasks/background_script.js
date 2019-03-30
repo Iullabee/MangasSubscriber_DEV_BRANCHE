@@ -287,27 +287,29 @@ var websites_list = {
 				getCurrentChapter: async function (url){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
-					var url_tail = url.split(this.url)[1]
-					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
+					var url_tail = url.split(this.url)[1];
+					if (url_tail.includes("/")) { //if there is a "/", there is probably a chapter number, if not url is that of manga root page
+						url_tail = url_tail.substring(url_tail.indexOf("/")+1); 
 					
-					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
-						url_tail = url_tail.split("/")[0];
-						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-							url_tail = url_tail.slice(1);
+						if (mangassubscriber_prefs["unified_chapter_numbers"]) {
+							url_tail = url_tail.split("/")[0];
+							while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+								url_tail = url_tail.slice(1);
+							}
+						} else {
+							//if there is a page number
+							if (url_tail.split("/")[1] || url_tail.charAt(url_tail.length -1) == "/"){
+								//get rid of page number
+								url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
+							}
+							//buffering chapter number with zeros and a c
+							while (url_tail.split(".")[0].length < 3) {
+								url_tail = "0" + url_tail;
+							}
+							url_tail = "c" + url_tail;
 						}
-					} else {
-						//if there is a page number
-						if (url_tail.split("/")[1] || url_tail.charAt(url_tail.length -1) == "/"){
-							//get rid of page number
-							url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
-						}
-						//buffering chapter number with zeros and a c
-						while (url_tail.split(".")[0].length < 3) {
-							url_tail = "0" + url_tail;
-						}
-						url_tail = "c" + url_tail;
-					}
-					return url_tail;
+						return url_tail;
+					} else return -1; //return -1 if url is manga root page
 				},
 				getAllChapters: async function (manga_url){
 					var chapters_list = {};
