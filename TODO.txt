@@ -8,6 +8,10 @@ GOALS :
 
 §§FUNCTIONALITIES
 
+- solve problems caused by following a manga under different names on different sites
+-- especially, fix the impossibility to mark as read chapters from sites using alternate titles
+-- add an "alternate_titles" property to mangas ? filled when following additional sites using alternate titles
+
 
 
 §§OPTIMIZATIONS
