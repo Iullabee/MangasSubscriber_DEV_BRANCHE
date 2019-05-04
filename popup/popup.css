@@ -1,7 +1,7 @@
 body {
-	width: 800px;
-	height: 600px;
 	overflow-x: hidden;
+	min-width: 800px;
+	min-height: 600px;
 }
 
 * {
@@ -49,18 +49,18 @@ body {
 }
 
 .field_container {
-	height: 27px;
-	line-height: 27px;
+	height: 2.3rem;
+	line-height: 2.3rem;
 	vertical-align: middle;
 }
 .field_container input {
-	height: 27px;
+	height: 2.3rem;
 	float : left;
 }
 .field_container .input_button {
 	position: relative;
-	width: 27px;
-	height: 27px;
+	width: 2.3rem;
+	height: 2.3rem;
 	border: 1px solid black;
 	float : left;
 }
@@ -86,17 +86,17 @@ MENU SECTION
 	position: fixed;
 	top: 0px;
 	padding-bottom: 1px;
-	width: 800px;
+	width: 100vw;
 	z-index: 1;
 }
 
 .extension_name {
-	font-size: 2.5em;
+	font-size: 2.5rem;
 	padding: 5px;
 }
 
 .extension_version {
-	font-size: 1em;
+	font-size: 1rem;
 	padding: 10px 0px 0px 5px;
 }
 
@@ -123,17 +123,17 @@ PANELS SECTION
 .panel {
 	position: fixed;
 	top: 52px;
-	width: 800px;
+	width: 100vw;
 	height: 0px;
 	overflow: hidden;
 	border: 1px solid black;
 	background: white;
 	z-index: 5;
-	transition: height 0.5s;
+	transition: height 0.25s;
 }
 
 .visible_panel {
-	height: 548px;
+	height: calc(100vh - 52px);
 	z-index: 10;
 }
 
@@ -145,9 +145,9 @@ CONSOLE PANEL
 }
 
 #console_display {
-	width: 800px;
-	height: 516px;
-	max-height: 516px;
+	height: calc(100vh - 1.25rem - 10px);
+	max-height: calc(100vh - 1.25rem - 10px);
+	width: 100vw;
 	overflow-y: scroll;
 }
 
@@ -161,16 +161,16 @@ CONSOLE PANEL
 	padding-left: 10px;
 	padding-right: 10px;
 	position: relative;
-	width: 518px;
+	width: calc(100vw - 11rem - 10rem - 17px);
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 .console_from {
-	width: 150px;
+	width: 11rem;
 }
 .console_status {
-	width: 115px;
+	width: 10rem;
 }
 
 .console_details {
@@ -182,7 +182,7 @@ CONSOLE PANEL
 
 .button {
 	padding: 4px;
-	font-size: 1.25em;
+	font-size: 1.25rem;
 	cursor: pointer;
 	
 	text-align: center;
@@ -204,7 +204,7 @@ CONSOLE END
 OPTIONS PANEL
 ****************************************/
 #options {
-	font-size: 1.5em;
+	font-size: 1.5rem;
 	padding: 0px 15px;
 }
 
@@ -213,25 +213,15 @@ OPTIONS PANEL
 	width: 100%;
 	border-bottom: 1px solid black;
 	padding: 5px 0px 5px 15px;
-	min-height: 30px;
+	min-height: 2rem;
 }
 
 #options > div:hover {
 	background-color: #e5e5e5;
 }
 
-#import {
-	min-height: 45px;
-}
-.import_options {
-	font-size: 0.75em;
-}
-#import_as_text_field {
-	width: 500px;
-}
-
 #auto_update_interval, #search_limit_number {
-	width: 75px;
+	width: 6rem;
 }
 /****************************************
 OPTIONS END
@@ -247,7 +237,7 @@ HELP PANEL
 }
 
 .section {
-	min-height: 50px;
+	min-height: 3rem;
 	overflow: hidden;
 }
 
@@ -264,7 +254,7 @@ HELP PANEL
 
 .separator {
 	border-top: 5px ridge silver;
-	padding: 30px 0px 30px 20px;
+	padding: 2rem 0px 2rem 2rem;
 }
 
 ul {
@@ -292,7 +282,7 @@ SEARCH PANEL
 }
 
 #search_field {
-	width: calc(100% - 27px);
+	width: calc(100% - 2.3rem);
 }
 /****************************************
 SEARCH END
@@ -321,8 +311,7 @@ LIST SECTION
 }
 
 #filter_list {
-	width: 500px;
-	/*top: 3px;*/
+	width: 41.5rem;
 }
 
 .selected {
@@ -331,8 +320,8 @@ LIST SECTION
 
 #list_container {
 	margin-top: 134px;
-	max-height: 494px;
-	height: 494px;
+	max-height: calc(100vh - 134px);
+	height: calc(100vh - 134px);
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
@@ -348,7 +337,7 @@ LIST SECTION
 	width: 783px;
 	max-width: 783px;
 	background-color: white;
-	transition: height 0.5s;
+	transition: height 0.1s;
 	height: 39px;
 	overflow: hidden;
 	border-bottom: 1px solid black;
@@ -417,7 +406,7 @@ MODAL
 	background-color: #000000bb;
 	opacity: 0;
 	visibility: hidden;
-	transform: scale(1.1);
+	/*transform: scale(1.1);*/
 	transition: visibility 0s linear 0.5s, opacity 0.5s, transform 0.5s;
 	z-index: 100;
 }
@@ -583,6 +572,6 @@ LIST END
 }
 
 .text_icons {
-	width: 1.2em;
-	height: 1.2em;
+	width: 1.2rem;
+	height: 1.2rem;
 }
