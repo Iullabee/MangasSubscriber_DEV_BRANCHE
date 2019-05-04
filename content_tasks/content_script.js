@@ -42,7 +42,7 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector("#viewer.read_img") || document.querySelector("img#image") ? false : true;
 				break;
 			case "readmangatoday":
-				is_placeholder = document.querySelector("#chapter_img") ? false : true; //no mobile site
+				is_placeholder = document.querySelector("#chapter_img") || document.querySelector("img.img-responsive") ? false : true; //1 image per page or all images in one page, no mobile site
 				break;
 			case "webtoons":
 				is_placeholder = document.querySelector("img._images") || document.querySelector("img._checkVisible") ? false : true;
