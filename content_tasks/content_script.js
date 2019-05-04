@@ -91,7 +91,6 @@ function createNavigation(message) {
 			first_button.href = navigation.first_chapter.url;
 			let first_button_link = document.createElement("div");
 			first_button_link.classList.add("mangassubscriber_row");
-			//first_button_link.href = navigation.first_chapter.url;
 			let first_button_arrow = document.createElement("img");
 			first_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			first_button_arrow.src = browser.extension.getURL("../icons/arrow_left_double.svg");
@@ -109,7 +108,6 @@ function createNavigation(message) {
 			previous_button.href = navigation.previous_chapter.url;
 			let previous_button_link = document.createElement("div");
 			previous_button_link.classList.add("mangassubscriber_row");
-			//previous_button_link.href = navigation.previous_chapter.url;
 			let previous_button_arrow = document.createElement("img");
 			previous_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
 			previous_button_arrow.src = browser.extension.getURL("../icons/arrow_left_single.svg");
@@ -128,7 +126,6 @@ function createNavigation(message) {
 			last_button.href = navigation.last_chapter.url;
 			let last_button_link = document.createElement("div");
 			last_button_link.classList.add("mangassubscriber_row");
-			//last_button_link.href = navigation.last_chapter.url;
 			let last_button_text_node = document.createElement("div");
 			last_button_text_node.classList.add("mangassubscriber_cell");
 			last_button_text_node.innerText = navigation.last_chapter.number;
@@ -146,7 +143,6 @@ function createNavigation(message) {
 			next_button.href = navigation.next_chapter.url;
 			let next_button_link = document.createElement("div");
 			next_button_link.classList.add("mangassubscriber_row");
-			//next_button_link.href = navigation.next_chapter.url;
 			let next_button_text_node = document.createElement("div");
 			next_button_text_node.classList.add("mangassubscriber_cell");
 			next_button_text_node.innerText = navigation.next_chapter.number;
@@ -166,7 +162,7 @@ function createNavigation(message) {
 		let menu_button = document.createElement("div");
 		menu_button.classList.add("mangassubscriber_button");
 		let menu_button_link = document.createElement("span");
-		menu_button_link.textContent = " . . . ";
+		menu_button_link.textContent = navigation.current_chapter;
 		menu_button.appendChild(menu_button_link);
 		menu_wrapper.appendChild(menu_button);
 

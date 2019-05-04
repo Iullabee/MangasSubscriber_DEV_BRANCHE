@@ -951,7 +951,7 @@ async function readMangaChapter(message, sender) {
 						}
 
 						if (await getNavigationBar())
-							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter, "unread_chapter": unread_chapter}});
+							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"current_chapter":current_chapter, "first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter, "unread_chapter": unread_chapter}});
 					}
 				}
 			}
