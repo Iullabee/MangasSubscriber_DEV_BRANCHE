@@ -8,7 +8,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: function (url) {
-					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
+					return "https://www." + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
@@ -1351,7 +1351,20 @@ async function install(){
 	if (!prefs || Object.keys(prefs).length < 8) {prefs = {"DB_version":"2.0.2", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
-	to_log = {"MangasSubscriberPrefs": prefs, "mangas_list": list};
+	//fix for mangahere url change
+	{
+		for (let manga in mangas_list) {
+			if (mangas_list.hasOwnProperty(manga)) {
+				for (let website in mangas_list[manga]["registered_websites"]) {
+					if (mangas_list[manga]["registered_websites"].hasOwnProperty(website)) {
+						mangas_list[manga]["registered_websites"][website] = websites_list[website].getMangaRootURL(mangas_list[manga]["registered_websites"][website]);
+					}
+				}
+			}
+		}
+	}
+
+	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
 	
 	await browser.storage.local.clear();
 	await browser.storage.local.set(to_log);
