@@ -54,7 +54,7 @@ var websites_list = {
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since mangahere uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
 								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://www." + this.url + list[i].href.split("manga/")[1]};
 							}
 						}
 					}
@@ -1362,6 +1362,7 @@ async function install(){
 				}
 			}
 		}
+		await updateMangasList();
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
