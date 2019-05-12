@@ -52,9 +52,12 @@ var websites_list = {
 					else {
 						for (let i=0; i<list.length; i++){
 							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since mangahere uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://www." + this.url + list[i].href.split("manga/")[1]};
+								let chapter_number = await this.getCurrentChapter(list[i].href);
+								if (chapter_number) {
+									let url_tail = list[i].href.split("/manga/")[1];
+									url_tail = url_tail.substring(url_tail.indexOf("/")+1);
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : this.getMangaRootURL(list[i].href) + url_tail};
+								}
 							}
 						}
 					}
@@ -81,7 +84,7 @@ var websites_list = {
 						let list = doc.querySelectorAll("ul.manga-list-4-list li .manga-list-4-item-title a");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("manga/")[1];
+							results[cleanMangaName(list[i].title)] = this.getMangaRootURL(list[i].href);
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
