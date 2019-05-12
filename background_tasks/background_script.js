@@ -378,7 +378,9 @@ var websites_list = {
 				},
 				getCurrentChapter: async function (url){
 					//get rid of website and manga name,
-					var url_tail = url.split("&episode_no=")[1].split("&")[0];
+					var url_tail = url.split("&episode_no=")[1] ? url.split("&episode_no=")[1].split("&")[0] :
+									url.split("&episodeNo=")[1] ? url.split("&episodeNo=")[1].split("&")[0] :
+									-1;
 					
 					return url_tail;
 				},
@@ -402,7 +404,7 @@ var websites_list = {
 					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
-							if(list[i].href && ! list[i].classList.contains("preview_pay_area")){ // ! list[i].classList.contains("preview_pay_area") to exclude chapters preview requiring payment (they screw up chapter number detection if not paid)
+							if(list[i].href && ! list[i].classList.contains("preview_pay_area") && ! list[i].classList.contains("_btnEpisodeEdit")){ // ! list[i].classList.contains("preview_pay_area") to exclude chapters preview requiring payment (they screw up chapter number detection if not paid) --- ! list[i].classList.contains("_btnEpisodeEdit") to exclude edit button broken links from webtoons in the challenge/discovery section
 								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number) {
 									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href};
