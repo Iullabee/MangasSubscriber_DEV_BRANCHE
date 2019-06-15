@@ -589,8 +589,8 @@ function filterList() {
 				!(list[manga].manga_name.includes(filter_field)) ? false
 				: list[manga].reading_status == "unread" && filter_unread ? false
 				: list[manga].reading_status == "read" && filter_already_read ? false
-				: filter_tags != "use all tags" && !(list[manga].tags.includes(filter_tags)) ? false
-				: filter_websites != "use all websites" && !(list[manga].websites.includes(filter_websites)) ? false
+				: filter_tags != "see all tags" && !(list[manga].tags.includes(filter_tags)) ? false
+				: filter_websites != "see all websites" && !(list[manga].websites.includes(filter_websites)) ? false
 			: true;
 			is_visible ? (list[manga].classList.remove("hidden"), list[manga].classList.add("visible")) 
 				: (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"));
