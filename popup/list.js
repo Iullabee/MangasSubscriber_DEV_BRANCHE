@@ -258,7 +258,7 @@ async function createMangasList() {
 			//creating modal body
 			let results = [];
 			for (let website_name in background.websites_list) {
-				if (background.websites_list.hasOwnProperty(website_name)) {
+				if (background.websites_list.hasOwnProperty(website_name) && !background.websites_list[website_name]["unsupported"]) {
 					let list_line = document.createElement("div");
 					list_line.classList.add("modal_list_line", "website_modal_list_line");
 					list_line.website_name = website_name;

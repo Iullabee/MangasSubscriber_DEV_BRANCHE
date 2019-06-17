@@ -641,110 +641,21 @@ var websites_list = {
 	},
 	"mangarock":{name:"mangarock",
 				url:"mangarock.com/",
+				"unsupported":true,
 				getMangaName: async function (url){
-					var source = "truc";
-					var parser = new DOMParser();
-					let name = "notAManga";
-					try {
-						//get manga's home page
-						source = await getSource(this.getMangaRootURL(url));
-					} catch (error) {
-						throw error;
-					}
-
-					//extract the manga name
-					var doc = parser.parseFromString(source, "text/html");
-					name = doc.querySelector("div._3_XVY._1_8ki h1");
-					
-					return name ? cleanMangaName(name.innerText) : "notAManga";
+					return "notAManga";
 				},
 				getMangaRootURL: function (url) {
-					return "https://" + this.url + "manga/" + url.split("/manga/")[1].split("/")[0] + "/";
+					return "../help/error.html";
 				},
 				getCurrentChapter: async function (url){
-					let chapters = [];
-					let chapter_number = url.split("/chapter/")[1];
-					
-					chapters = await this.getAllChapters(this.getMangaRootURL(url));
-					let changed = false;
-					for (let i in chapters) {
-						if (chapters.hasOwnProperty(i) && chapters[i].url.split("chapter/")[1] == chapter_number) {
-							chapter_number = i;
-							changed = true;
-							break;
-						}
-					}
-					return changed ? chapter_number : null;
+					return null;
 				},
 				getAllChapters: async function (manga_url){
-					var chapters_list = {};
-					var source = "truc";
-					var parser = new DOMParser();
-
-					try {
-						//get manga's home page
-						source = await getSource(manga_url);
-					} catch (error) {
-						throw error;
-					}
-
-					//extract the chapter list
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("td.col-8.col-md-9 a");
-					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
-					else {
-						for (let i=0; i<list.length; i++){
-							if(list[i].href){
-								let chapter_number = list[i].innerText.split("Chapter ")[1].split(":")[0];//await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + "manga/" + list[i].href.split("manga/")[1]};
-							}
-						}
-					}
-					return chapters_list;
+					return {};
 				},
 				searchFor: async function (manga_name){
-					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
-					let untrimmed_results = {};
-					let results = {};
-					let index = manga_name.split(" ").length;
-
-					while (Object.keys(results).length == 0 && index > 0) {
-						let tab = await browser.tabs.create({url: "https://mangarock.com/search?q="+manga_name});
-						let arrayed = [];
-						for (i=0; i<100; i++) {
-							arrayed = await browser.tabs.executeScript({
-								code:'if (!list) {var list = [];} else {list = [];} list = document.querySelectorAll("a._2dU-m.vlQGQ"); if (!results) {var results = {};} else {results = {};}'+
-								'for (let i=0; i<list.length; i++) {results[list[i].innerText] = "https://mangarock.com/manga/" + list[i].href.split("manga/")[1];}'+
-								'JSON.stringify(results);',
-								runAt: "document_idle"
-							});
-							if (arrayed[0] == undefined || arrayed[0].length < 3) {
-								await (async function sleep(ms = 0) {
-									return new Promise(r => setTimeout(r, ms));
-								})(100);
-							} else break;
-						}
-						
-						let raw_results = JSON.parse(arrayed[0]);
-						for (let res in raw_results) {
-							if (raw_results.hasOwnProperty(res)) {
-								untrimmed_results[cleanMangaName(res)] = raw_results[res];
-							}
-						}
-						
-						browser.tabs.remove(tab.id);
-						if (Object.keys(untrimmed_results).length) break; // if results are found, break and return
-						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
-						index--;
-					}
-
-					for (i=0; i<Object.keys(untrimmed_results).length; i++) {
-						if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-						results[Object.keys(untrimmed_results)[i]] = untrimmed_results[Object.keys(untrimmed_results)[i]];
-					}
-					
-					return results;
+					return {};
 				}
 	}
 };
@@ -1361,7 +1272,7 @@ async function install(){
 		for (let manga in mangas_list) {
 			if (mangas_list.hasOwnProperty(manga)) {
 				for (let website in mangas_list[manga]["registered_websites"]) {
-					if (mangas_list[manga]["registered_websites"].hasOwnProperty(website)) {
+					if (mangas_list[manga]["registered_websites"].hasOwnProperty(website) && !websites_list[website]["unsupported"]) {
 						mangas_list[manga]["registered_websites"][website] = websites_list[website].getMangaRootURL(mangas_list[manga]["registered_websites"][website]);
 					}
 				}

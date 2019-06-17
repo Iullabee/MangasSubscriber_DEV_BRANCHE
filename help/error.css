@@ -1,0 +1,9 @@
+.section {
+	min-height: 3rem;
+	overflow: hidden;
+}
+
+.separator {
+	border-top: 5px ridge silver;
+	padding: 2rem 0px 2rem 2rem;
+}
