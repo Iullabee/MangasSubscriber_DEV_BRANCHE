@@ -931,7 +931,14 @@ async function exportMangasList(){
 	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
 	var blob = new Blob([JSON.stringify(list, null, 2)], {type : 'application/json'});
 
-	await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListBackUp.json", "saveAs":true});
+	let now = new Date();
+	let now_string = " - " + now.getFullYear()+ "-" + (now.getMonth() + 1) + "-" + now.getDate() + " " + now.getHours() + "h" + now.getMinutes() + "m" + now.getSeconds() + "s";
+	
+	try{
+		await browser.downloads.download({"url": URL.createObjectURL(blob), "filename": "MangaListBackUp"+ now_string +".json"});
+	} catch (error){
+		console.log(error);
+	}
 	return;
 }
 
@@ -1264,6 +1271,10 @@ async function install(){
 	let list = await getMangasList();
 	let to_log = null;
 
+	//saving the existing list "just in case"
+	if (list && prefs) await exportMangasList();
+
+	//initializing if nothing exists or it's outdated
 	if (!prefs || Object.keys(prefs).length < 8) {prefs = {"DB_version":"2.0.2", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
@@ -1278,7 +1289,6 @@ async function install(){
 				}
 			}
 		}
-		await updateMangasList();
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
