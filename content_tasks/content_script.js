@@ -77,7 +77,10 @@ function createNavigation(message) {
 		while (document.body.childNodes.length > 0) {
 			container.appendChild(document.body.childNodes[0]);
 		}
-		document.body.classList.forEach((value) => {container.classList.add(value); document.body.classList.remove(value);});
+		while (document.body.classList.length > 0) {
+			container.classList.add(document.body.classList.item(0)); 
+			document.body.classList.remove(document.body.classList.item(0))
+		}
 		container.classList.add("navigation_bar_spacer");
 		document.body.insertBefore(container, document.body.firstChild);
 		
