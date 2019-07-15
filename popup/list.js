@@ -1,4 +1,9 @@
 
+
+
+
+
+
 async function createMangasList() {
 	var mangas = await background.getMangasList();
 	//saving scroll position to recall later
@@ -575,7 +580,7 @@ createMangasList();
 
 
 //filter the list
-function filterList() {
+async function filterList() {
 	var list = document.getElementById("list").children;
 	let filter_field = document.getElementById("filter_list").value.toLowerCase();
 	let filter_unread = document.getElementById("unread_filter").filter_out;
@@ -597,7 +602,8 @@ function filterList() {
 		}
 	}
 	//focus the filter field if not on android (to avoid wasting half the screen on the virtual keyboard)
-	browser.runtime.platformOS != "android" ? document.getElementById("filter_list").focus() : false;
+	let platformInfo = await browser.runtime.getPlatformInfo();
+	platformInfo.os != "android" ? document.getElementById("filter_list").focus() : false;
 }
 //filter the list when user types something
 document.getElementById("filter_list").addEventListener("keyup", async (e) => {
