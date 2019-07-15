@@ -1278,15 +1278,12 @@ async function install(){
 	if (!prefs || Object.keys(prefs).length < 8) {prefs = {"DB_version":"2.0.2", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
-	//fix for mangahere url change
+	//applying the change in cleanMangaName() to existing manga names
 	{
 		for (let manga in mangas_list) {
-			if (mangas_list.hasOwnProperty(manga)) {
-				for (let website in mangas_list[manga]["registered_websites"]) {
-					if (mangas_list[manga]["registered_websites"].hasOwnProperty(website) && !websites_list[website]["unsupported"]) {
-						mangas_list[manga]["registered_websites"][website] = websites_list[website].getMangaRootURL(mangas_list[manga]["registered_websites"][website]);
-					}
-				}
+			if (mangas_list.hasOwnProperty(manga) && manga != cleanMangaName(manga)) {
+				mangas_list[cleanMangaName(manga)] = mangas_list[manga];
+				delete mangas_list[manga];
 			}
 		}
 	}
