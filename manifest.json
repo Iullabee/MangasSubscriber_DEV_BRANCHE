@@ -53,8 +53,7 @@
 						"*://www.webtoons.com/*/*/*",
 						"*://m.webtoons.com/*/*/*",
 						"*://mangakakalot.com/*/*/*",
-						"*://manganelo.com/*/*/*",
-						"*://mangarock.com/*/*/*"],
+						"*://manganelo.com/*/*/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
