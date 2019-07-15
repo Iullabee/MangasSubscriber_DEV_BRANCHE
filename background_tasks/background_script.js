@@ -661,7 +661,7 @@ var websites_list = {
 };
 
 function cleanMangaName (name) {
-	return name.replace(/[\W_]+/g , " ").toLowerCase();
+	return name.replace(/[\W_]+/g , " ").toLowerCase().trim();
 }
 function sortAlphaNum(a, b) {
 	var reA = /[^a-zA-Z]/g;
