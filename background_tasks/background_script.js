@@ -806,7 +806,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 																		browser.storage.local.set({"mangas_list" : mangas_list});
 																	},
 																	function(error){
-																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+error}}); //warning the popup
+																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+ error +"\n"+ error.stack}}); //warning the popup
 																	}
 					);
 					update_promises.push(updated_chapters_list[manga][website_name]);
