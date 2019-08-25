@@ -216,7 +216,7 @@ OPTIONS PANEL
 	min-height: 2rem;
 }
 
-#options > div:hover {
+#options .line:hover {
 	background-color: #e5e5e5;
 }
 
