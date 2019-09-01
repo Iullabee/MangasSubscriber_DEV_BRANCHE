@@ -128,17 +128,16 @@ async function updateConsole(message) {
 		//updating console recap numbers
 		if (log.status == "updating") {
 			let updating_number = document.getElementById("console_updating_number");
-			if (!updating_number.value)
-				updating_number.value = 0;
+			if (!updating_number.value)	updating_number.value = 0;
 			updating_number.value += 1;
 			updating_number.textContent = "("+updating_number.value+")";
 		} else {
 			let updating_number = document.getElementById("console_updating_number");
+			if (!updating_number.value)	updating_number.value = 0;
 			updating_number.value -= 1;
-			updating_number.textContent = "("+updating_number.value+")";
+			updating_number.textContent = "("+(updating_number.value<0 ? 0 : updating_number.value)+")";
 			let finished_number = document.getElementById("console_"+log.status+"_number");
-			if (!finished_number.value)
-				finished_number.value = 0;
+			if (!finished_number.value)	finished_number.value = 0;
 			finished_number.value += 1;
 			finished_number.textContent = "("+finished_number.value+")";
 		}
