@@ -790,10 +790,10 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 			updated_chapters_list[manga] = {};
 			for (let website_name in mangas_list[manga]["registered_websites"]){
 				if (check_all_sites || website_name == mangas_list[manga].website_name) {
-					browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"updating" , "details":""}}); //warning the popup
+					if (! mangassubscriber_prefs["performance_mode"]) browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"updating" , "details":""}}); //warning the popup
 					updated_chapters_list[manga][website_name] = websites_list[website_name].getAllChapters(mangas_list[manga]["registered_websites"][website_name]); //A PROMISE IS RETURNED HERE
 					updated_chapters_list[manga][website_name].then(async function(updated_chapters){
-																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"completed" , "details":""}}); //warning the popup
+																		if (! mangassubscriber_prefs["performance_mode"]) browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"completed" , "details":""}}); //warning the popup
 																		for (let chapter in updated_chapters){
 																			if (!mangas_list[manga].chapters_list[chapter]){
 																				//if not on the list, update with what we have
@@ -803,7 +803,6 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 																				mangas_list[manga].chapters_list[chapter] = {"status":mangas_list[manga].chapters_list[chapter]["status"] , "url":updated_chapters[chapter]["url"]};
 																			}
 																		}
-																		browser.storage.local.set({"mangas_list" : mangas_list});
 																	},
 																	function(error){
 																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+ error +"\n"+ error.stack}}); //warning the popup
@@ -816,6 +815,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 	}
 	//map a catch() clause to the promises so that promise.all.then triggers even if some promises are rejected
 	Promise.all(update_promises.map(p => p.catch(() => undefined))).then(() => {
+		browser.storage.local.set({"mangas_list" : mangas_list});
 		setBadgeNumber();
 	});
 	return;
@@ -970,7 +970,7 @@ async function exportMangasListOnline(){
 //import mangas list from json
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.2"){
+	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.3"){
 		await getMangasList();
 		mangas_list = cloneObject(back_up["mangas_list"]);
 		mangassubscriber_prefs = cloneObject(back_up["MangasSubscriberPrefs"]);
@@ -1073,6 +1073,19 @@ async function toggleUnifiedChapterNumbers(){
 async function getUnifiedChapterNumbers(){
 	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	return mangassubscriber_prefs["unified_chapter_numbers"];
+}
+
+
+async function togglePerformanceMode(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	mangassubscriber_prefs["performance_mode"] = ! mangassubscriber_prefs["performance_mode"];
+	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
+	return;
+}
+
+async function getPerformanceMode(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	return mangassubscriber_prefs["performance_mode"];
 }
 
 
@@ -1275,7 +1288,7 @@ async function install(){
 	if (list && prefs) await exportMangasList();
 
 	//initializing if nothing exists or it's outdated
-	if (!prefs || Object.keys(prefs).length < 8) {prefs = {"DB_version":"2.0.2", "unified_chapter_numbers":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
+	if (!prefs || Object.keys(prefs).length < 9) {prefs = {"DB_version":"2.0.3", "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
 	//applying the change in cleanMangaName() to existing manga names

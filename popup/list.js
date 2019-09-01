@@ -6,6 +6,7 @@
 
 async function createMangasList() {
 	var mangas = await background.getMangasList();
+	var preferences = await background.getMangasSubscriberPrefs();
 	//saving scroll position to recall later
 	let scrollmemory = document.getElementById("list_container").scrollTop;
    
@@ -29,7 +30,6 @@ async function createMangasList() {
 		for (let chapter in manga.chapters_list){
 			manga.chapters_list[chapter]["status"] == "unread" ? unread_chapters.push(chapter) : read_chapters.push(chapter);
 		}
-		await background.getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
 		unread_chapters.sort(background.customSort);
 		read_chapters.sort(background.customSort).reverse();
 		
@@ -100,7 +100,7 @@ async function createMangasList() {
 			let manga_url = await background.reconstructChapterURL(my_manga.manga_name, my_manga.getElementsByClassName("chapters_select")[0].options[my_manga.getElementsByClassName("chapters_select")[0].selectedIndex].value); 
 			//TODO - find a wait to wait for the new tab to be fully loaded before calling createMangasList()
 			await browser.tabs.create({url:manga_url, active:false});
-			createMangasList();
+			if (!preferences["performance_mode"]) createMangasList();
 		});
 		dom_read_button_td.appendChild(dom_read_button);
 		dom_manga.appendChild(dom_read_button_td);

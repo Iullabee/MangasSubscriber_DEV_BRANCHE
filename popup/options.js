@@ -14,6 +14,22 @@ displayUnifiedChapterNumbers();
 
 
 
+//toggle the "performance mode" option
+document.getElementById("performance_mode").addEventListener("click", async (e) => {
+	await background.togglePerformanceMode();
+	displayPerformanceMode();
+});
+
+//display the status of the "performance mode" option
+async function displayPerformanceMode(){
+	var check_all = await background.getPerformanceMode();
+	document.getElementById("performance_mode_tickbox").src = check_all ? "../icons/yes.svg" : "../icons/no.svg";
+}
+//initialize the "performance mode" option
+displayPerformanceMode();
+
+
+
 //toggle the "check all sites when updating the list" option
 document.getElementById("check_all_sites").addEventListener("click", async (e) => {
 	await background.toggleCheckAllSites();
