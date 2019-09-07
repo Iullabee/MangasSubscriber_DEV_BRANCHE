@@ -56,7 +56,10 @@ var websites_list = {
 								if (chapter_number) {
 									let url_tail = list[i].href.split("/manga/")[1];
 									url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : this.getMangaRootURL(list[i].href) + url_tail};
+									let update = new Date(list[i].querySelector(".title2").innerText) != "Invalid Date" ? new Date(list[i].querySelector(".title2").innerText).getTime()
+										: list[i].querySelector(".title2").innerText == "Yesterday" ? new Date().getTime() - (24 * 3600 * 1000)
+										: new Date().getTime();
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : this.getMangaRootURL(list[i].href) + url_tail, "update" : update};
 								}
 							}
 						}
@@ -149,8 +152,11 @@ var websites_list = {
 						for (let i=0; i<list.length; i++){
 							if(list[i].href){
 								let chapter_number = await this.getCurrentChapter(this.url + list[i].href.split("/manga/")[1]); //since fanfox uses relative path for urls in chapters list, we need to get replace the extension ID at the start of the url
+								let update = new Date(list[i].querySelector(".title2").innerText) != "Invalid Date" ? new Date(list[i].querySelector(".title2").innerText).getTime()
+									: list[i].querySelector(".title2").innerText == "Yesterday" ? new Date().getTime() - (24 * 3600 * 1000)
+									: new Date().getTime();
 								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1], "update" : update};
 							}
 						}
 					}
@@ -232,14 +238,20 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll(".chapter_list a");
-					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
+					let list = doc.querySelectorAll(".chapter_list li");
+					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
-							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + list[i].href.split("manga/")[1]};
+							if (list.hasOwnProperty(i)){
+								let chapter = list[i].querySelector("a");
+								let update = new Date(list[i].querySelector(".time").innerText) != "Invalid Date" ? new Date(list[i].querySelector(".time").innerText).getTime()
+									: list[i].querySelector(".time").innerText == "Yesterday" ? new Date().getTime() - (24 * 3600 * 1000)
+									: new Date().getTime();
+								if(chapter.href){
+									let chapter_number = await this.getCurrentChapter(chapter.href);
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + chapter.href.split("manga/")[1], "update" : update};
+								}
 							}
 						}
 					}
@@ -281,90 +293,21 @@ var websites_list = {
 	},
 	"readmangatoday":{name:"readmangatoday",
 				url:"readmng.com/",
-				getMangaName: function (url){
-					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
+				"unsupported":"partial",
+				getMangaName: async function (url){
+					return "notAManga";
 				},
 				getMangaRootURL: function (url) {
-					return "https://" + this.url + url.split(this.url)[1].split("/")[0] + "/";
+					return "../help/error.html";
 				},
 				getCurrentChapter: async function (url){
-					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
-					//get rid of website and manga name,
-					var url_tail = url.split(this.url)[1];
-					if (url_tail.includes("/")) { //if there is a "/", there is probably a chapter number, if not url is that of manga root page
-						url_tail = url_tail.substring(url_tail.indexOf("/")+1); 
-					
-						if (mangassubscriber_prefs["unified_chapter_numbers"]) {
-							url_tail = url_tail.split("/")[0];
-							while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-								url_tail = url_tail.slice(1);
-							}
-						} else {
-							//if there is a page number
-							if (url_tail.split("/")[1] || url_tail.charAt(url_tail.length -1) == "/"){
-								//get rid of page number
-								url_tail = url_tail.substring(0, url_tail.lastIndexOf("/"));
-							}
-							//buffering chapter number with zeros and a c
-							while (url_tail.split(".")[0].length < 3) {
-								url_tail = "0" + url_tail;
-							}
-							url_tail = "c" + url_tail;
-						}
-						return url_tail;
-					} else return -1; //return -1 if url is manga root page
+					return null;
 				},
 				getAllChapters: async function (manga_url){
-					var chapters_list = {};
-					var source = "truc";
-					var parser = new DOMParser();
-
-					try {
-						//get manga's home page
-						source = await getSource(manga_url);
-					} catch (error) {
-						throw error;
-					}
-
-					//extract the chapter list
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll(".chp_lst a");
-					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
-					else {
-						for (let i=0; i<list.length; i++){
-							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href.replace("moz-extension", "http")};
-							}
-						}
-					}
-					return chapters_list;
+					return {};
 				},
 				searchFor: async function (manga_name){
-					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
-					let results = {};
-					let index = manga_name.split(" ").length;
-					var parser = new DOMParser();
-
-					while (Object.keys(results).length == 0 && index > 0) {
-						let response = await fetch(`https://www.readmng.com/search`, {
-							method: "POST",
-							headers: {"Content-Type": "application/x-www-form-urlencoded"},
-							body: ("query" + '=' + manga_name.replace(/ /g, "+")),
-						});
-						let doc = parser.parseFromString(await response.text(), "text/html");
-						
-						let list = doc.querySelectorAll(".style-list .box .title h2 a");
-						for (let i=0; i<list.length; i++) {
-							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].title)] = list[i].href.replace("moz-extension", "http");
-						}
-						
-						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
-						index--;
-					}
-					return results;
+					return {};
 				}
 	},
 	"webtoons":{name:"webtoons",
@@ -373,7 +316,6 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[2]);
 				},
 				getMangaRootURL: function (url) {
-					//return "https://" + this.url + url.split(this.url)[1].split("/list?")[0] + "/";
 					let url_tail = url.split(this.url)[1].split("/");
 
 					let splitter = url.split("/list?")[1] ? "/list?" : "/viewer?"; // /list? if we're in manga root, /viewer? if we're reading a chapter
@@ -410,7 +352,8 @@ var websites_list = {
 							if(list[i].href && ! list[i].classList.contains("preview_pay_area") && ! list[i].classList.contains("_btnEpisodeEdit")){ // ! list[i].classList.contains("preview_pay_area") to exclude chapters preview requiring payment (they screw up chapter number detection if not paid) --- ! list[i].classList.contains("_btnEpisodeEdit") to exclude edit button broken links from webtoons in the challenge/discovery section
 								let chapter_number = await this.getCurrentChapter(list[i].href);
 								if (chapter_number) {
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href};
+									let update = new Date(list[i].querySelector(".date").innerText).getTime();
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].href, "update" : update};
 									if (mangas_list[manga_name] && mangas_list[manga_name]["chapters_list"][chapter_number]) already_updated_this = true;
 								}
 							}
@@ -509,14 +452,27 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("div.chapter-list div.row span a");
+					let list = doc.querySelectorAll("div.chapter-list div.row");
 					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
-							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + "chapter/" + list[i].href.split("chapter/")[1]};
+							if (list.hasOwnProperty(i)){
+								let chapter = list[i].querySelector("span a");
+								let date = "";
+								if (list[i].querySelector("span[title]").innerText.includes("-")) {
+									date = list[i].querySelector("span[title]").innerText.split("-");
+									date = date[1]+"/"+date[0]+"/20"+date[2];
+								} else date = list[i].querySelector("span[title]").innerText;
+								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
+									: date == "1 day ago " ? new Date().getTime() - (24 * 3600 * 1000)
+									: date == "2 day ago " ? new Date().getTime() - (48 * 3600 * 1000)
+									: date == "3 day ago " ? new Date().getTime() - (72 * 3600 * 1000)
+									: new Date().getTime();
+								if(chapter.href){
+									let chapter_number = await this.getCurrentChapter(chapter.href);
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + "chapter/" + chapter.href.split("chapter/")[1], "update" : update};
+								}
 							}
 						}
 					}
@@ -595,14 +551,27 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("div.chapter-list div.row span a");
+					let list = doc.querySelectorAll("div.chapter-list div.row");
 					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
-							if(list[i].href){
-								let chapter_number = await this.getCurrentChapter(list[i].href);
-								if (chapter_number)
-									chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + "chapter/" + list[i].href.split("chapter/")[1]};
+							if (list.hasOwnProperty(i)){
+								let chapter = list[i].querySelector("span a");
+								let date = "";
+								if (list[i].querySelector("span[title]").innerText.includes("-")) {
+									date = list[i].querySelector("span[title]").innerText.split("-");
+									date = date[1]+"/"+date[0]+"/20"+date[2];
+								} else date = list[i].querySelector("span[title]").innerText;
+								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
+									: date == "1 day ago " ? new Date().getTime() - (24 * 3600 * 1000)
+									: date == "2 day ago " ? new Date().getTime() - (48 * 3600 * 1000)
+									: date == "3 day ago " ? new Date().getTime() - (72 * 3600 * 1000)
+									: new Date().getTime();
+								if(chapter.href){
+									let chapter_number = await this.getCurrentChapter(chapter.href);
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + "chapter/" + chapter.href.split("chapter/")[1], "update" : update};
+								}
 							}
 						}
 					}
@@ -641,7 +610,7 @@ var websites_list = {
 	},
 	"mangarock":{name:"mangarock",
 				url:"mangarock.com/",
-				"unsupported":true,
+				"unsupported":"total",
 				getMangaName: async function (url){
 					return "notAManga";
 				},
@@ -741,14 +710,19 @@ async function followManga(url){
 	let mangas_list = await getMangasList();
 	await getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
 	
+	let updates = [];
+
 	for (let chapter_number in chapters_list){
 		chapters_list[chapter_number]["status"] = customSort(chapter_number, current_chapter) <= 0 ? "read" : "unread";
+		updates.push(chapters_list[chapter_number]["update"]);
 	}
 	let registered_websites = {};
 	registered_websites[website.name] = manga_root_url;
+	updates.sort(function(a, b){return b-a});
 
 	manga = {"website_name":website.name,
-			"update":true,	
+			"update":true,
+			"last_updated":updates[0],	
 			"chapters_list":chapters_list,
 			"registered_websites":registered_websites,
 			"tags":{}};
@@ -798,9 +772,13 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 																			if (!mangas_list[manga].chapters_list[chapter]){
 																				//if not on the list, update with what we have
 																				mangas_list[manga].chapters_list[chapter] = {"status":"unread" , "url":updated_chapters[chapter]["url"]};
+																				if (!mangas_list[manga]["last_updated"] || updated_chapters[chapter]["update"] > mangas_list[manga]["last_updated"]) 
+																					mangas_list[manga]["last_updated"] = updated_chapters[chapter]["update"];
 																			} else if (getWebsite(updated_chapters[chapter]["url"]).name == mangas_list[manga].website_name) {
 																				//otherwise, if it's on the list AND it's the prefered website, update the url
 																				mangas_list[manga].chapters_list[chapter] = {"status":mangas_list[manga].chapters_list[chapter]["status"] , "url":updated_chapters[chapter]["url"]};
+																				if (!mangas_list[manga]["last_updated"] || updated_chapters[chapter]["update"] > mangas_list[manga]["last_updated"]) 
+																					mangas_list[manga]["last_updated"] = updated_chapters[chapter]["update"];
 																			}
 																		}
 																	},
@@ -842,6 +820,7 @@ async function readMangaChapter(message, sender) {
 					browser.storage.local.set({"mangas_list" : mangas_list});
 				} else if (! mangas_list[manga_name].chapters_list[current_chapter]) {
 					mangas_list[manga_name].chapters_list[current_chapter] = {"status" : "read", "url" : url};
+					//TODO : find a way to fetch last_updated value for that manga without updating the list
 					browser.storage.local.set({"mangas_list" : mangas_list});
 				}
 				if (sender){
@@ -1291,14 +1270,9 @@ async function install(){
 	if (!prefs || Object.keys(prefs).length < 9) {prefs = {"DB_version":"2.0.3", "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
-	//applying the change in cleanMangaName() to existing manga names
+	//updating the list to populate last_updated values for all mangas
 	{
-		for (let manga in mangas_list) {
-			if (mangas_list.hasOwnProperty(manga) && manga != cleanMangaName(manga)) {
-				mangas_list[cleanMangaName(manga)] = mangas_list[manga];
-				delete mangas_list[manga];
-			}
-		}
+		updateMangasList(null, true);
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};

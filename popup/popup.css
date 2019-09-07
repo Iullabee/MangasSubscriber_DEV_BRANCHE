@@ -358,12 +358,16 @@ LIST SECTION
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: calc(783px - 3 * 10px - 50px - 100px - 28px - 5px);
-	width: calc(783px - 3 * 10px - 50px - 100px - 28px - 5px);
+	max-width: calc(783px - 4 * 10px - 65px - 50px - 90px - 28px - 5px);
+	width: calc(783px - 4 * 10px - 65px - 50px - 90px - 28px - 5px);
 }
 
 .chapters_select {
-	width: 100px;
+	width: 90px;
+}
+
+.last_updated {
+	width: 75px;
 }
 
 .websites_select {

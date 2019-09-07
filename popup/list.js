@@ -39,6 +39,8 @@ async function createMangasList() {
 		dom_manga.website_name = manga.website_name;
 		dom_manga.reading_status = unread_chapters[0] ? "unread" : "read";
 		dom_manga.update_state = manga["update"];
+		dom_manga.last_updated = manga["last_updated"];
+		dom_manga.last_updated_test = new Date(manga["last_updated"]);
 		dom_manga.classList.add("list_line", "visible");
 		//displaying the manga name 
 		let dom_manga_text = document.createElement("div");
@@ -52,13 +54,22 @@ async function createMangasList() {
 		dom_manga_text.appendChild(dom_name_node);
 		dom_manga.appendChild(dom_manga_text);
 		
+		//and date of last update
+		let dom_last_updated_node = document.createElement("div");
+		dom_last_updated_node.classList.add("list_cell", "align_right", "last_updated");
+		let day = new Date(dom_manga.last_updated).getDate() < 10 ? "0"+ new Date(dom_manga.last_updated).getDate() : new Date(dom_manga.last_updated).getDate();
+		let month = (new Date(dom_manga.last_updated).getMonth()+1) < 10 ? "0"+ (new Date(dom_manga.last_updated).getMonth()+1) : (new Date(dom_manga.last_updated).getMonth()+1);
+		let year = new Date(dom_manga.last_updated).getFullYear().toString().substring(2);
+		let last_updated_text_node = document.createTextNode(day +"/"+ month +"/"+ year);
+		dom_last_updated_node.appendChild(last_updated_text_node);
+		dom_manga.appendChild(dom_last_updated_node);
+
 		//and number of unread chapters
 		let dom_unread_number_node = document.createElement("div");
 		dom_unread_number_node.classList.add("unread_number", "list_cell", "align_right", unread_chapters.length ? "red_text" : "green_text");
-		let text_node = document.createTextNode(" ("+unread_chapters.length+")");
-		dom_unread_number_node.appendChild(text_node);
+		let unread_number_text_node = document.createTextNode(" ("+unread_chapters.length+")");
+		dom_unread_number_node.appendChild(unread_number_text_node);
 		dom_manga.appendChild(dom_unread_number_node);
-		
 		
 		//and the sorted chapter list (unread first, then read)
 		let dom_select_td = document.createElement("div");
@@ -263,7 +274,7 @@ async function createMangasList() {
 			//creating modal body
 			let results = [];
 			for (let website_name in background.websites_list) {
-				if (background.websites_list.hasOwnProperty(website_name) && !background.websites_list[website_name]["unsupported"]) {
+				if (background.websites_list.hasOwnProperty(website_name) && ! background.websites_list[website_name]["unsupported"]) {
 					let list_line = document.createElement("div");
 					list_line.classList.add("modal_list_line", "website_modal_list_line");
 					list_line.website_name = website_name;
@@ -694,7 +705,7 @@ function initializeWebsitesFilter() {
 	let websites_filter = document.getElementById("websites_filter");
 	let websites = {};
 	for (let website in background.websites_list) {
-		if (background.websites_list.hasOwnProperty(website)) {
+		if (background.websites_list.hasOwnProperty(website) && !(background.websites_list[website]["unsupported"] == "total")) {
 			websites[website] = website;
 		}
 	}
