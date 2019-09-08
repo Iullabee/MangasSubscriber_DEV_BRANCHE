@@ -1272,7 +1272,7 @@ async function install(){
 
 	//updating the list to populate last_updated values for all mangas
 	{
-		updateMangasList(null, true);
+		if (Object.keys(list).length > 0) updateMangasList(null, true);
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
