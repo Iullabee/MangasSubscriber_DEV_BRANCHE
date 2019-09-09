@@ -56,7 +56,8 @@ async function createMangasList() {
 		
 		//and date of last update
 		let dom_last_updated_node = document.createElement("div");
-		dom_last_updated_node.classList.add("list_cell", "align_right", "last_updated");
+		dom_last_updated_node.classList.add("last_updated", "list_cell", "align_right");
+		dom_last_updated_node.title = "last updated on :";
 		let day = new Date(dom_manga.last_updated).getDate() < 10 ? "0"+ new Date(dom_manga.last_updated).getDate() : new Date(dom_manga.last_updated).getDate();
 		let month = (new Date(dom_manga.last_updated).getMonth()+1) < 10 ? "0"+ (new Date(dom_manga.last_updated).getMonth()+1) : (new Date(dom_manga.last_updated).getMonth()+1);
 		let year = new Date(dom_manga.last_updated).getFullYear().toString().substring(2);
