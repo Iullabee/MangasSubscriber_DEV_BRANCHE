@@ -424,6 +424,7 @@ MODAL
 	border-radius: 0.5em;
 	width: 500px;
 	max-width: 500px;
+	max-height: 600px;
 }
 
 #modal_title {
@@ -432,6 +433,9 @@ MODAL
 	text-align: center;
 	text-decoration: bold;
 	padding: 18px 12px;
+	max-height: 3.5em;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #modal_content {
