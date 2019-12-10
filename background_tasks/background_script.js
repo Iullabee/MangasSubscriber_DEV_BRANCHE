@@ -293,7 +293,7 @@ var websites_list = {
 	},
 	"readmangatoday":{name:"readmangatoday",
 				url:"readmng.com/",
-				"unsupported":"partial",
+				"unsupported":"total",
 				getMangaName: async function (url){
 					return "notAManga";
 				},
