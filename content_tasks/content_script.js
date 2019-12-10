@@ -5,7 +5,8 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"webtoons":"webtoons.com/",
 					"mangakakalot":"mangakakalot.com/",
 					"manganelo":"manganelo.com/",
-					"mangarock":"mangarock.com/"
+					"mangarock":"mangarock.com/",
+					"isekaiscan":"isekaiscan.com/"
 					};
 
 //fix fanfox annoying urls
@@ -60,6 +61,9 @@ function readMangaChapter() {
 			case "mangarock":
 				is_placeholder = document.querySelector(".pageMangaReader") ? false : true; //no mobile site
 				break;
+			case "isekaiscan":
+					is_placeholder = document.querySelector(".reading-content") ? false : true; //no mobile site
+					break;
 		}
 	}
 	
