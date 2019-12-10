@@ -34,6 +34,7 @@
 	z-index: 10000;
     border-bottom: 1px solid gray;
     font-size: 1rem;
+	min-height: 2.2rem;
 }
 
 .left_nav_button {
