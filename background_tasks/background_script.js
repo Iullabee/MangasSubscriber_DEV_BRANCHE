@@ -1360,9 +1360,9 @@ async function install(){
 	if (!prefs || Object.keys(prefs).length < 9) {prefs = {"DB_version":"2.0.3", "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
 	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
 
-	//updating the list to populate last_updated values for all mangas
+	//add here existing lists modification to comply with new version when needed
 	{
-		if (Object.keys(list).length > 0) updateMangasList(null, true);
+		
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
