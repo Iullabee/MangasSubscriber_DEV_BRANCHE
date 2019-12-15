@@ -1039,7 +1039,7 @@ async function exportMangasListOnline(){
 //import mangas list from json
 async function importMangasList(parsed_json){
 	var back_up = parsed_json["MangasSubscriberBackUp"];
-	if (back_up && back_up["MangasSubscriberPrefs"] && back_up["MangasSubscriberPrefs"]["DB_version"] == "2.0.3"){
+	if (back_up && back_up["mangas_list"] && back_up["MangasSubscriberPrefs"]){
 		await getMangasList();
 		mangas_list = cloneObject(back_up["mangas_list"]);
 		mangassubscriber_prefs = cloneObject(back_up["MangasSubscriberPrefs"]);
