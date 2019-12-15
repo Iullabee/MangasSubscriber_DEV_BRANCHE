@@ -1349,16 +1349,19 @@ async function setBadgeNumber() {
 
 
 async function install(){
-	let prefs = await getMangasSubscriberPrefs();
-	let list = await getMangasList();
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	let mangas_list = await getMangasList();
 	let to_log = null;
 
 	//saving the existing list "just in case"
-	if (list && prefs) await exportMangasList();
+	if (mangas_list && mangassubscriber_prefs && (! mangassubscriber_prefs["version"] || mangassubscriber_prefs["version"] != browser.runtime.getManifest().version)) {
+		await exportMangasList();
+		mangassubscriber_prefs["version"] = browser.runtime.getManifest().version;
+	}
 
 	//initializing if nothing exists or it's outdated
-	if (!prefs || Object.keys(prefs).length < 9) {prefs = {"DB_version":"2.0.3", "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"}; mangassubscriber_prefs = prefs;}
-	if (!list || Object.keys(list).length == 0) {list = {}; mangas_list = list;}
+	if (!mangassubscriber_prefs || Object.keys(mangassubscriber_prefs).length < 10) {mangassubscriber_prefs = {"DB_version":"2.0.4", "version":browser.runtime.getManifest().version, "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"};}
+	if (!mangas_list || Object.keys(mangas_list).length == 0) {mangas_list = {};}
 
 	//add here existing lists modification to comply with new version when needed
 	{
