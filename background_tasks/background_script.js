@@ -1091,13 +1091,13 @@ async function setMangaUpdate(manga_name, update_state) {
 
 
 async function getMangasList(){
-	if (Object.keys(mangas_list).length == 0)
+	if (!mangas_list || Object.keys(mangas_list).length == 0)
 		mangas_list = (await browser.storage.local.get("mangas_list"))["mangas_list"];
 	return mangas_list;
 }
 
 async function getMangasSubscriberPrefs(){
-	if (Object.keys(mangassubscriber_prefs).length == 0)
+	if (!mangassubscriber_prefs || Object.keys(mangassubscriber_prefs).length == 0)
 		mangassubscriber_prefs = (await browser.storage.local.get("MangasSubscriberPrefs"))["MangasSubscriberPrefs"];
 	return mangassubscriber_prefs;
 }
@@ -1352,7 +1352,7 @@ async function install(){
 	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	let mangas_list = await getMangasList();
 	let to_log = null;
-
+	
 	//saving the existing list "just in case"
 	if (mangas_list && mangassubscriber_prefs && (! mangassubscriber_prefs["version"] || mangassubscriber_prefs["version"] != browser.runtime.getManifest().version)) {
 		await exportMangasList();
