@@ -551,17 +551,13 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("div.chapter-list div.row");
+					let list = doc.querySelectorAll("ul.row-content-chapter");
 					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
 							if (list.hasOwnProperty(i)){
-								let chapter = list[i].querySelector("span a");
-								let date = "";
-								if (list[i].querySelector("span[title]").innerText.includes("-")) {
-									date = list[i].querySelector("span[title]").innerText.split("-");
-									date = date[1]+"/"+date[0]+"/20"+date[2];
-								} else date = list[i].querySelector("span[title]").innerText;
+								let chapter = list[i].querySelector("a");
+								let date = list[i].querySelector("span[title]").innerText;
 								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
 									: date == "1 day ago " ? new Date().getTime() - (24 * 3600 * 1000)
 									: date == "2 day ago " ? new Date().getTime() - (48 * 3600 * 1000)
