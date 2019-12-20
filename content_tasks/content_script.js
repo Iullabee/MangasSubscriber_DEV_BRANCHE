@@ -49,10 +49,8 @@ function readMangaChapter() {
 				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
 			case "manganelo":
-				{let elem = document.querySelector("#vungdoc img");
-				let source_url = elem ? elem.src : null;
-				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
-				break;}
+				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
+				break;
 			case "isekaiscan":
 					is_placeholder = document.querySelector(".reading-content") ? false : true; //no mobile site
 					break;

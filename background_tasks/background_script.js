@@ -524,7 +524,7 @@ var websites_list = {
 
 					//extract the manga name
 					var doc = parser.parseFromString(source, "text/html");
-					name = doc.querySelector("ul.manga-info-text li h1");
+					name = doc.querySelector("div.story-info-right h1");
 					
 					return name ? cleanMangaName(name.innerText) : "notAManga";
 				},
