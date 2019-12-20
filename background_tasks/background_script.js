@@ -592,7 +592,7 @@ var websites_list = {
 						
 						//extract mangas found
 						let doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("div.story_item h3.story_name a");
+						let list = doc.querySelectorAll("a.item-title");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							results[cleanMangaName(list[i].innerText)] = this.getMangaRootURL(list[i].href);
