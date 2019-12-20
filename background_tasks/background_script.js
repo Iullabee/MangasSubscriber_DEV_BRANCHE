@@ -839,6 +839,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 	//add cookies to bypass age verification hiding chapters lists
 	await browser.cookies.set({url:"https://fanfox.net", name:"isAdult", value:"1"});
 	await browser.cookies.set({url:"https://www.mangahere.cc", name:"isAdult", value:"1"});
+	await browser.cookies.set({url:"https://www.webtoons.com", name:"ageGatePass", value:"true"});
 
 	if (mangas_selection) {
 		for (var i in mangas_selection) {
