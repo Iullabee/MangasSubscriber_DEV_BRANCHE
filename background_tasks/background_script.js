@@ -330,6 +330,8 @@ var websites_list = {
 					return url_tail;
 				},
 				getAllChapters: async function (manga_url){
+					//temporary, only dec/jan/feb confirmed, need to wait to get the missing months
+					//var french_months = {"janv.":"jan", "févr.":"feb", "mars":"mar", "avril":"apr", "mai":"may", "juin":"jun", "juil.":"jul", "août":"aug","sept.":"sep", "oct.":"oct", "nov.":"nov", "déc.":"dec"};
 					var chapters_list = {};
 					var source = "truc";
 					var parser = new DOMParser();
@@ -551,18 +553,13 @@ var websites_list = {
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("ul.row-content-chapter");
+					let list = doc.querySelectorAll("li.a-h");
 					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
 							if (list.hasOwnProperty(i)){
 								let chapter = list[i].querySelector("a");
-								let date = list[i].querySelector("span[title]").innerText;
-								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
-									: date == "1 day ago " ? new Date().getTime() - (24 * 3600 * 1000)
-									: date == "2 day ago " ? new Date().getTime() - (48 * 3600 * 1000)
-									: date == "3 day ago " ? new Date().getTime() - (72 * 3600 * 1000)
-									: new Date().getTime();
+								let update = new Date(list[i].querySelector("span[title]").title);
 								if(chapter.href){
 									let chapter_number = await this.getCurrentChapter(chapter.href);
 									if (chapter_number)
@@ -1014,7 +1011,6 @@ async function exportMangasListOnline(){
 	var text_data = encodeURIComponent(JSON.stringify(list, null, 0));
 	//dev key 4f96e913faf4b10d77bd99304939270a
 	//user key ff7e23814c18e02ebe244dc3aa70b020
-
 	var request = new XMLHttpRequest();
 
 	request.onreadystatechange = async function() {
@@ -1362,7 +1358,11 @@ async function install(){
 
 	//add here existing lists modification to comply with new version when needed
 	{
-		
+		for (let manga in mangas_list) {
+			if (mangas_list[manga]["last_updated"] > 1609455599999) {
+				mangas_list[manga]["last_updated"] = 1009839540000;
+			}
+		}
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
