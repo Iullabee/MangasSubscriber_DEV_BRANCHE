@@ -414,7 +414,7 @@ var websites_list = {
 	},
 	"mangakakalot":{name:"mangakakalot",
 				url:"mangakakalot.com/",
-				getMangaName: async function (url){
+				/*getMangaName: async function (url){
 					var source = "truc";
 					var parser = new DOMParser();
 					let name = "notAManga";
@@ -509,6 +509,22 @@ var websites_list = {
 						index--;
 					}
 					return results;
+				}*/
+				"unsupported":"partial",
+				getMangaName: async function (url){
+					return "notAManga";
+				},
+				getMangaRootURL: function (url) {
+					return "../help/error.html";
+				},
+				getCurrentChapter: async function (url){
+					return null;
+				},
+				getAllChapters: async function (manga_url){
+					return {};
+				},
+				searchFor: async function (manga_name){
+					return {};
 				}
 	},
 	"manganelo":{name:"manganelo",
