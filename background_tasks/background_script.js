@@ -648,15 +648,15 @@ var websites_list = {
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
 					var url_tail = url.split("/manga/")[1];
-					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
+					(url_tail.indexOf("/")+1 <= url_tail.length) ? url_tail = url_tail.substring(url_tail.indexOf("/")+1) : url_tail = "";
 					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
-						//if there is a chapter number
-						if (url_tail.split("chapter-")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("chapter-")[1].split("/")[0];
-						}
-						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+						//while first char isn't 1~9 and there is more than one leading 0
+						while ((url_tail.charCodeAt(0) < 49 || url_tail.charCodeAt(0) > 57) && url_tail.split(".")[0].length > 1) {
 							url_tail = url_tail.slice(1);
+						}
+						//while last char isn't 0~9
+						while ((url_tail.charCodeAt(url_tail.length -1) < 48 || url_tail.charCodeAt(url_tail.length -1) > 57)) {
+							url_tail = url_tail.substring(0, url_tail.length-1);
 						}
 						url_tail = url_tail.replace(/-|_/g, '.');
 					}
@@ -1361,11 +1361,13 @@ async function install(){
 	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 	let mangas_list = await getMangasList();
 	let to_log = null;
-	
+	let update_list = false;
+
 	//saving the existing list "just in case"
 	if (mangas_list && mangassubscriber_prefs && (! mangassubscriber_prefs["version"] || mangassubscriber_prefs["version"] != browser.runtime.getManifest().version)) {
 		await exportMangasList();
 		mangassubscriber_prefs["version"] = browser.runtime.getManifest().version;
+		update_list = true;
 	}
 
 	//initializing if nothing exists or it's outdated
@@ -1373,10 +1375,16 @@ async function install(){
 	if (!mangas_list || Object.keys(mangas_list).length == 0) {mangas_list = {};}
 
 	//add here existing lists modification to comply with new version when needed
-	{
+	if (update_list) {
 		for (let manga in mangas_list) {
-			if (mangas_list[manga]["last_updated"] > 1609455599999) {
-				mangas_list[manga]["last_updated"] = 1009839540000;
+			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
+				for (chapter in mangas_list[manga]["chapters_list"]) {
+					let status = mangas_list[manga]["chapters_list"][chapter]["status"];
+					let url = mangas_list[manga]["chapters_list"][chapter]["url"];
+					delete mangas_list[manga]["chapters_list"][chapter];
+					let chapter_number = await getCurrentChapter(url);
+					if (chapter_number != "") mangas_list[manga]["chapters_list"][chapter_number] = {"status": status, "url": url};
+				}
 			}
 		}
 	}
