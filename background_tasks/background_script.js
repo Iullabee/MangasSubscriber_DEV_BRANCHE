@@ -575,7 +575,12 @@ var websites_list = {
 						for (let i=0; i<list.length; i++){
 							if (list.hasOwnProperty(i)){
 								let chapter = list[i].querySelector("a");
-								let update = new Date(list[i].querySelector("span[title]").title);
+								let date = list[i].querySelector("span[title]").title;
+								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
+									: date == "1 day ago" ? new Date().getTime() - (24 * 3600 * 1000)
+									: date == "2 day ago" ? new Date().getTime() - (48 * 3600 * 1000)
+									: date == "3 day ago" ? new Date().getTime() - (72 * 3600 * 1000)
+									: new Date().getTime();
 								if(chapter.href){
 									let chapter_number = await this.getCurrentChapter(chapter.href);
 									if (chapter_number)
@@ -1376,17 +1381,7 @@ async function install(){
 
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
-		for (let manga in mangas_list) {
-			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
-				for (chapter in mangas_list[manga]["chapters_list"]) {
-					let status = mangas_list[manga]["chapters_list"][chapter]["status"];
-					let url = mangas_list[manga]["chapters_list"][chapter]["url"];
-					delete mangas_list[manga]["chapters_list"][chapter];
-					let chapter_number = await getCurrentChapter(url);
-					if (chapter_number != "") mangas_list[manga]["chapters_list"][chapter_number] = {"status": status, "url": url};
-				}
-			}
-		}
+		
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
