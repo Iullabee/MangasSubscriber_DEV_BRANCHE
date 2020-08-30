@@ -769,7 +769,9 @@ function sortVersions(a, b) {
 	let compare = null;
 
 	for (i=0; i<length; i++) {
-		compare = tabA[i] ? tabB[i] ? tabA[i] > tabB[i] ? 1 : tabA[i] == tabB[i] ? 0 : -1 : 1 : -1;
+		let Ai = tabA[i] ? parseInt(tabA[i]) : 0;
+		let Bi = tabB[i] ? parseInt(tabB[i]) : 0;
+		compare = Ai > Bi ? 1 : Ai == Bi ? 0 : -1;
 		if (compare != 0) break;
 	}
 	return compare;
