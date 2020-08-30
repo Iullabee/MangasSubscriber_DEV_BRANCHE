@@ -819,6 +819,7 @@ async function followManga(url){
 	for (let chapter_number in chapters_list){
 		chapters_list[chapter_number]["status"] = customSort(chapter_number, current_chapter) <= 0 ? "read" : "unread";
 		updates.push(chapters_list[chapter_number]["update"]);
+		delete chapters_list[chapter_number]["update"];
 	}
 	let registered_websites = {};
 	registered_websites[website.name] = manga_root_url;
@@ -1381,7 +1382,11 @@ async function install(){
 
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
-		
+		for (let manga in mangas_list){
+			for (let chapter_number in mangas_list[manga]["chapters_list"]) {
+				delete mangas_list[manga]["chapters_list"][chapter_number]["update"];
+			}
+		}
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
