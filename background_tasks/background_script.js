@@ -1385,6 +1385,8 @@ async function install(){
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
 		for (let manga in mangas_list){
+			if (typeof mangas_list[manga]["last_updated"] == "string") 
+				mangas_list[manga]["last_updated"] = 0;
 			for (let chapter_number in mangas_list[manga]["chapters_list"]) {
 				delete mangas_list[manga]["chapters_list"][chapter_number]["update"];
 			}
