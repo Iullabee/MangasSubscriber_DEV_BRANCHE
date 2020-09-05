@@ -871,8 +871,15 @@ var websites_list = {
 };
 
 function cleanMangaName (name) {
-	return name.replace(/[\W_]+/g , " ").toLowerCase().trim();
+	return htmlDecode(name).replace(/[\W_]+/g , " ").toLowerCase().trim();
 }
+
+function htmlDecode(input){
+	let e = document.createElement('div');
+	e.innerHTML = input;
+	return e.childNodes[0].nodeValue;
+  }
+
 function sortAlphaNum(a, b) {
 	var reA = /[^a-zA-Z]/g;
 	var reN = /[^0-9.]/g;
