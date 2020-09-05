@@ -1087,6 +1087,7 @@ async function importMangasList(parsed_json){
 		setBadgeNumber();
 		//reset possible autoUpdate
 		setAutoUpdate(await getAutoUpdateInterval());
+		install();
 	}
 	return ;
 }
