@@ -600,7 +600,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						source_url = "https://manganelo.com/search/"+manga_name.replace(" ", "_");
+						source_url = "https://manganelo.com/search/story/"+manga_name.replace(" ", "_");
 						try {
 							//get search page
 							source = await getSource(source_url);
