@@ -23,6 +23,7 @@
 		"*://mangakakalot.com/*",
 		"*://manganelo.com/*",
 		"*://isekaiscan.com/*",
+		"*://mangadex.org/*",
 		"*://pastebin.com/*"
 	],
 
@@ -52,7 +53,8 @@
 						"*://m.webtoons.com/*/*/*",
 						"*://mangakakalot.com/*/*/*",
 						"*://manganelo.com/*/*/*",
-						"*://isekaiscan.com/*"],
+						"*://isekaiscan.com/*",
+						"*://mangadex.org/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
