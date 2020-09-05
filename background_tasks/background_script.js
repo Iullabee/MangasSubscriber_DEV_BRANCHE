@@ -668,13 +668,17 @@ var websites_list = {
 					var url_tail = url.split("/manga/")[1].split("&")[0];
 					(url_tail.indexOf("/")+1 <= url_tail.length) ? url_tail = url_tail.substring(url_tail.indexOf("/")+1) : url_tail = "";
 					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
-						//while first char isn't 1~9 and there is more than one leading 0
-						while ((url_tail.charCodeAt(0) < 49 || url_tail.charCodeAt(0) > 57) && url_tail.split(".")[0].length > 1) {
+						//while first char isn't 0~9
+						while (url_tail.charCodeAt(0) < 48 || url_tail.charCodeAt(0) > 57) {
 							url_tail = url_tail.slice(1);
 						}
 						//while last char isn't 0~9
-						while ((url_tail.charCodeAt(url_tail.length -1) < 48 || url_tail.charCodeAt(url_tail.length -1) > 57)) {
+						while (url_tail.charCodeAt(url_tail.length -1) < 48 || url_tail.charCodeAt(url_tail.length -1) > 57) {
 							url_tail = url_tail.substring(0, url_tail.length-1);
+						}
+						//while there is more than one leading zero
+						while (url_tail.charCodeAt(0) == 48 && url_tail.charCodeAt(1) == 48) {
+							url_tail = url_tail.slice(1);
 						}
 						url_tail = url_tail.replace(/-|_/g, '.');
 					}
