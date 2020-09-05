@@ -719,7 +719,7 @@ var websites_list = {
 	
 						//extract mangas found
 						let doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("h4 a");
+						let list = doc.querySelectorAll("h3.h4 a");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
 							results[cleanMangaName(list[i].innerText)] = "https://" + this.url + list[i].href.split("manga/")[1];
