@@ -646,7 +646,6 @@ var websites_list = {
 				getMangaName: async function (url){
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
-				getMangaRootURL: function (url) {
 					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
@@ -788,12 +787,13 @@ function cloneObject(obj) {
 	return clone;
 }
 
-async function getSource(source_url){
+async function getSource(url, options){
 	var response = "";
 	var data = "";
+	var use_options = options ? options : {};
 
 	try{
-		response = await fetch(source_url);
+		response = await fetch(url, use_options);
 		data = await response.text();
 	} catch (error){
 		throw error;
