@@ -63,7 +63,16 @@ function readMangaChapter() {
 	
 	if (!is_placeholder) {
 		browser.runtime.sendMessage({"target":"background","read": url});
+	} else {
+		retryReading();
 	}
+}
+
+var retry_number = 0;
+var max_retry = 5;
+function retryReading () {
+	retry_number++;
+	if (retry_number < max_retry)	setTimeout(readMangaChapter, 3000)
 }
 
 //listen to background script, and create navigation buttons
