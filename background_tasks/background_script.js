@@ -646,12 +646,26 @@ var websites_list = {
 				getMangaName: async function (url){
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
-					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
+				getMangaRootURL: async function (url) {
+					let source = "";
+					var parser = new DOMParser();
+					try {
+						//get manga's home page
+						source = await getSource("https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/");
+					} catch (error) {
+						throw error;
+					}
+
+					var doc = parser.parseFromString(source, "text/html");
+					let shortlink = doc.querySelector("link[rel='shortlink']").href;
+					let manga_number = shortlink.split("=")[1].split("/")[0];
+
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/&" + manga_number;
 				},
 				getCurrentChapter: async function (url){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
-					var url_tail = url.split("/manga/")[1];
+					var url_tail = url.split("/manga/")[1].split("&")[0];
 					(url_tail.indexOf("/")+1 <= url_tail.length) ? url_tail = url_tail.substring(url_tail.indexOf("/")+1) : url_tail = "";
 					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
 						//while first char isn't 1~9 and there is more than one leading 0
@@ -672,12 +686,19 @@ var websites_list = {
 					var parser = new DOMParser();
 
 					try {
-						//get manga's home page
-						source = await getSource(manga_url);
+						source = await getSource("https://isekaiscan.com/wp-admin/admin-ajax.php", {
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+								"Cache-Control": "no-cache"
+							},
+							"body": "action=manga_get_chapters&manga=" + manga_url.split("&")[1],
+							"method": "POST",
+							"mode": "cors"
+						});
 					} catch (error) {
 						throw error;
 					}
-
+					
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
 					let list = doc.querySelectorAll("li.wp-manga-chapter a");
@@ -721,7 +742,7 @@ var websites_list = {
 						let list = doc.querySelectorAll("h3.h4 a");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].innerText)] = "https://" + this.url + list[i].href.split("manga/")[1];
+							results[cleanMangaName(list[i].innerText)] = await this.getMangaRootURL(list[i].href);
 						}
 
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
@@ -810,7 +831,7 @@ async function followManga(url){
 	var manga = {};
 	var website = getWebsite(url);
 	var manga_name = await website.getMangaName(url);
-	let manga_root_url = website.getMangaRootURL(url);
+	let manga_root_url = await website.getMangaRootURL(url);
 	var chapters_list = await website.getAllChapters(manga_root_url);
 	var current_chapter = await website.getCurrentChapter(url);
 	let mangas_list = await getMangasList();
@@ -1076,7 +1097,7 @@ async function registerWebsites(manga_name, websites){
 	for (let name in websites) {
 		if (websites.hasOwnProperty(name)) {
 			let website = getWebsite(websites[name]);
-			websites[name] = website.getMangaRootURL(websites[name]);
+			websites[name] = await website.getMangaRootURL(websites[name]);
 		}
 	}
 
@@ -1385,11 +1406,8 @@ async function install(){
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
 		for (let manga in mangas_list){
-			if (typeof mangas_list[manga]["last_updated"] == "string") 
-				mangas_list[manga]["last_updated"] = 0;
-			for (let chapter_number in mangas_list[manga]["chapters_list"]) {
-				delete mangas_list[manga]["chapters_list"][chapter_number]["update"];
-			}
+			if (mangas_list[manga]["registered_websites"]["isekaiscan"] && ! mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[1]) 
+			mangas_list[manga]["registered_websites"]["isekaiscan"] = await websites_list["isekaiscan"].getMangaRootURL(mangas_list[manga]["registered_websites"]["isekaiscan"]);
 		}
 	}
 
