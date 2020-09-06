@@ -880,7 +880,7 @@ function cleanMangaName (name) {
 
 function htmlDecode(input){
 	let e = document.createElement('div');
-	e.innerHTML = input;
+	e.innerText = input;
 	return e.childNodes[0].nodeValue;
   }
 
