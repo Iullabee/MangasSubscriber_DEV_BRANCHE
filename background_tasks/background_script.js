@@ -765,9 +765,8 @@ var websites_list = {
 					//if we're on chapter page
 					else if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://mangadex.org/api/?id=" + url.split("/chapter/")[1].split("/")[0] + "&server=null&saver=1&type=chapter"));
-							let manga_source = JSON.parse(await getSource("https://mangadex.org/api/manga/" + chapter_source["manga_id"]));
-							name = cleanMangaName(manga_source["manga"]["title"]);
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
+							name = cleanMangaName(chapter_source["data"]["mangaTitle"]);
 						} catch (error) {
 							throw error;
 						}
@@ -781,9 +780,8 @@ var websites_list = {
 					//if we're on chapter page
 					else if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://mangadex.org/api/?id=" + url.split("/chapter/")[1].split("/")[0] + "&server=null&saver=1&type=chapter"));
-							let manga_source = JSON.parse(await getSource("https://mangadex.org/api/manga/" + chapter_source["manga_id"]));
-							result = this.url + "/title/" + chapter_source["manga_id"] + "/" + cleanMangaName(manga_source["manga"]["title"]).replace(/ /g, "-");
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
+							result = this.url + "/title/" + chapter_source["data"]["mangaId"] + "/" + cleanMangaName(chapter_source["data"]["mangaTitle"]).replace(/ /g, "-");
 						} catch (error) {
 							throw error;
 						}
@@ -796,10 +794,10 @@ var websites_list = {
 					//if we're on chapter page
 					if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://mangadex.org/api/?id=" + url.split("/chapter/")[1].split("/")[0] + "&server=null&saver=1&type=chapter"));
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
 							
-							let volume_number = chapter_source["volume"] && chapter_source["volume"] != "" ? chapter_source["volume"] : "";
-							let chapter_number = volume_number != "" ? chapter_source["chapter"].replace(/\./g, "") : chapter_source["chapter"];
+							let volume_number = chapter_source["data"]["volume"] ? chapter_source["data"]["volume"] : "";
+							let chapter_number = volume_number != "" ? chapter_source["data"]["chapter"].replace(/\./g, "") : chapter_source["data"]["chapter"];
 							if (volume_number != "" && chapter_number.length == 1) chapter_number = "0" + chapter_number;
 							
 							let junction = (volume_number != "") && (chapter_number != "") ? "." : "";
@@ -816,24 +814,26 @@ var websites_list = {
 					let manga_id = manga_url.split("/title/")[1].split("/")[0];
 
 					try {
-						source = JSON.parse(await getSource("https://mangadex.org/api/manga/" + manga_id));
+						source = JSON.parse(await getSource("https://api.mangadex.org/v2/manga/" + manga_id + "/chapters"));
 					} catch (error) {
 						throw error;
 					}
 					
 					//extract the chapter list
-					if (! source["chapter"] || Object.keys(source["chapter"]).length == 0) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
+					if (! source["data"]["chapters"]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name); 
+					if (Object.keys(source["data"]["chapters"]).length == 0) throw new Error(" no chapters found for "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let chapter_id in source["chapter"]){
-							if(source["chapter"][chapter_id]["lang_code"] == "gb"){
-								let volume_number = source["chapter"][chapter_id]["volume"] && source["chapter"][chapter_id]["volume"] != "" ? source["chapter"][chapter_id]["volume"] : "";
-								let chapter_number = volume_number != "" ? source["chapter"][chapter_id]["chapter"].replace(/\./g, "") : source["chapter"][chapter_id]["chapter"];
+						for (let index in source["data"]["chapters"]){
+							if(source["data"]["chapters"][index]["language"] == "gb"){
+								let volume_number = source["data"]["chapters"][index]["volume"] && source["data"]["chapters"][index]["volume"] != "" ? source["data"]["chapters"][index]["volume"] : "";
+								let chapter_number = volume_number != "" ? source["data"]["chapters"][index]["chapter"].replace(/\./g, "") : source["data"]["chapters"][index]["chapter"];
+								let chapter_id = source["data"]["chapters"][index]["id"];
 								if (volume_number != "" && chapter_number.length == 1) chapter_number = "0" + chapter_number;
 								
 								let junction = (volume_number != "") && (chapter_number != "") ? "." : "";
 								let chapter = volume_number + junction + chapter_number;
 
-								let update = new Date(1000*source["chapter"][chapter_id]["timestamp"]);
+								let update = new Date(1000*source["data"]["chapters"][index]["timestamp"]);
 								if (chapter != "")
 									chapters_list[chapter] = {"status" : "unknown", "url" : "https://mangadex.org/chapter/" + chapter_id + "/1", "update" : update};
 							}
