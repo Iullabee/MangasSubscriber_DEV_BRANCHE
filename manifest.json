@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.2.2",
+	"version": "2.2.3",
 
 	"icons": {
 		"48": "icons/logo.svg"
@@ -25,7 +25,7 @@
 		"*://isekaiscan.com/*",
 		"*://mangadex.org/*",
 		"*://api.mangadex.org/*",
-		"*://pastebin.com/*"
+		"*://api.paste.ee/*"
 	],
 
 	"browser_action": {

@@ -1178,25 +1178,27 @@ async function exportMangasList(){
 	return;
 }
 
-//export mangas list online to pastebin
+//export mangas list online to paste.ee
 async function exportMangasListOnline(){
 	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
 	var text_data = encodeURIComponent(JSON.stringify(list, null, 0));
-	//dev key 4f96e913faf4b10d77bd99304939270a
-	//user key ff7e23814c18e02ebe244dc3aa70b020
+
 	var request = new XMLHttpRequest();
 
 	request.onreadystatechange = async function() {
-		if (this.readyState == 4 && this.status == 200) {
-			let key = this.responseText.split("https://pastebin.com/")[1];
+		if (this.readyState == 4 && this.status == 201) {
+			let decoded_json = decodeURIComponent(this.responseText);
+			let parsed_json = JSON.parse(decoded_json);
+			let key = parsed_json["id"];
 			await browser.storage.sync.set({"sync_list_key":key});
 		}
 	};
 
-	request.open("POST", "https://pastebin.com/api/api_post.php", true);
-	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	request.send("api_dev_key=4f96e913faf4b10d77bd99304939270a&api_user_key=ff7e23814c18e02ebe244dc3aa70b020&api_option=paste&api_paste_private=0&api_paste_expire_date=N&api_paste_format=json&api_paste_code="+text_data);
-	
+	request.open("POST", "https://api.paste.ee/v1/pastes", true);
+	request.setRequestHeader("Content-type", "application/json");
+	request.setRequestHeader("X-Auth-Token", "aWYQmpKw3E1YdeYkuvEE3fMtAL2k3GdUNg5i3fEUH");
+	request.send('{"sections":[{"contents":"'+text_data+'"}]}');
+
 	return;
 }
 

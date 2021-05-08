@@ -137,7 +137,7 @@ document.getElementById("export_online").addEventListener("click", async (e) => 
 	} else {
 		export_text.textContent = "error, try again";
 	}
-	setTimeout(()=>{export_text.textContent = "export list to pastebin";},3000);
+	setTimeout(()=>{export_text.textContent = "export list to paste.ee";},3000);
 });
 
 
@@ -148,18 +148,21 @@ document.getElementById("import_online").addEventListener("click", async (e) => 
 	let key = await background.getSyncListURL();
 
 	let request = new XMLHttpRequest();
-	request.open("POST", "https://pastebin.com/api/api_raw.php", true);
+	request.open("GET", "https://api.paste.ee/v1/pastes/"+key, true);
 	request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	request.send("api_dev_key=4f96e913faf4b10d77bd99304939270a&api_user_key=ff7e23814c18e02ebe244dc3aa70b020&api_option=show_paste&api_paste_key="+ key);
-
+	request.setRequestHeader("X-Auth-Token", "aWYQmpKw3E1YdeYkuvEE3fMtAL2k3GdUNg5i3fEUH");
+	request.send();
+	
 	request.onreadystatechange = async function() {
 		if (this.readyState == 4 && this.status == 200) {
 			json = this.responseText;
 			if (json.split("Bad API request")[1] || json.split("Paste Removed")[1]) json = "";
 
 			if (json != "") {
-				let decoded_json = decodeURIComponent(json);
+				let response_json = JSON.parse(json);
+				let decoded_json = decodeURIComponent(response_json["paste"]["sections"][0]["contents"]);
 				let parsed_json = JSON.parse(decoded_json);
+				console.log(parsed_json);
 				document.getElementById("import_online").textContent = "...";
 	
 				var fail = await background.importMangasList(parsed_json);
@@ -168,7 +171,7 @@ document.getElementById("import_online").addEventListener("click", async (e) => 
 				} else {
 					document.getElementById("import_online").textContent = "error, try again";
 				}
-				setTimeout(()=>{document.getElementById("import_online").textContent = "import list from pastebin";},3000);
+				setTimeout(()=>{document.getElementById("import_online").textContent = "import list from paste.ee";},3000);
 			}
 		}
 	};
