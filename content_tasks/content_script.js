@@ -4,6 +4,7 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"webtoons":"webtoons.com/",
 					"mangakakalot":"mangakakalot.com/",
 					"manganelo":"manganelo.com/",
+					"manganato":"readmanganato.com/",
 					"isekaiscan":"isekaiscan.com/",
 					"mangadex":"mangadex.org/"
 					};
@@ -12,6 +13,11 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 (function fanfoxURLFix() {
 	if (this.location.href.indexOf("fanfox.net//") >= 0)
 		this.location.href = this.location.href.replace("fanfox.net//", "fanfox.net/");
+})();
+//fix manganato annoying urls
+(function manganatoURLFix() {
+	if (this.location.href.indexOf("manganato.com/") >= 0 && this.location.href.indexOf("readmanganato.com/") == -1 && this.location.href.split("manganato.com/")[1])
+		this.location.href = this.location.href.replace("manganato.com/", "readmanganato.com/");
 })();
 
 window.addEventListener("load", readMangaChapter);
@@ -50,6 +56,9 @@ function readMangaChapter() {
 				is_placeholder = source_url && ! source_url.includes("/nextchap.png") ? false : true; //no mobile site
 				break;}
 			case "manganelo":
+				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
+				break;
+			case "manganato":
 				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
 				break;
 			case "isekaiscan":

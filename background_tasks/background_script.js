@@ -622,6 +622,101 @@ var websites_list = {
 					return results;
 				}
 	},
+	"readmanganato":{name:"readmanganato",
+				url:"readmanganato.com/",
+				getMangaName: async function (url){
+					var source = "truc";
+					var parser = new DOMParser();
+					let name = "notAManga";
+					try {
+						//get manga's home page
+						source = await getSource(this.getMangaRootURL(url));
+					} catch (error) {
+						throw error;
+					}
+
+					//extract the manga name
+					var doc = parser.parseFromString(source, "text/html");
+					name = doc.querySelector("div.story-info-right h1");
+					
+					return name ? cleanMangaName(name.innerText) : "notAManga";
+				},
+				getMangaRootURL: function (url) {
+					return "https://" + this.url + "manga-" + url.split("/manga-")[1].split("/")[0] + "/";
+				},
+				getCurrentChapter: async function (url){
+					//get rid of website and manga name
+					let url_tail = url.split("chapter-")[1] ? url.split("chapter-")[1] : null;
+					
+					return url_tail;
+				},
+				getAllChapters: async function (manga_url){
+					var chapters_list = {};
+					var source = "truc";
+					var parser = new DOMParser();
+
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
+
+					//extract the chapter list
+					var doc = parser.parseFromString(source, "text/html");
+					let list = doc.querySelectorAll("li.a-h");
+					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
+					else {
+						for (let i=0; i<list.length; i++){
+							if (list.hasOwnProperty(i)){
+								let chapter = list[i].querySelector("a");
+								let date = list[i].querySelector("span[title]").title;
+								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
+									: date == "1 day ago" ? new Date().getTime() - (24 * 3600 * 1000)
+									: date == "2 day ago" ? new Date().getTime() - (48 * 3600 * 1000)
+									: date == "3 day ago" ? new Date().getTime() - (72 * 3600 * 1000)
+									: new Date().getTime();
+								if(chapter.href){
+									let chapter_number = await this.getCurrentChapter(chapter.href);
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : manga_url + "chapter-" + chapter.href.split("chapter-")[1], "update" : update};
+								}
+							}
+						}
+					}
+					return chapters_list;
+				},
+				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					let results = {};
+					var source = "truc";
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name
+						source_url = "https://readmanganato.com/search/story/"+manga_name.replace(" ", "_");
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+						
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("a.item-title");
+						for (let i=0; i<list.length; i++) {
+							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+							results[cleanMangaName(list[i].innerText)] = this.getMangaRootURL(list[i].href);
+						}
+						if (Object.keys(results).length) break; // if results are found, break and return
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+					}
+					return results;
+				}
+	},
 	"mangarock":{name:"mangarock",
 				url:"mangarock.com/",
 				"unsupported":"total",
@@ -1536,10 +1631,23 @@ async function install(){
 
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
+		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			if (mangas_list[manga]["registered_websites"]["isekaiscan"] && ! mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[1]) 
-			mangas_list[manga]["registered_websites"]["isekaiscan"] = await websites_list["isekaiscan"].getMangaRootURL(mangas_list[manga]["registered_websites"]["isekaiscan"]);
+			if (mangas_list[manga]["registered_websites"]["manganelo"]) {
+				let data ="";
+				try {data = await getSource(mangas_list[manga]["registered_websites"]["manganelo"]);} catch (e) {console.log(e)}
+				let parser = new DOMParser();
+				let doc = parser.parseFromString(data, "text/html");
+				let one_chapter = doc.querySelector("li.a-h a");
+				let url = one_chapter ? one_chapter.href ? one_chapter.href : null : null;
+				if (url) {
+					mangas_list[manga]["registered_websites"]["readmanganato"] = websites_list["readmanganato"].getMangaRootURL(url); 
+					mangas_list[manga]["website_name"] == "manganelo" ? mangas_list[manga]["website_name"] = "readmanganato" : null;
+					delete mangas_list[manga]["registered_websites"]["manganelo"];
+				}
+			}
 		}
+		setBadgeNumber();
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
