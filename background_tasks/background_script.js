@@ -1648,17 +1648,16 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			if (mangas_list[manga]["registered_websites"]["manganelo"]) {
-				let data ="";
-				try {data = await getSource(mangas_list[manga]["registered_websites"]["manganelo"]);} catch (e) {console.log(e)}
-				let parser = new DOMParser();
-				let doc = parser.parseFromString(data, "text/html");
-				let one_chapter = doc.querySelector("li.a-h a");
-				let url = one_chapter ? one_chapter.href ? one_chapter.href : null : null;
-				if (url) {
-					mangas_list[manga]["registered_websites"]["readmanganato"] = websites_list["readmanganato"].getMangaRootURL(url); 
-					mangas_list[manga]["website_name"] == "manganelo" ? mangas_list[manga]["website_name"] = "readmanganato" : null;
-					delete mangas_list[manga]["registered_websites"]["manganelo"];
+			if (mangas_list[manga]["registered_websites"]["mangadex"]) {
+				let response = "";
+				try{
+					response = await fetch(mangas_list[manga]["registered_websites"]["mangadex"]);
+				} catch (error){
+					throw error;
+				}
+				
+				if (response != "" && response.url) {
+					mangas_list[manga]["registered_websites"]["mangadex"] = response.url; 
 				}
 			}
 		}
