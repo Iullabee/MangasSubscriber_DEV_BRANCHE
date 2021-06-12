@@ -65,7 +65,7 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector(".reading-content") ? false : true; //no mobile site
 				break;
 			case "mangadex":
-				is_placeholder = document.querySelector(".reader-image-wrapper") ? false : true; //no mobile site
+				is_placeholder = document.querySelector(".img__box") ? false : true; //no mobile site
 				break;
 		}
 	}
