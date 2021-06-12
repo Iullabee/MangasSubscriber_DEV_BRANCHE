@@ -854,29 +854,37 @@ var websites_list = {
 				url:"mangadex.org/",
 				getMangaName: async function (url){
 					let name = "notAManga";
-					
-					//if we're on root page, name is in url
-					if (url.includes("/title/") && url.split("/title/")[1] && url.split("/title/")[1].split("/")[1]) name = cleanMangaName(url.split("/title/")[1].split("/")[1]);
-					//if we're on chapter page
-					else if (url.includes("/chapter/")){
+					let manga_id = "";
+					//if on chapter page, get chapter data and extract manga id
+					if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
-							name = cleanMangaName(chapter_source["data"]["mangaTitle"]);
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
+							manga_id = chapter_source["relationships"]["1"]["id"];
 						} catch (error) {
 							throw error;
 						}
+					} else if (url.includes("/title/") && url.split("/title/")[1]) { //if on root page, manga id is in url
+						manga_id = url.split("/title/")[1];
+						
+					}
+					//get manga data and extract name
+					try {
+						let manga_source = JSON.parse(await getSource("https://api.mangadex.org/manga/" + manga_id));
+						name = cleanMangaName(manga_source["data"]["attributes"]["title"]["en"]);
+					} catch (error) {
+						throw error;
 					}
 					return name;
 				},
 				getMangaRootURL: async function (url) {
 					let result = "";
-					//if we're on root page, make sure the domaine is mangadex and not mangassubscriber
-					if (url.includes("/title/") && url.split("/title/")[1] && url.split("/title/")[1].split("/")[1]) result = "https://" + this.url + "title/" + url.split("/title/")[1];
+					//if we're on root page, make sure the domain is mangadex and not mangassubscriber
+					if (url.includes("/title/") && url.split("/title/")[1]) result = "https://" + this.url + "title/" + url.split("/title/")[1];
 					//if we're on chapter page
 					else if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
-							result = this.url + "/title/" + chapter_source["data"]["mangaId"] + "/" + cleanMangaName(chapter_source["data"]["mangaTitle"]).replace(/ /g, "-");
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
+							result = this.url + "/title/" + chapter_source["relationships"]["1"]["id"];
 						} catch (error) {
 							throw error;
 						}
@@ -889,10 +897,10 @@ var websites_list = {
 					//if we're on chapter page
 					if (url.includes("/chapter/")){
 						try {
-							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/v2/chapter/" + url.split("/chapter/")[1].split("/")[0]));
+							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
 							
-							let volume_number = chapter_source["data"]["volume"] ? chapter_source["data"]["volume"] : "";
-							let chapter_number = volume_number != "" ? chapter_source["data"]["chapter"].replace(/\./g, "") : chapter_source["data"]["chapter"];
+							let volume_number = chapter_source["data"]["attributes"]["volume"] != null ? chapter_source["data"]["volume"] : "";
+							let chapter_number = volume_number != "" ? chapter_source["data"]["attributes"]["chapter"].replace(/\./g, "") : chapter_source["data"]["attributes"]["chapter"];
 							if (volume_number != "" && chapter_number.length == 1) chapter_number = "0" + chapter_number;
 							
 							let junction = (volume_number != "") && (chapter_number != "") ? "." : "";
@@ -905,32 +913,42 @@ var websites_list = {
 				},
 				getAllChapters: async function (manga_url){
 					var chapters_list = {};
+					let temp_list = {};
 					let source = "truc";
 					let manga_id = manga_url.split("/title/")[1].split("/")[0];
 
 					try {
-						source = JSON.parse(await getSource("https://api.mangadex.org/v2/manga/" + manga_id + "/chapters"));
+						let offset = 0;
+						let total = 500;
+						while (offset < total) {
+							source = JSON.parse(await getSource("https://api.mangadex.org/manga/" + manga_id + "/feed?limit=500&offset=" + offset));
+							total = source["total"];
+							offset += 500;
+							for(var i in source["results"]) {
+								temp_list[i] = cloneObject(source["results"][i]);
+							}
+						}
 					} catch (error) {
 						throw error;
 					}
 					
 					//extract the chapter list
-					if (! source["data"]["chapters"]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name); 
-					if (Object.keys(source["data"]["chapters"]).length == 0) throw new Error(" no chapters found for "+this.getMangaName(manga_url)+" on "+this.name);
+					if (! temp_list["0"]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name); 
+					if (Object.keys(temp_list).length == 0) throw new Error(" no chapters found for "+this.getMangaName(manga_url)+" on "+this.name);
 					else {
-						for (let index in source["data"]["chapters"]){
-							if(source["data"]["chapters"][index]["language"] == "gb"){
-								let volume_number = source["data"]["chapters"][index]["volume"] && source["data"]["chapters"][index]["volume"] != "" ? source["data"]["chapters"][index]["volume"] : "";
-								let chapter_number = volume_number != "" ? source["data"]["chapters"][index]["chapter"].replace(/\./g, "") : source["data"]["chapters"][index]["chapter"];
-								let chapter_id = source["data"]["chapters"][index]["id"];
+						for (let index in temp_list){
+							if(temp_list[index]["data"]["attributes"]["translatedLanguage"] == "en"){
+								let volume_number = temp_list[index]["data"]["attributes"]["volume"] != null ? temp_list[index]["data"]["attributes"]["volume"] : "";
+								let chapter_number = volume_number != "" ? temp_list[index]["data"]["attributes"]["chapter"].replace(/\./g, "") : temp_list[index]["data"]["attributes"]["chapter"];
+								let chapter_id = temp_list[index]["data"]["id"];
 								if (volume_number != "" && chapter_number.length == 1) chapter_number = "0" + chapter_number;
 								
 								let junction = (volume_number != "") && (chapter_number != "") ? "." : "";
 								let chapter = volume_number + junction + chapter_number;
 
-								let update = new Date(1000*source["data"]["chapters"][index]["timestamp"]);
+								let update = new Date(temp_list[index]["data"]["attributes"]["publishAt"]).getTime();
 								if (chapter != "")
-									chapters_list[chapter] = {"status" : "unknown", "url" : "https://mangadex.org/chapter/" + chapter_id + "/1", "update" : update};
+									chapters_list[chapter] = {"status" : "unknown", "url" : "https://mangadex.org/chapter/" + chapter_id, "update" : update};
 							}
 						}
 					}
@@ -941,24 +959,21 @@ var websites_list = {
 					let results = {};
 					var source = "truc";
 					let index = manga_name.split(" ").length;
-					var parser = new DOMParser();
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						let source_url = "https://mangadex.org/search?title="+manga_name;
+						let source_url = "https://api.mangadex.org/manga?title=" + manga_name.replace(" ", "%20") + "&limit=30&offset=0&contentRating[]=safe&contentRating[]=none&contentRating[]=suggestive&contentRating[]=erotica";
 						try {
 							//get search page
-							source = await getSource(source_url);
+							source = JSON.parse(await getSource(source_url));
 						} catch (error) {
 							throw error;
 						}
 	
 						//extract mangas found
-						let doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("a.manga_title");
-						for (let i=0; i<list.length; i++) {
+						for (let i=0; i<source["results"].length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].innerText)] = await this.getMangaRootURL(list[i].href);
+							results[cleanMangaName(source["results"][i]["data"]["attributes"]["title"]["en"])] = this.url + "/title/" + source["results"][i]["data"]["id"];
 						}
 
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
