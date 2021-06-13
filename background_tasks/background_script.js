@@ -1651,7 +1651,7 @@ async function install(){
 			if (mangas_list[manga]["registered_websites"]["mangadex"]) {
 				let response = "";
 				try{
-					response = await fetch(mangas_list[manga]["registered_websites"]["mangadex"]);
+					response = await fetch(mangas_list[manga]["registered_websites"]["mangadex"].replace("mangadex.org//", "https://mangadex.org/"));
 				} catch (error){
 					throw error;
 				}
@@ -1659,6 +1659,7 @@ async function install(){
 				if (response != "" && response.url) {
 					mangas_list[manga]["registered_websites"]["mangadex"] = response.url; 
 				}
+				mangas_list[manga]["last_updated"] = 0;
 			}
 		}
 		setBadgeNumber();
