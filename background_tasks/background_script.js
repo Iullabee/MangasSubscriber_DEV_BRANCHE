@@ -1177,7 +1177,7 @@ async function readMangaChapter(message, sender) {
 		var manga_name = await getMangaName(url);
 		var current_chapter = await getCurrentChapter(url);
 
-		let mangas_list = await getMangasList();
+		await getMangasList();
 		await getMangasSubscriberPrefs(); //making sure preferences are initialized for customSort()
 
 		if (mangas_list[manga_name]) {
@@ -1652,8 +1652,8 @@ async function setBadgeNumber() {
 
 
 async function install(){
-	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
-	let mangas_list = await getMangasList();
+	mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	mangas_list = await getMangasList();
 	let to_log = null;
 	let update_list = false;
 
