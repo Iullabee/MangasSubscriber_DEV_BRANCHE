@@ -205,6 +205,18 @@ function createNavigation(message) {
 		
 		document.body.insertBefore(nav_bar, container);
 	
+		//add keyboard navigation
+		window.addEventListener("keydown", (e)=>{
+			switch (e.key) {
+			  case navigation.previous_chapter_key :
+				if (navigation.previous_chapter_key != "" && (navigation.previous_chapter != "" || navigation.first_chapter != "")) {location.assign(navigation.previous_chapter.url ? navigation.previous_chapter.url : navigation.first_chapter.url);}
+				break;
+			  case navigation.next_chapter_key :
+				if (navigation.next_chapter_key != "" && (navigation.next_chapter != "" || navigation.last_chapter != "")) {location.assign(navigation.next_chapter.url ? navigation.next_chapter.url : navigation.last_chapter.url);}
+				break; 
+			}
+		});
+
 		// Create an observer to fire readMangaCHapter when the body is modified (which recreates the nav_bar if it has been destroyed by MangaLoader)
 		var config = { attributes: false, childList: true, subtree: true };
 		var observer = new MutationObserver(readMangaChapter);

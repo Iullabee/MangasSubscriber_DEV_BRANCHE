@@ -53,6 +53,10 @@ body {
 	line-height: 2.3rem;
 	vertical-align: middle;
 }
+.field_container label {
+	height: 2.3rem;
+	float : left;
+}
 .field_container input {
 	height: 2.3rem;
 	float : left;

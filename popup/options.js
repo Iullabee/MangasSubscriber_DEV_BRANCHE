@@ -60,6 +60,52 @@ async function displayNavigationBar(){
 //initialize the navigation bar option
 displayNavigationBar();
 
+//select previous chapter key for keyboard navigation
+document.getElementById("previous_chapter_key").addEventListener("keydown", async (e) => {
+	let keycode = e.key;
+	await background.registerPreviousChapterKey(keycode);
+	displayPreviousChapterKey();
+});
+
+//clear the previous chapter key
+document.getElementById("previous_chapter_key_clear").addEventListener("click", async () => {
+	var previous_chapter_key = document.getElementById("previous_chapter_key");
+	previous_chapter_key.value = "";
+	await background.registerPreviousChapterKey("");
+	displayPreviousChapterKey();
+});
+
+//display the previous chapter key
+async function displayPreviousChapterKey(){
+	var previous_chapter_key = await background.getPreviousChapterKey();
+	document.getElementById("previous_chapter_key").value = previous_chapter_key;
+}
+//initialize the previous chapter key
+displayPreviousChapterKey();
+
+//select next chapter key for keyboard navigation
+document.getElementById("next_chapter_key").addEventListener("keydown", async (e) => {
+	let keycode = e.key;
+	await background.registerNextChapterKey(keycode);
+	displayNextChapterKey();
+});
+
+//clear the next chapter key
+document.getElementById("next_chapter_key_clear").addEventListener("click", async (e) => {
+	var next_chapter_key = document.getElementById("next_chapter_key");
+	next_chapter_key.value = "";
+	await background.registerNextChapterKey("");
+	displayNextChapterKey();
+});
+
+//display the next chapter key
+async function displayNextChapterKey(){
+	var next_chapter_key = await background.getNextChapterKey();
+	document.getElementById("next_chapter_key").value = next_chapter_key;
+}
+//initialize the next chapter key
+displayNextChapterKey();
+
 
 
 //change the auto update interval (waits 0.5s after user stops changing it before setting it to avoid firing a ton of background stuff from scrolling the numbers)

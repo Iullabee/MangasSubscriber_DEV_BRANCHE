@@ -1213,7 +1213,7 @@ async function readMangaChapter(message, sender) {
 						}
 
 						if (await getNavigationBar())
-							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"current_chapter":current_chapter, "first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter, "unread_chapter": unread_chapter}});
+							browser.tabs.sendMessage(sender.tab.id, {"target":"content","navigation": {"current_chapter":current_chapter, "first_chapter": first_chapter, "previous_chapter": previous_chapter, "next_chapter": next_chapter, "last_chapter": last_chapter, "unread_chapter": unread_chapter, "previous_chapter_key":mangassubscriber_prefs["previous_chapter_key"], "next_chapter_key":mangassubscriber_prefs["next_chapter_key"]}});
 					}
 				}
 			}
@@ -1464,6 +1464,30 @@ async function getNavigationBar(){
 	return mangassubscriber_prefs["navigation_bar"];
 }
 
+async function registerPreviousChapterKey(keycode){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	mangassubscriber_prefs["previous_chapter_key"] = keycode;
+	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
+	return;
+}
+
+async function getPreviousChapterKey(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	return mangassubscriber_prefs["previous_chapter_key"];
+}
+
+async function registerNextChapterKey(keycode){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	mangassubscriber_prefs["next_chapter_key"] = keycode;
+	await browser.storage.local.set({"MangasSubscriberPrefs" : mangassubscriber_prefs});
+	return;
+}
+
+async function getNextChapterKey(){
+	let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+	return mangassubscriber_prefs["next_chapter_key"];
+}
+
 
 
 //sets website_name as preferred website for manga_name
@@ -1641,28 +1665,12 @@ async function install(){
 	}
 
 	//initializing if nothing exists or it's outdated
-	if (!mangassubscriber_prefs || Object.keys(mangassubscriber_prefs).length < 10) {mangassubscriber_prefs = {"DB_version":"2.0.4", "version":browser.runtime.getManifest().version, "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"};}
+	if (!mangassubscriber_prefs || Object.keys(mangassubscriber_prefs).length < 12) {mangassubscriber_prefs = {"DB_version":"2.0.5", "version":browser.runtime.getManifest().version, "unified_chapter_numbers":true, "performance_mode":true, "check_all_sites":false, "navigation_bar":true, "previous_chapter_key":"", "next_chapter_key":"", "auto_update":0, "last_update":0, "search_limit":5, "patchnotes": "0.0.0"};}
 	if (!mangas_list || Object.keys(mangas_list).length == 0) {mangas_list = {};}
 
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
-		browser.browserAction.setBadgeText({"text" : "..."});
-		for (let manga in mangas_list){
-			if (mangas_list[manga]["registered_websites"]["mangadex"]) {
-				let response = "";
-				try{
-					response = await fetch(mangas_list[manga]["registered_websites"]["mangadex"].replace("mangadex.org//", "https://mangadex.org/"));
-				} catch (error){
-					throw error;
-				}
-				
-				if (response != "" && response.url) {
-					mangas_list[manga]["registered_websites"]["mangadex"] = response.url; 
-				}
-				mangas_list[manga]["last_updated"] = 0;
-			}
-		}
-		setBadgeNumber();
+		
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
