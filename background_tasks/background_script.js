@@ -899,7 +899,7 @@ var websites_list = {
 						try {
 							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
 							
-							let volume_number = chapter_source["data"]["attributes"]["volume"] != null ? chapter_source["data"]["volume"] : "";
+							let volume_number = chapter_source["data"]["attributes"]["volume"] != null ? chapter_source["data"]["attributes"]["volume"] : "";
 							let chapter_number = volume_number != "" ? chapter_source["data"]["attributes"]["chapter"].replace(/\./g, "") : chapter_source["data"]["attributes"]["chapter"];
 							if (volume_number != "" && chapter_number.length == 1) chapter_number = "0" + chapter_number;
 							
