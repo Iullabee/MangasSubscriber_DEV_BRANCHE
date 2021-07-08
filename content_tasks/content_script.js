@@ -112,7 +112,7 @@ function createNavigation(message) {
 			first_button_link.classList.add("mangassubscriber_row");
 			let first_button_arrow = document.createElement("img");
 			first_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
-			first_button_arrow.src = browser.extension.getURL("../icons/arrow_left_double.svg");
+			first_button_arrow.src = browser.runtime.getURL("../icons/arrow_left_double.svg");
 			first_button_link.appendChild(first_button_arrow);
 			let first_button_text_node = document.createElement("div");
 			first_button_text_node.classList.add("mangassubscriber_cell");
@@ -129,7 +129,7 @@ function createNavigation(message) {
 			previous_button_link.classList.add("mangassubscriber_row");
 			let previous_button_arrow = document.createElement("img");
 			previous_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
-			previous_button_arrow.src = browser.extension.getURL("../icons/arrow_left_single.svg");
+			previous_button_arrow.src = browser.runtime.getURL("../icons/arrow_left_single.svg");
 			previous_button_link.appendChild(previous_button_arrow);
 			let previous_button_text_node = document.createElement("div");
 			previous_button_text_node.classList.add("mangassubscriber_cell");
@@ -151,7 +151,7 @@ function createNavigation(message) {
 			last_button_link.appendChild(last_button_text_node);
 			let last_button_arrow = document.createElement("img");
 			last_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
-			last_button_arrow.src = browser.extension.getURL("../icons/arrow_right_double.svg");
+			last_button_arrow.src = browser.runtime.getURL("../icons/arrow_right_double.svg");
 			last_button_link.appendChild(last_button_arrow);
 			last_button.appendChild(last_button_link);
 			nav_bar.appendChild(last_button);
@@ -168,7 +168,7 @@ function createNavigation(message) {
 			next_button_link.appendChild(next_button_text_node);
 			let next_button_arrow = document.createElement("img");
 			next_button_arrow.classList.add("text_icons", "mangassubscriber_cell");
-			next_button_arrow.src = browser.extension.getURL("../icons/arrow_right_single.svg");
+			next_button_arrow.src = browser.runtime.getURL("../icons/arrow_right_single.svg");
 			next_button_link.appendChild(next_button_arrow);
 			next_button.appendChild(next_button_link);
 			nav_bar.appendChild(next_button);
