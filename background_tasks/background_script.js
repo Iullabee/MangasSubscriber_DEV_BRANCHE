@@ -785,12 +785,13 @@ var websites_list = {
 					var parser = new DOMParser();
 
 					try {
-						source = await getSource("https://isekaiscan.com/wp-admin/admin-ajax.php", {
+						source = await getSource(manga_url + "ajax/chapters/", {
 							"headers": {
 								"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-								"Cache-Control": "no-cache"
+								"Sec-Fetch-Mode": "cors",
+								"Sec-Fetch-Site": "same-origin",
+								"Cache-Control": "max-age=0"
 							},
-							"body": "action=manga_get_chapters&manga=" + manga_url.split("&")[1],
 							"method": "POST",
 							"mode": "cors"
 						});
@@ -1670,7 +1671,14 @@ async function install(){
 
 	//add here existing lists modification to comply with new version when needed
 	if (update_list) {
-		
+		browser.browserAction.setBadgeText({"text" : "..."});
+		for (let manga in mangas_list){
+			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
+				mangas_list[manga]["registered_websites"]["isekaiscan"] = mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[0];
+				console.log(mangas_list[manga]["registered_websites"]["isekaiscan"]);
+			}
+		}
+		setBadgeNumber();
 	}
 
 	to_log = {"MangasSubscriberPrefs": mangassubscriber_prefs, "mangas_list": mangas_list};
