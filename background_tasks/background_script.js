@@ -720,14 +720,17 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						let source_url = "https://api.mangadex.org/manga?title=" + manga_name.replace(" ", "%20") + "&limit=30&offset=0&contentRating[]=safe&contentRating[]=none&contentRating[]=suggestive&contentRating[]=erotica";
+						let source_url = "https://api.mangadex.org/manga?title=" + manga_name.replace(" ", "%20") + "&limit=30&offset=0&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica";
 						try {
 							//get search page
-							source = JSON.parse(await getSource(source_url));
+							source = JSON.parse(await getSource(source_url, {
+								"method": "GET",
+								"mode": "cors"
+							}));
 						} catch (error) {
 							throw error;
 						}
-	
+						
 						//extract mangas found
 						for (let i=0; i<source["results"].length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
