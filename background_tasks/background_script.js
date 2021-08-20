@@ -747,8 +747,7 @@ var websites_list = {
 				getCurrentChapter: async function (url){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
 					//get rid of website and manga name,
-					var url_tail = url.split("/manga/")[1].split("&")[0];
-					(url_tail.indexOf("/")+1 <= url_tail.length) ? url_tail = url_tail.substring(url_tail.indexOf("/")+1) : url_tail = "";
+					var url_tail = url.split("/chapter-")[1] ? url.split("/chapter-")[1].split("/")[0] : "";
 					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
 						//while first char isn't 0~9
 						while (url_tail.charCodeAt(0) < 48 || url_tail.charCodeAt(0) > 57) {
@@ -1660,8 +1659,20 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
+			console.log(mangas_list[manga]);
 			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
 				mangas_list[manga]["registered_websites"]["isekaiscan"] = mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[0];
+				for (let chapter in mangas_list[manga]["chapters_list"]){
+					if (chapter.split("/")[1]) {
+						let new_chapter = await websites_list["isekaiscan"].getCurrentChapter(mangas_list[manga]["chapters_list"][chapter]["url"]);
+						if (! mangas_list[manga]["chapters_list"][new_chapter]) {
+							mangas_list[manga]["chapters_list"][new_chapter] = cloneObject(mangas_list[manga]["chapters_list"][chapter]);
+							mangas_list[manga]["chapters_list"][new_chapter]["url"] = (mangas_list[manga]["chapters_list"][new_chapter]["url"]).split("?")[0];
+						}
+						delete mangas_list[manga]["chapters_list"][chapter];
+						
+					}
+				}
 			}
 		}
 		setBadgeNumber();
