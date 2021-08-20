@@ -742,20 +742,7 @@ var websites_list = {
 					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
 				},
 				getMangaRootURL: async function (url) {
-					let source = "";
-					var parser = new DOMParser();
-					try {
-						//get manga's home page
-						source = await getSource("https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/");
-					} catch (error) {
-						throw error;
-					}
-
-					var doc = parser.parseFromString(source, "text/html");
-					let shortlink = doc.querySelector("link[rel='shortlink']").href;
-					let manga_number = shortlink.split("=")[1].split("/")[0];
-
-					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/&" + manga_number;
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
 					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
@@ -1675,7 +1662,6 @@ async function install(){
 		for (let manga in mangas_list){
 			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
 				mangas_list[manga]["registered_websites"]["isekaiscan"] = mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[0];
-				console.log(mangas_list[manga]["registered_websites"]["isekaiscan"]);
 			}
 		}
 		setBadgeNumber();
