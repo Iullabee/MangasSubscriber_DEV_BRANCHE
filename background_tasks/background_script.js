@@ -617,7 +617,9 @@ var websites_list = {
 					if (url.includes("/chapter/")){
 						try {
 							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
-							manga_id = chapter_source["data"]["relationships"]["1"]["id"];
+							for (let i in chapter_source["data"]["relationships"]) {
+								if (chapter_source["data"]["relationships"][i]["type"] == "manga") manga_id = chapter_source["data"]["relationships"][i]["id"];
+							}
 						} catch (error) {
 							throw error;
 						}
@@ -642,7 +644,11 @@ var websites_list = {
 					else if (url.includes("/chapter/")){
 						try {
 							let chapter_source = JSON.parse(await getSource("https://api.mangadex.org/chapter/" + url.split("/chapter/")[1].split("/")[0]));
-							result = this.url + "/title/" + chapter_source["data"]["relationships"]["1"]["id"];
+							let manga_id = "";
+							for (let i in chapter_source["data"]["relationships"]) {
+								if (chapter_source["data"]["relationships"][i]["type"] == "manga") manga_id = chapter_source["data"]["relationships"][i]["id"];
+							}
+							result = this.url + "title/" + manga_id;
 						} catch (error) {
 							throw error;
 						}
