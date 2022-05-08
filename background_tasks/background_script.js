@@ -1439,21 +1439,7 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			console.log(mangas_list[manga]);
-			if (mangas_list[manga]["registered_websites"]["isekaiscan"]) {
-				mangas_list[manga]["registered_websites"]["isekaiscan"] = mangas_list[manga]["registered_websites"]["isekaiscan"].split("&")[0];
-				for (let chapter in mangas_list[manga]["chapters_list"]){
-					if (chapter.split("/")[1]) {
-						let new_chapter = await websites_list["isekaiscan"].getCurrentChapter(mangas_list[manga]["chapters_list"][chapter]["url"]);
-						if (! mangas_list[manga]["chapters_list"][new_chapter]) {
-							mangas_list[manga]["chapters_list"][new_chapter] = cloneObject(mangas_list[manga]["chapters_list"][chapter]);
-							mangas_list[manga]["chapters_list"][new_chapter]["url"] = (mangas_list[manga]["chapters_list"][new_chapter]["url"]).split("?")[0];
-						}
-						delete mangas_list[manga]["chapters_list"][chapter];
-						
-					}
-				}
-			}
+		//nothing to do this time around
 		}
 		setBadgeNumber();
 	}
