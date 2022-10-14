@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.3.8",
+	"version": "2.3.9",
 
 	"icons": {
 		"48": "icons/logo.svg"
@@ -22,6 +22,7 @@
 		"*://*.mangahere.cc/*",
 		"*://manganato.com/*",
 		"*://readmanganato.com/*",
+		"*://chapmanganato.com/*",
 		"*://isekaiscan.com/*",
 		"*://mangadex.org/*",
 		"*://api.mangadex.org/*",
@@ -54,6 +55,7 @@
 						"*://m.webtoons.com/*/*/*",
 						"*://manganato.com/*",
 						"*://readmanganato.com/*/*",
+						"*://chapmanganato.com/*/*",
 						"*://isekaiscan.com/*",
 						"*://mangadex.org/*"],
 			"js": ["content_tasks/content_script.js"],
