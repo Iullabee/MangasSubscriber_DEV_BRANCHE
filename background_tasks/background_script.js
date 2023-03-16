@@ -843,6 +843,122 @@ var websites_list = {
 					}
 					return results;
 				}
+	},
+	"mangago":{name:"mangago",
+				url:"www.mangago.me/read-manga/",
+				getMangaName: function (url){
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
+				},
+				getMangaRootURL: function (url) {
+					return "https://" + this.url + url.split("/read-manga/")[1].split("/")[0] + "/";
+				},
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					//get rid of website and manga name,
+					var url_tail = url.split("/read-manga/")[1];
+					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
+					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
+					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
+						//if there is a chapter number
+						if (url_tail.split("chapter-")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("chapter-")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						else if (url_tail.split("/c")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("/c")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						else if (url_tail.split("/")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("/")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+							url_tail = url_tail.slice(1);
+						}
+					} else {
+						//if there is a chapter number
+						if (url_tail.split("chapter-")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("chapter-")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						else if (url_tail.split("/c")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("/c")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						else if (url_tail.split("/")[1]){
+							//get rid of volume and page number
+							url_tail = url_tail.split("/")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						}
+						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+							url_tail = url_tail.slice(1);
+						}
+					}
+					return url_tail;
+				},
+				getAllChapters: async function (manga_url){
+					var chapters_list = {};
+					var source = "truc";
+					var parser = new DOMParser();
+
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
+
+					//extract the chapter list
+					var doc = parser.parseFromString(source, "text/html");
+					let list = doc.querySelectorAll("#chapter_table tbody tr");
+					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
+					else {
+						for (let i=0; i<list.length; i++){
+							if (list.hasOwnProperty(i)){
+								let chapter = list[i].querySelector("a");
+								let update = new Date(list[i].lastElementChild.innerText);
+								if(chapter.href){
+									let chapter_number = await this.getCurrentChapter(chapter.href);
+									if (chapter_number)
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + chapter.href.split("read-manga/")[1], "update" : update};
+								}
+							}
+						}
+					}
+					return chapters_list;
+				},
+				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					let results = {};
+					var source = "truc";
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name
+						source_url = "https://www.mangago.me/r/l_search/?name="+manga_name;
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+						
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("ul#search_list li div.box div.left a.thm-effect");
+						for (let i=0; i<list.length; i++) {
+							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+							results[cleanMangaName(list[i].title)] = "https://" + this.url + list[i].href.split("read-manga/")[1];
+						}
+						if (Object.keys(results).length) break; // if results are found, break and return
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+						
+						//if no results, wait before trying again with shortened name to avoid triggering mangatown's antispam answer
+						await new Promise( (resolve, reject) => {setTimeout(() => {resolve(true);}, 5500)});
+					}
+					return results;
+				}
 	}
 };
 

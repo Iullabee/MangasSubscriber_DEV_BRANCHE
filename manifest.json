@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.3.9",
+	"version": "2.4.0",
 
 	"icons": {
 		"48": "icons/logo.svg"
@@ -26,6 +26,7 @@
 		"*://isekaiscan.com/*",
 		"*://mangadex.org/*",
 		"*://api.mangadex.org/*",
+		"*://*.mangago.me/*",
 		"*://api.paste.ee/*"
 	],
 
@@ -57,7 +58,8 @@
 						"*://readmanganato.com/*/*",
 						"*://chapmanganato.com/*/*",
 						"*://isekaiscan.com/*",
-						"*://mangadex.org/*"],
+						"*://mangadex.org/*",
+						"*://www.mangago.me/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
