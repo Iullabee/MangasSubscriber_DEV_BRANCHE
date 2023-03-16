@@ -75,7 +75,7 @@
 		"icons/*.svg"
 	],
 	
-	"applications": {
+	"browser_specific_settings": {
 		"gecko": {
 			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee"
 		}
