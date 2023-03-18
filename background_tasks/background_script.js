@@ -853,47 +853,36 @@ var websites_list = {
 					return "https://" + this.url + url.split("/read-manga/")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
-					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
-					//get rid of website and manga name,
-					var url_tail = url.split("/read-manga/")[1];
-					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					url_tail = url_tail.substring(url_tail.indexOf("/")+1);
-					if (mangassubscriber_prefs["unified_chapter_numbers"]) {
-						//if there is a chapter number
-						if (url_tail.split("chapter-")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("chapter-")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+					//some chapters have urls so messed up that non unified chapter numbers aren't useable
+					//let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					//if (mangassubscriber_prefs["unified_chapter_numbers"]) {
+						try {
+							//get search page
+							source = await getSource(url);
+						} catch (error) {
+							throw error;
 						}
-						else if (url_tail.split("/c")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("/c")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						//extract chapter number
+						let parser = new DOMParser();
+						let doc = parser.parseFromString(source, "text/html");
+						let chapter_number = doc.querySelector('title').innerText;
+						
+						if(chapter_number.split("Ch.")[1]) {
+							chapter_number = chapter_number.split("Ch.")[1].split(" Page ")[0];
+						} else {
+							chapter_number = chapter_number.substring(chapter_number.indexOf(".")+1, chapter_number.indexOf(" Page "));
+							chapter_number = (chapter_number == "" ? "0" : chapter_number) + (chapter_number.includes(".") ? "0" : ".0");
 						}
-						else if (url_tail.split("/")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("/")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
+						//clean whatever is left that is neither a number nor a dot
+						chapter_number = chapter_number.replace(/[^\d.]/g, '');
+						while (chapter_number.charAt(0) == "0" && chapter_number.split(".")[0].length > 1) {
+							chapter_number = chapter_number.slice(1);
 						}
-						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-							url_tail = url_tail.slice(1);
-						}
-					} else {
-						//if there is a chapter number
-						if (url_tail.split("chapter-")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("chapter-")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
-						}
-						else if (url_tail.split("/c")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("/c")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
-						}
-						else if (url_tail.split("/")[1]){
-							//get rid of volume and page number
-							url_tail = url_tail.split("/")[1].split("/pg-1")[0].split(".html")[0].split("/")[0];
-						}
-						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
-							url_tail = url_tail.slice(1);
-						}
-					}
-					return url_tail;
+					//} else {
+						//some chapters have urls so messed up that non unified chapter numbers aren't useable
+						
+					//}
+					return chapter_number;
 				},
 				getAllChapters: async function (manga_url){
 					var chapters_list = {};
@@ -917,7 +906,16 @@ var websites_list = {
 								let chapter = list[i].querySelector("a");
 								let update = new Date(list[i].lastElementChild.innerText);
 								if(chapter.href){
-									let chapter_number = await this.getCurrentChapter(chapter.href);
+									let chapter_number = "";
+									if(chapter.innerHTML.split("Ch.")[1]) {
+										chapter_number = chapter.innerHTML.split("Ch.")[1].split("</b>")[0];
+									} else {
+										chapter_number = chapter.innerHTML.substring(chapter.innerHTML.indexOf(".")+1, chapter.innerHTML.indexOf("</b>"));
+										chapter_number = (chapter_number == "" ? "0" : chapter_number) + (chapter_number.includes(".") ? "0" : ".0");
+									}
+									//clean whatever is left that isn't a number nor a dot
+									chapter_number = chapter_number.replace(/[^\d.]/g, '');
+									
 									if (chapter_number)
 										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + chapter.href.split("read-manga/")[1], "update" : update};
 								}
