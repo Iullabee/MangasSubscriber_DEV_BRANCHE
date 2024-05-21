@@ -498,7 +498,7 @@ var websites_list = {
 						let list = doc.querySelectorAll("a.item-title");
 						for (let i=0; i<list.length; i++) {
 							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
-							results[cleanMangaName(list[i].innerText)] = this.getMangaRootURL(list[i].href);
+							results[cleanMangaName(list[i].innerText)] = list[i].href;
 						}
 						if (Object.keys(results).length) break; // if results are found, break and return
 						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
