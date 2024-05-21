@@ -2,7 +2,7 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"mangafox":"fanfox.net/manga/",
 					"mangatown":"mangatown.com/manga/",
 					"webtoons":"webtoons.com/",
-					"manganato":"readmanganato.com/",
+					"manganato":"manganato.com/",
 					"alt_manganato":"chapmanganato.to/",
 					"isekaiscan":"isekaiscan.com/",
 					"mangadex":"mangadex.org/",
@@ -14,11 +14,7 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 	if (this.location.href.indexOf("fanfox.net//") >= 0)
 		this.location.href = this.location.href.replace("fanfox.net//", "fanfox.net/");
 })();
-//fix manganato annoying urls
-(function manganatoURLFix() {
-	if (this.location.href.indexOf("manganato.com/") >= 0 && this.location.href.indexOf("readmanganato.com/") == -1 && this.location.href.indexOf("chapmanganato.com/") == -1 && this.location.href.split("manganato.com/")[1])
-		this.location.href = this.location.href.replace("manganato.com/", "readmanganato.com/");
-})();
+
 
 window.addEventListener("load", readMangaChapter);
 function readMangaChapter() {

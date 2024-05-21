@@ -244,7 +244,7 @@ async function createMangasList() {
 		dom_option_title.appendChild(dom_option_title_text);
 		dom_register_website.appendChild(dom_option_title);
 
-		dom_manga.websites = "";
+		dom_manga.websites = ";";
 		for (let website_name in background.mangas_list[name].registered_websites){
 			let dom_option = document.createElement("option");
 			let dom_option_text = document.createTextNode(website_name);
@@ -252,7 +252,7 @@ async function createMangasList() {
 			dom_option.setAttribute("disabled", "disabled");
 			if (website_name == mangas[name]["website_name"]) dom_option.selected = "selected";
 			dom_register_website.appendChild(dom_option);
-			dom_manga.websites = dom_manga.websites + website_name; //add the website name to the websites property of the manga dom element to filter on
+			dom_manga.websites = dom_manga.websites + website_name + ";"; //add the website name to the websites property of the manga dom element to filter on
 		}
 		if (dom_register_website.options.length == 1) {
 			//add add warning if it is not followed on any website
@@ -607,7 +607,7 @@ async function filterList() {
 				: list[manga].reading_status == "unread" && filter_unread ? false
 				: list[manga].reading_status == "read" && filter_already_read ? false
 				: filter_tags != "see all tags" && !(list[manga].tags.includes(filter_tags)) ? false
-				: filter_websites != "see all websites" && !(list[manga].websites.includes(filter_websites)) ? false
+				: filter_websites != "see all websites" && !(list[manga].websites.includes(";" + filter_websites + ";")) ? false
 			: true;
 			is_visible ? (list[manga].classList.remove("hidden"), list[manga].classList.add("visible")) 
 				: (list[manga].classList.add("hidden"), list[manga].classList.remove("visible"));

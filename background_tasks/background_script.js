@@ -412,8 +412,8 @@ var websites_list = {
 					return results;
 				}
 	},
-	"readmanganato":{name:"readmanganato",
-				url:"readmanganato.com/",
+	"manganato":{name:"manganato",
+				url:"manganato.com/",
 				getMangaName: async function (url){
 					var source = "truc";
 					var parser = new DOMParser();
@@ -469,7 +469,7 @@ var websites_list = {
 								if(chapter.href){
 									let chapter_number = await this.getCurrentChapter(chapter.href);
 									if (chapter_number)
-										chapters_list[chapter_number] = {"status" : "unknown", "url" : manga_url + "chapter-" + chapter.href.split("chapter-")[1], "update" : update};
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : chapter.href, "update" : update};
 								}
 							}
 						}
@@ -485,7 +485,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						source_url = "https://readmanganato.com/search/story/"+manga_name.replace(" ", "_");
+						source_url = "https://manganato.com/search/story/"+manga_name.replace(" ", "_");
 						try {
 							//get search page
 							source = await getSource(source_url);
@@ -1653,6 +1653,33 @@ async function install(){
 			if ("chapmanganato" in mangas_list[manga].registered_websites) {
 				mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["chapmanganato"].replace(".com/", ".to/");
 			}
+			//switching readmanganato.com urls to manganato.com urls
+			if ("readmanganato" in mangas_list[manga].registered_websites) {
+
+				var source = "truc";
+				var parser = new DOMParser();
+
+				try {
+					//get manga's home page
+					source = await getSource(mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "manganato.com/"));
+				} catch (error) {
+					throw error;
+				}
+
+				//extract the chapter list
+				var doc = parser.parseFromString(source, "text/html");
+				let list = doc.querySelectorAll("li.a-h");
+				if (list[0]) { //if it is found on manganato.com
+					mangas_list[manga].registered_websites["manganato"] = mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "manganato.com/");
+					delete mangas_list[manga].registered_websites["readmanganato"];
+					if (mangas_list[manga].website_name == "readmanganato") mangas_list[manga].website_name = "manganato";
+				} else { //else get it from chapmanganato.to
+					mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "chapmanganato.to/");
+					delete mangas_list[manga].registered_websites["readmanganato"];
+					if (mangas_list[manga].website_name == "readmanganato") mangas_list[manga].website_name = "chapmanganato";
+				}
+			}
+			
 		}
 		setBadgeNumber();
 	}
