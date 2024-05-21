@@ -905,7 +905,7 @@ var websites_list = {
 							if (list.hasOwnProperty(i)){
 								let chapter = list[i].querySelector("a");
 								let update = new Date(list[i].lastElementChild.innerText);
-								if(chapter.href){
+								if(chapter.href && chapter.href.includes("www.mangago.me")){
 									let chapter_number = "";
 									if(chapter.innerHTML.split("Ch.")[1]) {
 										chapter_number = chapter.innerHTML.split("Ch.")[1].split("</b>")[0];
@@ -917,7 +917,7 @@ var websites_list = {
 									chapter_number = chapter_number.replace(/[^\d.]/g, '');
 									
 									if (chapter_number)
-										chapters_list[chapter_number] = {"status" : "unknown", "url" : "https://" + this.url + chapter.href.split("read-manga/")[1], "update" : update};
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : chapter.href, "update" : update};
 								}
 							}
 						}
@@ -1648,7 +1648,7 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-		//nothing to do this time around
+			//fixing mangago 404 not found urls just needs to update the list
 		}
 		setBadgeNumber();
 	}
