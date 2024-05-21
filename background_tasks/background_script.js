@@ -508,7 +508,7 @@ var websites_list = {
 				}
 	},
 	"chapmanganato":{name:"chapmanganato",
-				url:"chapmanganato.com/",
+				url:"chapmanganato.to/",
 				getMangaName: async function (url){
 					var source = "truc";
 					var parser = new DOMParser();
@@ -564,7 +564,7 @@ var websites_list = {
 								if(chapter.href){
 									let chapter_number = await this.getCurrentChapter(chapter.href);
 									if (chapter_number)
-										chapters_list[chapter_number] = {"status" : "unknown", "url" : manga_url + "chapter-" + chapter.href.split("chapter-")[1], "update" : update};
+										chapters_list[chapter_number] = {"status" : "unknown", "url" : chapter.href, "update" : update};
 								}
 							}
 						}
@@ -580,7 +580,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						source_url = "https://chapmanganato.com/search/story/"+manga_name.replace(" ", "_");
+						source_url = "https://chapmanganato.to/search/story/"+manga_name.replace(" ", "_");
 						try {
 							//get search page
 							source = await getSource(source_url);
@@ -1649,6 +1649,10 @@ async function install(){
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
 			//fixing mangago 404 not found urls just needs to update the list
+			//switching chapmanganato.com urls to champanganato.to
+			if ("chapmanganato" in mangas_list[manga].registered_websites) {
+				mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["chapmanganato"].replace(".com/", ".to/");
+			}
 		}
 		setBadgeNumber();
 	}
