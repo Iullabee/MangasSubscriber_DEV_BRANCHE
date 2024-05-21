@@ -413,7 +413,7 @@ var websites_list = {
 				}
 	},
 	"manganato":{name:"manganato",
-				url:"manganato.com/",
+				url:"manganato.com/manga-",
 				getMangaName: async function (url){
 					var source = "truc";
 					var parser = new DOMParser();
@@ -432,7 +432,7 @@ var websites_list = {
 					return name ? cleanMangaName(name.innerText) : "notAManga";
 				},
 				getMangaRootURL: function (url) {
-					return "https://" + this.url + "manga-" + url.split("/manga-")[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split("/manga-")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
 					//get rid of website and manga name
@@ -508,7 +508,7 @@ var websites_list = {
 				}
 	},
 	"chapmanganato":{name:"chapmanganato",
-				url:"chapmanganato.to/",
+				url:"chapmanganato.to/manga-",
 				getMangaName: async function (url){
 					var source = "truc";
 					var parser = new DOMParser();
@@ -527,7 +527,7 @@ var websites_list = {
 					return name ? cleanMangaName(name.innerText) : "notAManga";
 				},
 				getMangaRootURL: function (url) {
-					return "https://" + this.url + "manga-" + url.split("/manga-")[1].split("/")[0] + "/";
+					return "https://" + this.url + url.split("/manga-")[1].split("/")[0] + "/";
 				},
 				getCurrentChapter: async function (url){
 					//get rid of website and manga name
@@ -722,13 +722,16 @@ var websites_list = {
 						manga_id = url.split("/title/")[1];
 						
 					}
-					//get manga data and extract name
-					try {
-						let manga_source = JSON.parse(await getSource("https://api.mangadex.org/manga/" + manga_id));
-						name = cleanMangaName(manga_source["data"]["attributes"]["title"]["en"]);
-					} catch (error) {
-						throw error;
+					if (manga_id != ""){
+						//get manga data and extract name
+						try {
+							let manga_source = JSON.parse(await getSource("https://api.mangadex.org/manga/" + manga_id));
+							name = cleanMangaName(manga_source["data"]["attributes"]["title"]["en"]);
+						} catch (error) {
+							throw error;
+						}
 					}
+					
 					return name;
 				},
 				getMangaRootURL: async function (url) {
@@ -1567,9 +1570,12 @@ function getWebsite(url){
 //get manga name from the url corresponding website
 async function getMangaName(url){
 	var website = getWebsite(url);
-	if (website != "notAMangaWebsite")
-		return await website.getMangaName(url);
-	else return "notAManga";
+	if (website != "notAMangaWebsite") {
+		let name = await website.getMangaName(url);
+		if (name && name != "" && name != "undefined")
+			return name;
+	}
+	return "notAManga";
 }
 
 //get the chapter currently being read
