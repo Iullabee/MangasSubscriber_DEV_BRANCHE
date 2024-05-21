@@ -580,7 +580,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						source_url = "https://chapmanganato.to/search/story/"+manga_name.replace(" ", "_");
+						source_url = "https://manganato.com/search/story/"+manga_name.replace(" ", "_"); //chapmanganato doesn't have its own search capabilities, it uses manganato
 						try {
 							//get search page
 							source = await getSource(source_url);
