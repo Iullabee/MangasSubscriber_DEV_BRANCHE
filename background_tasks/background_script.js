@@ -1302,7 +1302,7 @@ async function readMangaChapter(message, sender) {
 
 
 
-//listen to content script, and set manga chapter as "read"
+//listen to content script, and set manga chapter as "not read"
 browser.runtime.onMessage.addListener(unreadMangaChapter);
 
 async function unreadMangaChapter(message, sender) {
