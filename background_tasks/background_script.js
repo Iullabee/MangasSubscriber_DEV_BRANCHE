@@ -974,6 +974,89 @@ var websites_list = {
 					}
 					return results;
 				}
+	},
+	"manhuaplus":{name:"manhuaplus",
+				url:"manhuaplus.org/manga/",
+				getMangaName: function (url){
+					return cleanMangaName(url.split(this.url)[1].split("/")[0]);
+				},
+				getMangaRootURL: function (url) {
+					return "https://" + this.url + url.split("/manga/")[1].split("/")[0] + "/";
+				},
+				getCurrentChapter: async function (url){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					var url_tail = url;
+					//manhuaplus doesn't use volume numbers, so unified_chapter_numbers is useless here
+					//if (mangassubscriber_prefs["unified_chapter_numbers"]) {
+						//if there is a chapter number
+						url_tail = url_tail.split("/chapter-")[1] ? url_tail.split("/chapter-")[1].replace("-", ".") : ""; //if there is a chapter number use that, otherwise empty string
+						while (url_tail.charAt(0) == "0" && url_tail.split(".")[0].length > 1) {
+							url_tail = url_tail.slice(1);
+						}
+					//} else {
+						
+					//}
+					return url_tail;
+				},
+				getAllChapters: async function (manga_url){
+					var chapters_list = {};
+					var source = "truc";
+					var parser = new DOMParser();
+
+					try {
+						//get manga's home page
+						source = await getSource(manga_url);
+					} catch (error) {
+						throw error;
+					}
+
+					//extract the chapter list
+					var doc = parser.parseFromString(source, "text/html");
+					let list = doc.querySelectorAll("li.chapter");
+					if (! list[0]) throw new Error(" can't find "+this.getMangaName(manga_url)+" on "+this.name);
+					else {
+						for (let i=0; i<list.length; i++){
+							if(list[i].querySelector("a").href){
+								let chapter_number = await this.getCurrentChapter(list[i].querySelector("a").href); 
+								let update = new Date(list[i].querySelector("time").datetime) != "Invalid Date" ? new Date(list[i].querySelector("time").datetime).getTime()
+									: new Date().getTime();
+								if (chapter_number)
+									chapters_list[chapter_number] = {"status" : "unknown", "url" : list[i].querySelector("a").href, "update" : update};
+							}
+						}
+					}
+					return chapters_list;
+				},
+				searchFor: async function (manga_name){
+					let mangassubscriber_prefs = await getMangasSubscriberPrefs();
+					let results = {};
+					var source = "truc";
+					let index = manga_name.split(" ").length;
+					var parser = new DOMParser();
+
+					while (Object.keys(results).length == 0 && index > 0) {
+						//get search page results for manga_name
+						let source_url = "https://manhuaplus.org/search?keyword="+manga_name.replace(" ", "%20");
+						try {
+							//get search page
+							source = await getSource(source_url);
+						} catch (error) {
+							throw error;
+						}
+	
+						//extract mangas found
+						let doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("div.b-img.i-mage a");
+						for (let i=0; i<list.length; i++) {
+							if (mangassubscriber_prefs["search_limit"] > 0 && i >= mangassubscriber_prefs["search_limit"]) break;
+							results[cleanMangaName(this.getMangaName(list[i].href))] = list[i].href;
+						}
+
+						manga_name = manga_name.substring(0, manga_name.lastIndexOf(" "));
+						index--;
+					}
+					return results;
+				}
 	}
 };
 
@@ -1670,7 +1753,7 @@ async function install(){
 		for (let manga in mangas_list){
 			//fixing mangago 404 not found urls just needs to update the list
 			//switching chapmanganato.com urls to champanganato.to
-			if ("chapmanganato" in mangas_list[manga].registered_websites) {
+			if ("chapmanganato" in mangas_list[manga].registered_websites && mangas_list[manga].registered_websites["chapmanganato"].includes(".com/")) {
 				mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["chapmanganato"].replace(".com/", ".to/");
 			}
 			//switching readmanganato.com urls to manganato.com urls
@@ -1701,7 +1784,7 @@ async function install(){
 				
 			}
 			//switching isekaiscan.com urls to www.isekaiscan.top
-			if ("isekaiscan" in mangas_list[manga].registered_websites) {
+			if ("isekaiscan" in mangas_list[manga].registered_websites && mangas_list[manga].registered_websites["isekaiscan"].includes(".com/")) {
 				let isekaiscan = websites_list["isekaiscan"];
 				let manga_root = mangas_list[manga].registered_websites["isekaiscan"];
 				

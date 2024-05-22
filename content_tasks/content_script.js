@@ -6,7 +6,8 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"alt_manganato":"chapmanganato.to/",
 					"isekaiscan":"www.isekaiscan.top/",
 					"mangadex":"mangadex.org/",
-					"mangago":"mangago.me/"
+					"mangago":"mangago.me/",
+					"manhuaplus":"manhuaplus.org/"
 					};
 
 //fix fanfox annoying urls
@@ -27,7 +28,6 @@ function readMangaChapter() {
 			website = x;
 		}
 	}
-	
 	//check if the chapter is available or if it's a placeholder page
 	//if using mangaloader script in tampermonkey
 	if (document.getElementsByClassName("ml-images")[0]){
@@ -60,6 +60,9 @@ function readMangaChapter() {
 				break;
 			case "mangago":
 				is_placeholder = document.querySelector("a#pic_container") ? false : true; //no mobile site
+				break;
+			case "manhuaplus":
+				is_placeholder = false; //no placeholder, directly redirects to manga homepage instead
 				break;
 		}
 	}

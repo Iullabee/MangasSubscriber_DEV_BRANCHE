@@ -27,6 +27,7 @@
 		"*://mangadex.org/*",
 		"*://api.mangadex.org/*",
 		"*://*.mangago.me/*",
+		"*://manhuaplus.org/*",
 		"*://api.paste.ee/*"
 	],
 
@@ -59,7 +60,8 @@
 						"*://chapmanganato.to/*/*",
 						"*://www.isekaiscan.top/*",
 						"*://mangadex.org/*",
-						"*://www.mangago.me/*"],
+						"*://www.mangago.me/*",
+						"*://manhuaplus.org/*"],
 			"js": ["content_tasks/content_script.js"],
 			"css":["content_tasks/content.css"]
 		}
