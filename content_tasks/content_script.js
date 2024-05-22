@@ -4,7 +4,7 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"webtoons":"webtoons.com/",
 					"manganato":"manganato.com/",
 					"alt_manganato":"chapmanganato.to/",
-					"isekaiscan":"isekaiscan.com/",
+					"isekaiscan":"www.isekaiscan.top/",
 					"mangadex":"mangadex.org/",
 					"mangago":"mangago.me/"
 					};
