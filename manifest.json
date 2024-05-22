@@ -21,7 +21,6 @@
 		"*://mangahere.cc/*",
 		"*://*.mangahere.cc/*",
 		"*://manganato.com/*",
-		"*://manganato.com/*",
 		"*://chapmanganato.to/*",
 		"*://www.isekaiscan.top/*",
 		"*://mangadex.org/*",
@@ -56,7 +55,6 @@
 						"*://www.webtoons.com/*/*/*",
 						"*://m.webtoons.com/*/*/*",
 						"*://manganato.com/*",
-						"*://manganato.com/*/*",
 						"*://chapmanganato.to/*/*",
 						"*://www.isekaiscan.top/*",
 						"*://mangadex.org/*",
@@ -79,7 +77,12 @@
 	
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee"
+			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee",
+			"strict_min_version": "120.0"
+		},
+		"gecko_android": {
+			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee",
+			"strict_min_version": "120.0"
 		}
 	}
 
