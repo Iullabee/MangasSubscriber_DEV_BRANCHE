@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.4.3",
+	"version": "2.4.4",
 
 	"icons": {
 		"48": "icons/logo.svg"
@@ -85,7 +85,6 @@
 			"strict_min_version": "120.0"
 		},
 		"gecko_android": {
-			"id": "MangasSubscriber_DEV_BRANCHE@Lullabee",
 			"strict_min_version": "120.0"
 		}
 	}
