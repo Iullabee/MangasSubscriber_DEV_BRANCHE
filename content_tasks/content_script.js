@@ -12,12 +12,6 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"manhuaplus":"manhuaplus.org/"
 					};
 
-//fix fanfox annoying urls
-(function fanfoxURLFix() {
-	if (this.location.href.indexOf("fanfox.net//") >= 0)
-		this.location.href = this.location.href.replace("fanfox.net//", "fanfox.net/");
-})();
-
 
 window.addEventListener("load", readMangaChapter);
 function readMangaChapter() {
