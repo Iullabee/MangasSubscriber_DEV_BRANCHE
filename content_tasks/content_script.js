@@ -5,6 +5,7 @@ var websites_list = {"mangahere":"mangahere.cc/manga/",
 					"manganato":"manganato.com/",
 					"alt_manganato":"chapmanganato.to/",
 					"mangakakalot":"www.mangakakalot.gg/",
+					"natomanga":"www.natomanga.com/",
 					"isekaiscan":"www.isekaiscan.top/",
 					"mangadex":"mangadex.org/",
 					"mangago":"mangago.me/",
@@ -54,6 +55,9 @@ function readMangaChapter() {
 				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
 				break;
 			case "mangakakalot":
+				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
+				break;
+			case "natomanga":
 				is_placeholder = document.querySelector(".container-chapter-reader img") ? false : true; //no mobile site
 				break;
 			case "isekaiscan":
