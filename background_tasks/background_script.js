@@ -1915,54 +1915,69 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			//fixing mangago 404 not found urls just needs to update the list
-			//switching chapmanganato.com urls to champanganato.to
-			if ("chapmanganato" in mangas_list[manga].registered_websites && mangas_list[manga].registered_websites["chapmanganato"].includes(".com/")) {
-				mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["chapmanganato"].replace(".com/", ".to/");
+			//switching chapmanganato.com urls to mangakakalot.gg or natomanga.com urls
+			if ("chapmanganato" in mangas_list[manga].registered_websites) {
+				var source = "truc";
+				var parser = new DOMParser();
+
+				try {
+					//get manga's home page
+					source = await getSource("https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/");
+					//extract the chapter list
+					var doc = parser.parseFromString(source, "text/html");
+					let list = doc.querySelectorAll("div.chapter-list div.row");
+					if (list[0]) { //if it is found on mangakakalot.gg
+						mangas_list[manga].registered_websites["mangakakalot"] = "https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/";
+						delete mangas_list[manga].registered_websites["chapmanganato"];
+						if (mangas_list[manga].website_name == "chapmanganato") mangas_list[manga].website_name = "mangakakalot";
+					} else { //else get it from natomanga.com
+						//get manga's home page
+						source = await getSource("https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/");
+						//extract the chapter list
+						var doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("div.chapter-list div.row");
+						if (list[0]) { //if it is found on natomanga.com
+							mangas_list[manga].registered_websites["natomanga"] = "https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/";
+							delete mangas_list[manga].registered_websites["chapmanganato"];
+							if (mangas_list[manga].website_name == "chapmanganato") mangas_list[manga].website_name = "natomanga";
+						} 
+					}
+				} catch (error) {
+					//fail silently
+				}
 			}
-			//switching readmanganato.com urls to manganato.com urls
-			if ("readmanganato" in mangas_list[manga].registered_websites) {
+			//switching manganato.com urls to natomanga.com or mangakakalot.gg urls 
+			if ("manganato" in mangas_list[manga].registered_websites) {
 
 				var source = "truc";
 				var parser = new DOMParser();
 
 				try {
 					//get manga's home page
-					source = await getSource(mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "manganato.com/"));
+					source = await getSource("https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/");
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("li.a-h");
-					if (list[0]) { //if it is found on manganato.com
-						mangas_list[manga].registered_websites["manganato"] = mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "manganato.com/");
-						delete mangas_list[manga].registered_websites["readmanganato"];
-						if (mangas_list[manga].website_name == "readmanganato") mangas_list[manga].website_name = "manganato";
-					} else { //else get it from chapmanganato.to
-						mangas_list[manga].registered_websites["chapmanganato"] = mangas_list[manga].registered_websites["readmanganato"].replace("readmanganato.com/", "chapmanganato.to/");
-						delete mangas_list[manga].registered_websites["readmanganato"];
-						if (mangas_list[manga].website_name == "readmanganato") mangas_list[manga].website_name = "chapmanganato";
+					let list = doc.querySelectorAll("div.chapter-list div.row");
+					if (list[0]) { //if it is found on natomanga.com
+						mangas_list[manga].registered_websites["natomanga"] = "https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/";
+						delete mangas_list[manga].registered_websites["manganato"];
+						if (mangas_list[manga].website_name == "manganato") mangas_list[manga].website_name = "natomanga";
+					} else { //else get it from mangakakalot.gg
+						//get manga's home page
+						source = await getSource("https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/");
+						//extract the chapter list
+						var doc = parser.parseFromString(source, "text/html");
+						let list = doc.querySelectorAll("div.chapter-list div.row");
+						if (list[0]) { //if it is found on mangakakalot.gg
+							mangas_list[manga].registered_websites["natomanga"] = "https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/";
+							delete mangas_list[manga].registered_websites["manganato"];
+							if (mangas_list[manga].website_name == "manganato") mangas_list[manga].website_name = "mangakakalot";
+						} 
 					}
 				} catch (error) {
 					//fail silently
 				}
-
-				
 			}
-			//switching isekaiscan.com urls to www.isekaiscan.top
-			if ("isekaiscan" in mangas_list[manga].registered_websites && mangas_list[manga].registered_websites["isekaiscan"].includes(".com/")) {
-				let isekaiscan = websites_list["isekaiscan"];
-				let manga_root = mangas_list[manga].registered_websites["isekaiscan"];
-				
-				manga_root = manga_root.replace("isekaiscan.com/", isekaiscan.url);
-				//check if isekaiscan can retrieve chapter_list
-				//if it can, good, change registered_websites with new manga_root
-				try {
-					await isekaiscan.getAllChapters(manga_root);
-					mangas_list[manga].registered_websites["isekaiscan"] = manga_root;
-				} catch (error) {
-					//fail silently
-				}
-			}
-			
 		}
 		setBadgeNumber();
 	}
