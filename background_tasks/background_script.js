@@ -577,6 +577,7 @@ var websites_list = {
 				}
 	},
 	"manganato":{name:"manganato",
+				"unsupported":"total",
 				url:"manganato.com/manga-",
 				getMangaName: async function (url){
 					var source = "truc";
@@ -672,6 +673,7 @@ var websites_list = {
 				}
 	},
 	"chapmanganato":{name:"chapmanganato",
+				"unsupported":"total",
 				url:"chapmanganato.to/manga-",
 				getMangaName: async function (url){
 					var source = "truc";
