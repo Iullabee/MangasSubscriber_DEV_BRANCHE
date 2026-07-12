@@ -899,14 +899,14 @@ var websites_list = {
 							throw error;
 						}
 					} else if (url.includes("/title/") && url.split("/title/")[1]) { //if on root page, manga id is in url
-						manga_id = url.split("/title/")[1];
+						manga_id = url.split("/title/")[1].split("/")[0];
 						
 					}
 					if (manga_id != ""){
 						//get manga data and extract name
 						try {
 							let manga_source = JSON.parse(await getSource("https://api.mangadex.org/manga/" + manga_id));
-							name = cleanMangaName(manga_source["data"]["attributes"]["title"]["en"]);
+							name = cleanMangaName(Object.values(manga_source["data"]["attributes"]["title"])[0]);
 						} catch (error) {
 							throw error;
 						}
@@ -917,7 +917,7 @@ var websites_list = {
 				getMangaRootURL: async function (url) {
 					let result = "";
 					//if we're on root page, make sure the domain is mangadex and not mangassubscriber
-					if (url.includes("/title/") && url.split("/title/")[1]) result = "https://" + this.url + "title/" + url.split("/title/")[1];
+					if (url.includes("/title/") && url.split("/title/")[1]) result = "https://" + this.url + "title/" + url.split("/title/")[1].split("/")[0];
 					//if we're on chapter page
 					else if (url.includes("/chapter/")){
 						try {
