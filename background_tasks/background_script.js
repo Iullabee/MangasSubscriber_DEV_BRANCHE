@@ -346,8 +346,8 @@ var websites_list = {
 					}
 
 					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll(".detail_lst ul li a");
-					list[0] ? false : list = doc.querySelectorAll("ul#_episodeList li a"); //if no chapters found, we might have been redirected to mobile website (different layout), check if we find something using that layout
+					let list = doc.querySelectorAll("#_listUl li a");
+					list[0] ? false : list = doc.querySelectorAll("ul.detail_list_wrap li a"); //if no chapters found, we might have been redirected to mobile website (different layout), check if we find something using that layout
 					if (! list[0]) throw new Error(" can't find "+manga_name+" on "+this.name);
 					else {
 						for (let i=0; i<list.length; i++){
@@ -364,7 +364,7 @@ var websites_list = {
 					if (!already_updated_this) {
 						let paginate = doc.getElementsByClassName("paginate")[0];
 						for (let i=0; i<paginate.children.length; i++) {
-							if (paginate.children[i].href.substr(-1) == "#" && paginate.children[i+1]) {
+							if (paginate.children[i].href && paginate.children[i].href.substr(-1) == "#" && paginate.children[i+1] && paginate.children[i+1].href) {
 								let chapters = await this.getAllChapters("https://" + this.url + paginate.children[i+1].href.split("moz-extension://")[1].substring(paginate.children[i+1].href.split("moz-extension://")[1].indexOf("/") + 1));
 								for (let number in chapters){
 									if(chapters.hasOwnProperty(number)){
