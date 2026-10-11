@@ -1997,69 +1997,7 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			//switching chapmanganato.com urls to mangakakalot.gg or natomanga.com urls
-			if ("chapmanganato" in mangas_list[manga].registered_websites) {
-				var source = "truc";
-				var parser = new DOMParser();
-
-				try {
-					//get manga's home page
-					source = await getSource("https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/");
-					//extract the chapter list
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("div.chapter-list div.row");
-					if (list[0]) { //if it is found on mangakakalot.gg
-						mangas_list[manga].registered_websites["mangakakalot"] = "https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/";
-						delete mangas_list[manga].registered_websites["chapmanganato"];
-						if (mangas_list[manga].website_name == "chapmanganato") mangas_list[manga].website_name = "mangakakalot";
-					} else { //else get it from natomanga.com
-						//get manga's home page
-						source = await getSource("https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/");
-						//extract the chapter list
-						var doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("div.chapter-list div.row");
-						if (list[0]) { //if it is found on natomanga.com
-							mangas_list[manga].registered_websites["natomanga"] = "https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/";
-							delete mangas_list[manga].registered_websites["chapmanganato"];
-							if (mangas_list[manga].website_name == "chapmanganato") mangas_list[manga].website_name = "natomanga";
-						} 
-					}
-				} catch (error) {
-					//fail silently
-				}
-			}
-			//switching manganato.com urls to natomanga.com or mangakakalot.gg urls 
-			if ("manganato" in mangas_list[manga].registered_websites) {
-
-				var source = "truc";
-				var parser = new DOMParser();
-
-				try {
-					//get manga's home page
-					source = await getSource("https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/");
-					//extract the chapter list
-					var doc = parser.parseFromString(source, "text/html");
-					let list = doc.querySelectorAll("div.chapter-list div.row");
-					if (list[0]) { //if it is found on natomanga.com
-						mangas_list[manga].registered_websites["natomanga"] = "https://www.natomanga.com/manga/" + manga.replaceAll(" ", "-") + "/";
-						delete mangas_list[manga].registered_websites["manganato"];
-						if (mangas_list[manga].website_name == "manganato") mangas_list[manga].website_name = "natomanga";
-					} else { //else get it from mangakakalot.gg
-						//get manga's home page
-						source = await getSource("https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/");
-						//extract the chapter list
-						var doc = parser.parseFromString(source, "text/html");
-						let list = doc.querySelectorAll("div.chapter-list div.row");
-						if (list[0]) { //if it is found on mangakakalot.gg
-							mangas_list[manga].registered_websites["natomanga"] = "https://www.mangakakalot.gg/manga/" + manga.replaceAll(" ", "-") + "/";
-							delete mangas_list[manga].registered_websites["manganato"];
-							if (mangas_list[manga].website_name == "manganato") mangas_list[manga].website_name = "mangakakalot";
-						} 
-					}
-				} catch (error) {
-					//fail silently
-				}
-			}
+			
 		}
 		setBadgeNumber();
 	}
