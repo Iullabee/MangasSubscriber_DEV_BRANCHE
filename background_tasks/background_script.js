@@ -429,7 +429,7 @@ var websites_list = {
 				},
 				getAllChapters: async function (manga_url){
 					var chapters_list = {};
-					var source = "truc";
+					/*var source = "truc";
 					var parser = new DOMParser();
 
 					try {
@@ -438,16 +438,38 @@ var websites_list = {
 					} catch (error) {
 						throw error;
 					}
+					
+					//if blocked by CloudFlare, open manga_root in a tab to bypass protection
+					if (source.includes("challenge-error-text")) { //add check if option to open in tabs to bypass cloudflare is selected
+						let bypassed = false;
+						//open in new tab and save reference to close tab afterward
+						let manga_tab = await browser.tabs.create({"active":false, "url": manga_url});
+						let max_timer_seconds = 10;
+						let timer_seconds = 0;
+						while (!bypassed && timer_seconds < max_timer_seconds) {
+							//use tabs.executeScript to get source code chapter list
+							//need to add scrolling on the chapters list here to make it fetch the earlier chapters before getting the outerHTML
+							source = await browser.tabs.executeScript(manga_tab.id, {code:"document.documentElement.outerHTML"})
+							bypassed = source.includes("challenge-error-text") ? false : true;
+							//waiting period to avoid spamming
+							await timer(1000);
+							timer_seconds++;
+						}
+						//close the tab
+						browser.tabs.remove(manga_tab.id);
+					}
 
 					//extract the chapter list
 					var doc = parser.parseFromString(source, "text/html");
 					let list = doc.querySelectorAll("div.chapter-list div.row");
-					if (! list[0]) throw new Error(" can't find "+ await this.getMangaName(manga_url)+" on "+this.name);
-					else {
+					if (! list[0]) {
+						let error_message = doc.querySelector("#challenge-error-text") ? "blocked by CloudFlare" : " can't find "+ await this.getMangaName(manga_url)+" on "+this.name;
+						throw new Error(error_message);
+					} else {
 						for (let i=0; i<list.length; i++){
 							if (list.hasOwnProperty(i)){
 								let chapter = list[i].querySelector("a");
-								let date = list[i].querySelector("span[title]").title;
+								let date = list[i].querySelectorAll("span")[3];
 								let update = new Date(date) != "Invalid Date" ? new Date(date).getTime()
 									: date == "1 day ago" ? new Date().getTime() - (24 * 3600 * 1000)
 									: date == "2 day ago" ? new Date().getTime() - (48 * 3600 * 1000)
@@ -460,7 +482,23 @@ var websites_list = {
 								}
 							}
 						}
+					}*/
+
+					let source = await getSource("https://www.mangakakalot.gg/api/manga/"+manga_url.split("/manga/")[1]+"chapters?limit=5000&offset=0");
+					let list =  JSON.parse(source)["data"]["chapters"];
+					if (! list[0]) {
+						let error_message = " can't find "+ await this.getMangaName(manga_url)+" on "+this.name;
+						throw new Error(error_message);
+					} else {
+						for (chapter in list){
+							let chapter_href = manga_url + list[chapter]["chapter_slug"];
+							let chapter_number = list[chapter]["chapter_num"].toString();
+							let date = list[chapter]["updated_at"];
+							let update = new Date(date) != "Invalid Date" ? new Date(date).getTime() : new Date().getTime();
+							chapters_list[chapter_number] = {"status" : "unknown", "url" : chapter_href, "update" : update};
+						}
 					}
+
 					return chapters_list;
 				},
 				searchFor: async function (manga_name){
@@ -1303,6 +1341,11 @@ async function getSource(url, options){
 	return data;
 }
 
+// Returns a Promise that resolves after "ms" Milliseconds
+async function timer(ms){
+	return new Promise(res => setTimeout(res, ms));
+}
+
 
 
 //follow a manga
@@ -1391,7 +1434,7 @@ async function updateMangasList(mangas_selection, ignore_no_update){
 																			}
 																		}
 																	},
-																	function(error){
+																	async function(error){
 																		browser.runtime.sendMessage({"target":"popup" , "log":{"manga":manga , "from":website_name , "status":"errors" , "details":"couldn't get source : "+ error +"\n"+ error.stack}}); //warning the popup
 																	}
 					);
@@ -1464,7 +1507,6 @@ async function readMangaChapter(message, sender) {
 		setBadgeNumber();
 	}
 }
-
 
 
 
