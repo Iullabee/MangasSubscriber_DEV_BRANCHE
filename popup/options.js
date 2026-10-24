@@ -173,6 +173,7 @@ document.getElementById("import_as_file").addEventListener("click", async (e) =>
 
 
 
+/*
 //export the mangas list online
 document.getElementById("export_online").addEventListener("click", async (e) => {
 	var export_text = document.getElementById("export_online");
@@ -222,4 +223,4 @@ document.getElementById("import_online").addEventListener("click", async (e) => 
 		}
 	};
 });
-
+*/

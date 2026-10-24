@@ -1610,6 +1610,7 @@ async function exportMangasList(){
 	return;
 }
 
+/*
 //export mangas list online to paste.ee
 async function exportMangasListOnline(){
 	var list = {"MangasSubscriberBackUp":await browser.storage.local.get()};
@@ -1633,6 +1634,7 @@ async function exportMangasListOnline(){
 
 	return;
 }
+*/
 
 
 
