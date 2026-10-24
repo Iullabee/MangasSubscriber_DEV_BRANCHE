@@ -412,8 +412,8 @@ var websites_list = {
 					return results;
 				}
 	},
-	"mangakakalot":{name:"mangakakalot",
-				url:"www.mangakakalot.gg/manga/",
+	"kakamanga":{name:"kakamanga",
+				url:"www.kakamanga.com/manga/",
 				getMangaName: async function (url){
 					let name = url.split(this.url)[1].split("/")[0];
 					return name ? cleanMangaName(name) : "notAManga";
@@ -484,7 +484,7 @@ var websites_list = {
 						}
 					}*/
 
-					let source = await getSource("https://www.mangakakalot.gg/api/manga/"+manga_url.split("/manga/")[1]+"chapters?limit=5000&offset=0");
+					let source = await getSource("https://www.kakamanga.com/api/manga/"+manga_url.split("/manga/")[1]+"chapters?limit=5000&offset=0");
 					let list =  JSON.parse(source)["data"]["chapters"];
 					if (! list[0]) {
 						let error_message = " can't find "+ await this.getMangaName(manga_url)+" on "+this.name;
@@ -510,7 +510,7 @@ var websites_list = {
 
 					while (Object.keys(results).length == 0 && index > 0) {
 						//get search page results for manga_name
-						source_url = "https://www.mangakakalot.gg/search/story/"+manga_name.replace(" ", "_");
+						source_url = "https://www.kakamanga.coom/search/story/"+manga_name.replace(" ", "_");
 						try {
 							//get search page
 							source = await getSource(source_url);
@@ -1997,7 +1997,11 @@ async function install(){
 	if (update_list) {
 		browser.browserAction.setBadgeText({"text" : "..."});
 		for (let manga in mangas_list){
-			
+			if ("mangakakalot" in mangas_list[manga].registered_websites) {
+				mangas_list[manga].registered_websites["kakamanga"] = mangas_list[manga].registered_websites["mangakakalot"].replace("mangakakalot.gg", "kakamanga.com");
+				mangas_list[manga].website_name = "kakamanga";
+				delete mangas_list[manga].registered_websites["mangakakalot"];
+			}
 		}
 		setBadgeNumber();
 	}

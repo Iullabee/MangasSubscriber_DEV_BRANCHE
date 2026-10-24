@@ -2,7 +2,7 @@
 
 	"manifest_version": 2,
 	"name": "MangasSubscriber_DEV_BRANCHE",
-	"version": "2.4.5",
+	"version": "2.4.6",
 
 	"icons": {
 		"48": "icons/logo.svg"
@@ -20,7 +20,7 @@
 		"*://*.webtoons.com/*",
 		"*://mangahere.cc/*",
 		"*://*.mangahere.cc/*",
-		"*://www.mangakakalot.gg/*",
+		"*://www.kakamanga.com/*",
 		"*://www.natomanga.com/*",
 		"*://www.isekaiscan.top/*",
 		"*://mangadex.org/*",
@@ -52,7 +52,7 @@
 						"*://m.mangatown.com/manga/*",
 						"*://www.webtoons.com/*/*/*",
 						"*://m.webtoons.com/*/*/*",
-						"*://www.mangakakalot.gg/*",
+						"*://www.kakamanga.com/*",
 						"*://www.natomanga.com/*",
 						"*://www.isekaiscan.top/*",
 						"*://mangadex.org/*",
